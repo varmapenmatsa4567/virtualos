@@ -6,6 +6,11 @@ body {
   font-family: Arial, Helvetica, sans-serif;
 }
 
+:root,
+body {
+  overflow: hidden;
+}
+
 @layer base {
   :root {
     --background: 0 0% 100%;

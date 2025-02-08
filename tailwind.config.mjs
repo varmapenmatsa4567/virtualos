@@ -5,9 +5,13 @@ export default {
     "./pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./components/**/*.{js,ts,jsx,tsx,mdx}",
     "./app/**/*.{js,ts,jsx,tsx,mdx}",
+    "./apps/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
   	extend: {
+		backgroundImage: {
+			'wallpaper': "url('/wallpaper.png')",
+		},
   		colors: {
   			background: 'hsl(var(--background))',
   			foreground: 'hsl(var(--foreground))',
