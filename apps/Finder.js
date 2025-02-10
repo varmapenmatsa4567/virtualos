@@ -56,7 +56,10 @@ const Finder = (props) => {
   ];
 
   const [currentId, setCurrentId] = useState(11);
-  const [fileStructure, setFileStructure] = useState(initialStructure);
+  const [fileStructure, setFileStructure] = useState(() => {
+    const savedFileStructure = localStorage.getItem('fileStructure');
+    return savedFileStructure ? JSON.parse(savedFileStructure) : initialStructure;
+  });
   const [currentPath, setCurrentPath] = useState([]);
   const [history, setHistory] = useState([[]]);
   const [historyIndex, setHistoryIndex] = useState(0);
@@ -85,68 +88,67 @@ const Finder = (props) => {
         }
     };
     const pasteItem = () => {
-        if (!clipboard) return;
-      
-        // Generate new IDs for the entire hierarchy
-        const generateNewIds = (item, idMap) => {
-          const newId = currentId;
-          idMap[item.id] = newId;
-          const newItem = { ...item, id: newId };
-          if (newItem.children) {
-            newItem.children = newItem.children.map(child => 
-              generateNewIds(child, idMap)
-            );
-          }
-          return newItem;
-        };
-      
-        const idMap = {};
-        const newItem = generateNewIds(clipboard.item, idMap);
-
-        // Update name if duplicate exists
-        const existingNames = finderItems.map(item => item.name);
-        let newName = newItem.name;
-        let counter = 1;
-
-        console.log(finderItems);
-        console.log(existingNames);
-
-        
-        while (existingNames.includes(newName)) {
-          newName = `${newItem.name} (${counter})`;
-          counter++;
+      if (!clipboard) return;
+    
+      // Generate new IDs for the entire hierarchy
+      const generateNewIds = (item, idMap) => {
+        const newId = currentId;
+        idMap[item.id] = newId;
+        const newItem = { ...item, id: newId };
+        if (newItem.children) {
+          newItem.children = newItem.children.map(child => 
+            generateNewIds(child, idMap)
+          );
         }
-      
-        newItem.name = newName;
-      
-        // Update structure
-        const updateStructure = (items, path, depth = 0) => {
-          if (depth === path.length) {
-            return [...items, newItem];
-          }
-      
-          return items.map(item => {
-            if (item.id === path[depth]) {
-              return {
-                ...item,
-                children: updateStructure(item.children || [], path, depth + 1)
-              };
-            }
-            return item;
-          });
-        };
-      
-        // If cut operation, remove original
-        if (isCutOperation) {
-          const updatedStructure = deleteItem(fileStructure, clipboard.item.id);
-          setFileStructure(updateStructure(updatedStructure, currentPath));
-          setClipboard(null);
-        } else {
-          setFileStructure(prev => updateStructure(prev, currentPath));
-        }
-      
-        setCurrentId(prev => prev + Object.keys(idMap).length);
+        return newItem;
       };
+    
+      const idMap = {};
+      const newItem = generateNewIds(clipboard.item, idMap);
+    
+      // Update name if duplicate exists
+      const existingNames = finderItems.map(item => item.name);
+      let newName = newItem.name;
+      let counter = 1;
+    
+      while (existingNames.includes(newName)) {
+        newName = `${newItem.name} (${counter})`;
+        counter++;
+      }
+    
+      newItem.name = newName;
+    
+      // Update structure
+      const updateStructure = (items, path, depth = 0) => {
+        if (depth === path.length) {
+          return [...items, newItem];
+        }
+    
+        return items.map(item => {
+          if (item.id === path[depth]) {
+            return {
+              ...item,
+              children: updateStructure(item.children || [], path, depth + 1)
+            };
+          }
+          return item;
+        });
+      };
+
+      console.log("currentPath+"+currentPath);
+      console.log("currentfolder+"+currentFolder);
+    
+      // If cut operation, remove original
+      if (isCutOperation) {
+        const updatedStructure = deleteItem(fileStructure, clipboard.item.id);
+        setFileStructure(updateStructure(updatedStructure, currentPath));
+        setClipboard(null);
+      } else {
+        setFileStructure(prev => updateStructure(prev, currentPath));
+      }
+    
+      setCurrentId(prev => prev + Object.keys(idMap).length);
+    };
 
   const openFolder = (id) => {
     const newPath = [...currentPath, id];
@@ -203,7 +205,7 @@ const Finder = (props) => {
     setCurrentId(currentId + 1);
   };
 
-  const deleteFolder = (id) => {
+  const deleteItem = (id) => {
     const updateStructure = (items) => {
       return items.filter(item => {
         if (item.id === id) return false;
@@ -271,7 +273,7 @@ const Finder = (props) => {
                     openFolder(item.id);
                     setSelectedItemId(item.id);
                 }}
-                onFolderDelete={() => deleteFolder(item.id)}
+                onFolderDelete={() => deleteItem(item.id)}
                 folderName={item.name}
                 onFolderDuplicate={() => duplicateFolder(item.id)}
                 onCopyItem={() => copyItem(item.id)}
@@ -284,8 +286,11 @@ const Finder = (props) => {
       return <File 
         key={index} 
         fileName={item.name}
+        onDeleteItem={() => deleteItem(item.id)}
         onCopyItem={() => copyItem(item.id)}
         onCutItem={() => cutItem(item.id)}
+        onSelect={() => setSelectedItemId(item.id)}
+        isSelected={selectedItemId === item.id}
        />;
 
     });
@@ -305,14 +310,29 @@ const Finder = (props) => {
           cutItem(selectedItemId);
         }
         if (e.key == 'Backspace' && selectedItemId) {
-          deleteFolder(selectedItemId);
+          deleteItem(selectedItemId);
         }
       }
     };
   
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [selectedItemId, clipboard]);
+  }, [selectedItemId, clipboard, currentPath]);
+
+  useEffect(() => {
+    // Save fileStructure to local storage whenever it changes
+    console.log("file structure"+JSON.stringify(fileStructure));
+    localStorage.setItem('fileStructure', JSON.stringify(fileStructure));
+  }, [fileStructure]);
+
+  useEffect(() => {
+    // Load fileStructure from local storage on component mount
+    const savedFileStructure = localStorage.getItem('fileStructure');
+    console.log("savedFileStructure"+savedFileStructure);
+    if (savedFileStructure) {
+      setFileStructure(JSON.parse(savedFileStructure));
+    }
+  }, []);
 
   return (
     <Window {...props}
