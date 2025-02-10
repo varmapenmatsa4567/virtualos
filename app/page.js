@@ -3,7 +3,7 @@ import AppManager from "@/components/AppManager";
 import Dock from "@/components/Dock";
 import TopBar from "@/components/TopBar";
 import Window from "@/components/Window";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 export default function Home() {
 
@@ -20,6 +20,15 @@ export default function Home() {
     setWindows([...windows, newWindow]);
     setActiveWindow(newWindow.id);
   };
+
+  useEffect(() => {
+    const disableContextMenu = (event) => event.preventDefault();
+    document.addEventListener("contextmenu", disableContextMenu);
+    
+    return () => {
+      document.removeEventListener("contextmenu", disableContextMenu);
+    };
+  }, []);
 
   return (
     <div className="w-screen h-screen flex flex-col items-center">

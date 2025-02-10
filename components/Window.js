@@ -3,14 +3,14 @@ import React from 'react';
 import { Rnd } from 'react-rnd';
 import WnManager from './WnManager';
 
-const Window = ({ onClick, isActive, isMinimized, isMaximized, onClose, toggleMinimize, toggleMaximize, children }) => {
+const Window = ({ onClick, isActive, isMinimized, isMaximized, onClose, toggleMinimize, toggleMaximize, toolbar, children }) => {
   return (
     <Rnd
       default={{
         x: 150,
         y: 205,
-        width: 300,
-        height: 200,
+        width: 600,
+        height: 400,
       }}
       className={`${isActive && 'z-50'}`}
       size={isMaximized ? { width: "100vw", height: "100vh" } : null}
@@ -26,13 +26,16 @@ const Window = ({ onClick, isActive, isMinimized, isMaximized, onClose, toggleMi
       }}
     >
       <div onClick={onClick} className={`bg-[#242227] flex flex-col shadow-2xl cursor-default h-full rounded-lg transition-all duration-75`}>
-        <div className="bg-[#3c3639] rounded-t-lg w-full h-8 flex flex-col justify-center toolbar">
+        <div className="bg-[#3c3639] rounded-t-lg w-full h-10 flex items-center toolbar">
           <WnManager
             onClose={onClose}
             toggleMinimize={toggleMinimize}
             toggleFullScreen={toggleMaximize}
             disabled={isMaximized}
           />
+          <div className='flex-1'>
+            {toolbar}
+          </div>
         </div>
         <div className='flex-1 w-full h-full'>
           {children}
