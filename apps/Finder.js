@@ -79,6 +79,48 @@ const Finder = (props) => {
         setIsCutOperation(false);
         }
     };
+
+    const handleFileUpload = (event) => {
+      const file = event.target.files[0];
+      if (!file) return;
+    
+      // Read the file as a blob
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const blob = new Blob([e.target.result], { type: file.type });
+    
+        // Create a new file object
+        const newFile = {
+          id: currentId,
+          name: file.name,
+          type: 'file',
+          blob: blob,
+        };
+    
+        // Update the file structure
+        const updateStructure = (items, path, depth = 0) => {
+          if (depth === path.length) {
+            return [...items, newFile];
+          }
+    
+          return items.map(item => {
+            if (item.id === path[depth]) {
+              return {
+                ...item,
+                children: updateStructure(item.children || [], path, depth + 1)
+              };
+            }
+            return item;
+          });
+        };
+    
+        const updatedStructure = updateStructure(fileStructure, currentPath);
+        setFileStructure(updatedStructure);
+        setCurrentId(prev => prev + 1);
+      };
+    
+      reader.readAsArrayBuffer(file);
+    };
     
     const cutItem = (id) => {
         const item = findItemById(fileStructure, id);
@@ -356,6 +398,12 @@ const Finder = (props) => {
             <div className='w-full p-3 px-6 flex gap-x-4 gap-y-2 flex-wrap'>
               {renderItems()}
             </div>
+            <input
+              type="file"
+              id="file-upload"
+              className='hidden'
+              onChange={handleFileUpload}
+            />
           </div>
         </ContextMenuTrigger>
         <FinderContextMenu 
@@ -363,6 +411,7 @@ const Finder = (props) => {
             onDuplicateFolder={duplicateFolder}
             onPasteItem={pasteItem}
             canPaste={!!clipboard}
+            onAddFile={() => document.getElementById('file-upload').click()}
         />
       </ContextMenu>
     </Window>
