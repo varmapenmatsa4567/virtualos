@@ -50,6 +50,18 @@ const Vscode = ({fileStructure, setFileStructure, ...props}) => {
     setContent(findContent(fileStructure));
   }
 
+  useEffect(() => {
+    if (openedFile?.blob) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        setContent(reader.result); // Set the file content as a string
+      };
+      reader.readAsText(openedFile.blob); // Read the Blob as text
+    } else {
+      setContent(''); // Reset content if no file is opened
+    }
+  }, [openedFile]);
+
   // useEffect(() => {
   //     // Save fileStructure to local storage whenever it changes
   //     // console.log("file structure"+JSON.stringify(fileStructure));
