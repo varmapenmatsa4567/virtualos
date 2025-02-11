@@ -18,7 +18,7 @@ return (
                 <AppIcon appName={'photos'} onClick={() => openWindow('photos')} />
                 <AppIcon appName={'safari'} onClick={() => openWindow('safari')} />
                 <AppIcon appName={'settings'} onClick={() => openWindow('settings')} />
-                <AppIcon appName={'finder'} onClick={() => openWindow('finder')} />
+                <AppIcon appName={'vscode'} onClick={() => openWindow('vscode')} />
                 <AppIcon appName={'calendar'} onClick={() => openWindow('calendar')} />
                 {minimizedWindows.length > 0 && (
                     <div className='h-14 border-[1px] mx-2'></div>

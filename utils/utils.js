@@ -49,3 +49,26 @@ export const noteDate = (date) => {
     else return `${month} ${day}, ${year}`;
 }
 
+export const getLanguageFromExtension = (fileName) => {
+    const extension = fileName.split('.').pop().toLowerCase();
+  
+    const languageMap = {
+      js: 'javascript',
+      jsx: 'javascript',
+      ts: 'typescript',
+      tsx: 'typescript',
+      py: 'python',
+      java: 'java',
+      c: 'c',
+      cpp: 'cpp',
+      html: 'html',
+      css: 'css',
+      json: 'json',
+      md: 'markdown',
+      txt: 'plaintext',
+      // Add more mappings as needed
+    };
+  
+    return languageMap[extension] || 'plaintext'; // Default to plaintext if extension is not recognized
+  };
+

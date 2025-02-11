@@ -1,10 +1,11 @@
 import React from 'react';
 import { ContextMenuContent, ContextMenuItem, ContextMenuSeparator, ContextMenuSub, ContextMenuSubContent, ContextMenuSubTrigger, ContextMenuCheckboxItem } from '@/components/ui/context-menu';
 
-const FinderContextMenu = ({onCreateFolder, onPasteItem, canPaste, onAddFile}) => {
+const FinderContextMenu = ({onCreateFolder, onPasteItem, canPaste, onAddFile, onCreateFile}) => {
   return (
     <ContextMenuContent className="bg-[#2f292e] text-white">
         <ContextMenuItem onClick={onCreateFolder}>New Folder</ContextMenuItem>
+        <ContextMenuItem onClick={onCreateFile}>New File</ContextMenuItem>
         {canPaste && <ContextMenuItem onClick={onPasteItem}>Paste Item</ContextMenuItem>}
         <ContextMenuSeparator />
         <ContextMenuItem>Get Info</ContextMenuItem>

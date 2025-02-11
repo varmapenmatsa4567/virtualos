@@ -22,10 +22,10 @@ const Window = ({ onClick, isActive, isMinimized, isMaximized, onClose, toggleMi
       bounds=".main"
       dragHandleClassName="toolbar"
       style={{
-        display: isMinimized ? "none" : "block",
+        display: isMinimized ? "none" : "block",  
       }}
     >
-      <div onClick={onClick} className={`bg-[#242227] flex flex-col shadow-2xl cursor-default h-full rounded-lg transition-all duration-75`}>
+      <div onClick={onClick} className={`bg-[#242227] overflow-hidden flex flex-col shadow-2xl cursor-default h-full rounded-lg`}>
         <div className="bg-[#3c3639] rounded-t-lg w-full h-10 flex items-center toolbar">
           <WnManager
             onClose={onClose}

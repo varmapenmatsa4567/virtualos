@@ -5,6 +5,7 @@ import File from '../components/File';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { ContextMenu, ContextMenuTrigger } from '@/components/ui/context-menu';
 import FinderContextMenu from '@/components/context-menu/FinderContextMenu';
+import { initialStructure } from '@/utils/data';
 
 // Helper function to recursively find a folder by path
 const getFolderByPath = (structure, path) => {
@@ -37,29 +38,13 @@ const findItemById = (items, id) => {
   };
 
 
-const Finder = (props) => {
-  const initialStructure = [
-    { id: 1, name: 'Documents', type: 'folder', children: [
-      { id: 2, name: 'sample.pdf', type: 'file' },
-      { id: 3, name: 'sample.docx', type: 'file' }
-    ]},
-    { id: 4, name: 'Projects', type: 'folder', children: [
-      { id: 5, name: 'main.py', type: 'file' }
-    ]},
-    { id: 6, name: 'Downloads', type: 'folder', children: [
-      { id: 7, name: 'image.jpg', type: 'file' }
-    ]},
-    { id: 8, name: 'Music', type: 'folder', children: [
-      { id: 9, name: 'Telugu songs', type: 'folder', children: [] },
-      { id: 10, name: 'English songs', type: 'folder', children: [] }
-    ]}
-  ];
+const Finder = ({fileStructure, setFileStructure, ...props}) => {
 
   const [currentId, setCurrentId] = useState(11);
-  const [fileStructure, setFileStructure] = useState(() => {
-    const savedFileStructure = localStorage.getItem('fileStructure');
-    return savedFileStructure ? JSON.parse(savedFileStructure) : initialStructure;
-  });
+  // const [fileStructure, setFileStructure] = useState(() => {
+  //   const savedFileStructure = localStorage.getItem('fileStructure');
+  //   return savedFileStructure ? JSON.parse(savedFileStructure) : initialStructure;
+  // });
   const [currentPath, setCurrentPath] = useState([]);
   const [history, setHistory] = useState([[]]);
   const [historyIndex, setHistoryIndex] = useState(0);
@@ -177,8 +162,6 @@ const Finder = (props) => {
         });
       };
 
-      console.log("currentPath+"+currentPath);
-      console.log("currentfolder+"+currentFolder);
     
       // If cut operation, remove original
       if (isCutOperation) {
@@ -247,6 +230,58 @@ const Finder = (props) => {
     setCurrentId(currentId + 1);
   };
 
+  const renameItem = (id, newName) => {
+    console.log('Before rename:', JSON.stringify(fileStructure, null, 2)); // Log the state before renaming
+  
+    const updateStructure = (items) => {
+      return items.map(item => {
+        if (item.id === id) {
+          console.log('Renaming item:', item); // Log the item being renamed
+          return { ...item, name: newName };
+        }
+        if (item.children) {
+          return { ...item, children: updateStructure(item.children) };
+        }
+        return item;
+      });
+    };
+  
+    setFileStructure(prev => {
+      const updatedStructure = updateStructure(prev);
+      console.log('After rename:', JSON.stringify(updatedStructure, null, 2)); // Log the state after renaming
+      return updatedStructure;
+    });
+  };
+
+  const createFile = () => {
+    const newFile = {
+      id: currentId,
+      name: "Untitled File.txt", // Default name and extension
+      type: 'file',
+      content: '' // Initial content of the file
+    };
+  
+    const updateStructure = (items, path, depth = 0) => {
+      if (depth === path.length) {
+        return [...items, newFile];
+      }
+      
+      return items.map(item => {
+        if (item.id === path[depth]) {
+          return {
+            ...item,
+            children: updateStructure(item.children || [], path, depth + 1)
+          };
+        }
+        return item;
+      });
+    };
+  
+    const updatedStructure = updateStructure(fileStructure, currentPath);
+    setFileStructure(updatedStructure);
+    setCurrentId(currentId + 1);
+  };
+
   const deleteItem = (id) => {
     const updateStructure = (items) => {
       return items.filter(item => {
@@ -305,7 +340,7 @@ const Finder = (props) => {
   };
 
   const renderItems = () => {
-    console.log(finderItems);
+    // console.log(finderItems);
     return finderItems.map((item, index) => {
       if (item.type === 'folder') {
         return (
@@ -333,6 +368,8 @@ const Finder = (props) => {
         onCutItem={() => cutItem(item.id)}
         onSelect={() => setSelectedItemId(item.id)}
         isSelected={selectedItemId === item.id}
+        onRename={(newName) => renameItem(item.id, newName)}
+        onFileOpen={() => props.handleFileClick(item)}
        />;
 
     });
@@ -361,20 +398,20 @@ const Finder = (props) => {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [selectedItemId, clipboard, currentPath]);
 
-  useEffect(() => {
-    // Save fileStructure to local storage whenever it changes
-    console.log("file structure"+JSON.stringify(fileStructure));
-    localStorage.setItem('fileStructure', JSON.stringify(fileStructure));
-  }, [fileStructure]);
+  // useEffect(() => {
+  //   // Save fileStructure to local storage whenever it changes
+  //   // console.log("file structure"+JSON.stringify(fileStructure));
+  //   localStorage.setItem('fileStructure', JSON.stringify(fileStructure));
+  // }, [fileStructure]);
 
-  useEffect(() => {
-    // Load fileStructure from local storage on component mount
-    const savedFileStructure = localStorage.getItem('fileStructure');
-    console.log("savedFileStructure"+savedFileStructure);
-    if (savedFileStructure) {
-      setFileStructure(JSON.parse(savedFileStructure));
-    }
-  }, []);
+  // useEffect(() => {
+  //   // Load fileStructure from local storage on component mount
+  //   const savedFileStructure = localStorage.getItem('fileStructure');
+  //   // console.log("savedFileStructure"+savedFileStructure);
+  //   if (savedFileStructure) {
+  //     setFileStructure(JSON.parse(savedFileStructure));
+  //   }
+  // }, []);
 
   return (
     <Window {...props}
@@ -412,6 +449,7 @@ const Finder = (props) => {
             onPasteItem={pasteItem}
             canPaste={!!clipboard}
             onAddFile={() => document.getElementById('file-upload').click()}
+            onCreateFile={createFile}
         />
       </ContextMenu>
     </Window>
