@@ -3,18 +3,12 @@ import Window from '@/components/Window';
 import Editor from '@monaco-editor/react';
 import { getLanguageFromExtension } from '@/utils/utils';
 import { Save } from 'lucide-react';
-import { initialStructure } from '@/utils/data';
-
 
 const Vscode = ({fileStructure, setFileStructure, ...props}) => {
   const openedFile = props.openedFile;
-  // console.log("openedFile"+openedFile["content"]);
   const fileName = openedFile ? openedFile.name : 'Untitled.txt';
   const [content, setContent] = React.useState(openedFile ? openedFile.content : "");
-  // const [fileStructure, setFileStructure] = useState(() => {
-  //     const savedFileStructure = localStorage.getItem('fileStructure');
-  //     return savedFileStructure ? JSON.parse(savedFileStructure) : initialStructure;
-  // });
+
 
   const language = getLanguageFromExtension(fileName); 
 
@@ -50,33 +44,6 @@ const Vscode = ({fileStructure, setFileStructure, ...props}) => {
     setContent(findContent(fileStructure));
   }
 
-  useEffect(() => {
-    if (openedFile?.blob) {
-      const reader = new FileReader();
-      reader.onload = () => {
-        setContent(reader.result); // Set the file content as a string
-      };
-      reader.readAsText(openedFile.blob); // Read the Blob as text
-    } else {
-      setContent(''); // Reset content if no file is opened
-    }
-  }, [openedFile]);
-
-  // useEffect(() => {
-  //     // Save fileStructure to local storage whenever it changes
-  //     // console.log("file structure"+JSON.stringify(fileStructure));
-  //     localStorage.setItem('fileStructure', JSON.stringify(fileStructure));
-  //   }, [fileStructure]);
-  
-  //   useEffect(() => {
-  //     // Load fileStructure from local storage on component mount
-  //     const savedFileStructure = localStorage.getItem('fileStructure');
-  //     // console.log("savedFileStructure"+savedFileStructure);
-  //     if (savedFileStructure) {
-  //       setFileStructure(JSON.parse(savedFileStructure));
-  //     }
-  //     getContent();
-  //   }, []);
   useEffect(() => {
     getContent();
   }, [openedFile]);

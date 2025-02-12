@@ -71,37 +71,45 @@ const Finder = ({fileStructure, setFileStructure, ...props}) => {
     
       // Read the file as a blob
       const reader = new FileReader();
+      var content= "";
       reader.onload = (e) => {
         const blob = new Blob([e.target.result], { type: file.type });
-    
-        // Create a new file object
-        const newFile = {
-          id: currentId,
-          name: file.name,
-          type: 'file',
-          blob: blob,
-        };
-    
-        // Update the file structure
-        const updateStructure = (items, path, depth = 0) => {
-          if (depth === path.length) {
-            return [...items, newFile];
-          }
-    
-          return items.map(item => {
-            if (item.id === path[depth]) {
-              return {
-                ...item,
-                children: updateStructure(item.children || [], path, depth + 1)
-              };
+  
+        const reader = new FileReader();
+        reader.onload = () => {
+          content = reader.result; // Set the file content as a string
+          const newFile = {
+            id: currentId,
+            name: file.name,
+            type: 'file',
+            content: content,
+          };
+      
+          // Update the file structure
+          const updateStructure = (items, path, depth = 0) => {
+            if (depth === path.length) {
+              return [...items, newFile];
             }
-            return item;
-          });
+      
+            return items.map(item => {
+              if (item.id === path[depth]) {
+                return {
+                  ...item,
+                  children: updateStructure(item.children || [], path, depth + 1)
+                };
+              }
+              return item;
+            });
+          };
+      
+          const updatedStructure = updateStructure(fileStructure, currentPath);
+          setFileStructure(updatedStructure);
+          setCurrentId(prev => prev + 1);
         };
-    
-        const updatedStructure = updateStructure(fileStructure, currentPath);
-        setFileStructure(updatedStructure);
-        setCurrentId(prev => prev + 1);
+        reader.readAsText(blob);
+        console.log(blob);
+        // Create a new file object
+        
       };
     
       reader.readAsArrayBuffer(file);
@@ -340,7 +348,7 @@ const Finder = ({fileStructure, setFileStructure, ...props}) => {
   };
 
   const renderItems = () => {
-    // console.log(finderItems);
+    console.log(finderItems);
     return finderItems.map((item, index) => {
       if (item.type === 'folder') {
         return (
