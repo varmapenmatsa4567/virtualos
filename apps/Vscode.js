@@ -7,12 +7,13 @@ import { Save } from 'lucide-react';
 const Vscode = ({fileStructure, setFileStructure, ...props}) => {
   const openedFile = props.openedFile;
   const fileName = openedFile ? openedFile.name : 'Untitled.txt';
-  const [content, setContent] = React.useState(openedFile ? openedFile.content : "");
+  const [content, setContent] = React.useState("");
 
 
   const language = getLanguageFromExtension(fileName); 
 
   const changeContent = () => {
+    if(openedFile === null) return;
     // console.log("hello");
     const updateStructure = (items) => {
       console.log(items);
@@ -30,6 +31,8 @@ const Vscode = ({fileStructure, setFileStructure, ...props}) => {
   }
 
   const getContent = () => {
+    if(openedFile === null) return;
+
     const findContent = (items) => {
       for (let item of items) {
         if (item.id === openedFile.id) {
