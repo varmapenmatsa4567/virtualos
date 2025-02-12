@@ -8,6 +8,7 @@ const Vscode = ({fileStructure, setFileStructure, ...props}) => {
   const openedFile = props.openedFile;
   const fileName = openedFile ? openedFile.name : 'Untitled.txt';
   const [content, setContent] = React.useState("");
+  const [isModified, setIsModified] = React.useState(false);
 
 
   const language = getLanguageFromExtension(fileName); 
@@ -28,6 +29,7 @@ const Vscode = ({fileStructure, setFileStructure, ...props}) => {
       });
     };
     setFileStructure(prev => updateStructure(prev));
+    setIsModified(false);
   }
 
   const getContent = () => {
@@ -47,6 +49,11 @@ const Vscode = ({fileStructure, setFileStructure, ...props}) => {
     setContent(findContent(fileStructure));
   }
 
+  const handleContentChange = (val) => {
+    setContent(val);
+    setIsModified(true);
+  }
+
   useEffect(() => {
     getContent();
   }, [openedFile]);
@@ -55,13 +62,15 @@ const Vscode = ({fileStructure, setFileStructure, ...props}) => {
     <Window {...props}
       toolbar={
         <div className='flex items-center justify-between h-11'>
-          <p className='text-white text-sm'>{openedFile ? openedFile.name : 'Untitled.txt'}</p>
+          <p className='text-white text-sm'>
+            {isModified ? '*' : ''}{openedFile ? openedFile.name : 'Untitled.txt'}
+          </p>
           <Save onClick={changeContent} size={26} className='text-white mx-4 hover:bg-gray-600 p-1 rounded-full' />
         </div>
       }
     >
       <div className='overflow-hidden h-full'>
-        <Editor value={content} onChange={(val, event) => setContent(val)} defaultLanguage={language} className='h-auto' />;
+        <Editor value={content} onChange={handleContentChange} defaultLanguage={language} className='h-auto' />;
       </div>
       <div>
         <button className='bg-[#2f292e] text-white w-full h-8'>Save</button>

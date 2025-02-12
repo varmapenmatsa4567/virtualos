@@ -38,6 +38,7 @@ const File = ({ onFileOpen, fileName, onCopyItem, onDeleteItem, onCutItem, onSel
     <ContextMenu>
       <ContextMenuTrigger>
         <div
+          onDoubleClick={onFileOpen}
           onClick={onSelect}
           className={`${isSelected ? "bg-[#3b373a] rounded-md" : null} flex flex-col items-center`}
         >
