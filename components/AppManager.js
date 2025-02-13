@@ -1,6 +1,8 @@
 import Finder from '@/apps/Finder'
 import Vscode from '@/apps/Vscode'
+import Terminal from '@/apps/Terminal'
 import React from 'react'
+import Safari from '@/apps/Safari'
 
 const AppManager = (props) => {
 
@@ -10,9 +12,13 @@ const AppManager = (props) => {
     else if(props.appName === 'vscode') {
         return <Vscode {...props}/>
     }
-  return (
-    <div>AppManager</div>
-  )
+    else if(props.appName === 'terminal') {
+        return <Terminal {...props}/>
+    }
+    else if(props.appName === 'safari') {
+        return <Safari {...props}/>
+    }
+  return null;
 }
 
 export default AppManager

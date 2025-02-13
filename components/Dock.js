@@ -6,20 +6,25 @@ import { TooltipProvider } from './ui/tooltip';
 const Dock = ({ setWindows, openWindow, windows }) => {
   const minimizedWindows = windows.filter((window) => window.isMinimized);
 
+  const isAppOpen = (appName) => {
+    return windows.some((window) => window.appName === appName);
+  }
+
 return (
     <TooltipProvider>
         <div className='absolute bottom-1 w-full flex justify-center group'>
             <div className='w-fit invisible group-hover:visible flex z-20 p-1 gap-1 items-center h-fit bg-black bg-opacity-30 border-[0.1px] border-gray-700 px-2 rounded-2xl'>
-                <AppIcon appName={'finder'} onClick={() => openWindow('finder')} />
-                <AppIcon appName={'clock'} onClick={() => openWindow('clock')} />
-                <AppIcon appName={'launchpad'} onClick={() => openWindow('launchpad')} />
-                <AppIcon appName={'calculator'} onClick={() => openWindow('calculator')} />
-                <AppIcon appName={'notes'} onClick={() => openWindow('notes')} />
-                <AppIcon appName={'photos'} onClick={() => openWindow('photos')} />
-                <AppIcon appName={'safari'} onClick={() => openWindow('safari')} />
-                <AppIcon appName={'settings'} onClick={() => openWindow('settings')} />
-                <AppIcon appName={'vscode'} onClick={() => openWindow('vscode')} />
-                <AppIcon appName={'calendar'} onClick={() => openWindow('calendar')} />
+                <AppIcon appName={'finder'} onClick={() => openWindow('finder')} isOpen={isAppOpen("finder")}/>
+                <AppIcon appName={'clock'} onClick={() => openWindow('clock')} isOpen={isAppOpen("clock")}/>
+                <AppIcon appName={'terminal'} onClick={() => openWindow('terminal')} isOpen={isAppOpen("terminal")}/>
+                <AppIcon appName={'launchpad'} onClick={() => {}}  />
+                <AppIcon appName={'calculator'} onClick={() => openWindow('calculator')} isOpen={isAppOpen("calculator")}/>
+                <AppIcon appName={'notes'} onClick={() => openWindow('notes')} isOpen={isAppOpen("notes")}/>
+                <AppIcon appName={'photos'} onClick={() => openWindow('photos')} isOpen={isAppOpen("photos")}/>
+                <AppIcon appName={'safari'} onClick={() => openWindow('safari')} isOpen={isAppOpen("safari")}/>
+                <AppIcon appName={'settings'} onClick={() => openWindow('settings')} isOpen={isAppOpen("settings")}/>
+                <AppIcon appName={'vscode'} onClick={() => openWindow('vscode')} isOpen={isAppOpen("vscode")}/>
+                <AppIcon appName={'calendar'} onClick={() => openWindow('calendar')} isOpen={isAppOpen("calendar")} />
                 {minimizedWindows.length > 0 && (
                     <div className='h-14 border-[1px] mx-2'></div>
                 )}
