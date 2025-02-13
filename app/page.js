@@ -46,6 +46,11 @@ export default function Home() {
     }
   };
 
+  const closeWindow = (id) => {
+    setOpenedApps(openedApps.filter((app) => app !== windows.find((w) => w.id === id).appName));
+    setWindows(windows.filter((window) => window.id !== id));
+  }
+
   // Function to handle file clicks
   const handleFileClick = (file) => {
     setOpenedFile(file); // Set the opened file
@@ -99,7 +104,7 @@ export default function Home() {
 
   return (
     <div className="w-screen h-screen flex flex-col items-center">
-      <TopBar />
+      <TopBar activeWindow={windows.filter((window) => window.id == activeWindow)}/>
       <div className="main flex-1 w-screen bg-wallpaper bg-cover">
         {windows.map((window) => (
           <AppManager
@@ -113,7 +118,7 @@ export default function Home() {
             isActive={activeWindow === window.id}
             isMinimized={window.isMinimized}
             isMaximized={window.isMaximized}
-            onClose={() => setWindows(windows.filter((w) => w.id !== window.id))}
+            onClose={() => closeWindow(window.id)}
             toggleMinimize={() => setWindows(windows.map((w) => w.id === window.id ? { ...w, isMinimized: !w.isMinimized } : w))}
             toggleMaximize={() => setWindows(windows.map((w) => w.id === window.id ? { ...w, isMaximized: !w.isMaximized } : w))}
           />

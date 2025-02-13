@@ -3,7 +3,7 @@ import React from 'react';
 import { Rnd } from 'react-rnd';
 import WnManager from './WnManager';
 
-const Window = ({ onClick, isActive, isMinimized, isMaximized, onClose, toggleMinimize, toggleMaximize, toolbar, children }) => {
+const Window = ({ onClick, isCustomized, customSize, isActive, isMinimized, isMaximized, onClose, toggleMinimize, toggleMaximize, toolbar, children }) => {
   return (
     <Rnd
       default={{
@@ -13,9 +13,9 @@ const Window = ({ onClick, isActive, isMinimized, isMaximized, onClose, toggleMi
         height: 400,
       }}
       className={`${isActive && 'z-50'}`}
-      size={isMaximized ? { width: "100vw", height: "100vh" } : null}
+      size={isMaximized ? { width: "100vw", height: "100vh" } : isCustomized ? customSize : null}
       position={isMaximized ? { x: 0, y: 0 } : null}
-      enableResizing={!isMaximized}
+      enableResizing={!isMaximized && !isCustomized}
       disableDragging={isMaximized}
       minWidth={500}
       minHeight={200}

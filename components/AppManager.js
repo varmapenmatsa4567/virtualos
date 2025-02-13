@@ -3,6 +3,7 @@ import Vscode from '@/apps/Vscode'
 import Terminal from '@/apps/Terminal'
 import React from 'react'
 import Safari from '@/apps/Safari'
+import Sudoko from '@/apps/Sudoko/Sudoko'
 
 const AppManager = (props) => {
 
@@ -17,6 +18,9 @@ const AppManager = (props) => {
     }
     else if(props.appName === 'safari') {
         return <Safari {...props}/>
+    }
+    else if(props.appName === 'sudoko') {
+        return <Sudoko {...props}/>
     }
   return null;
 }

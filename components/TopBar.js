@@ -4,8 +4,9 @@ import { formatDate } from '../utils/utils';
 import { IoBatteryFull, IoSearch, IoBluetooth } from 'react-icons/io5';
 import { IoIosWifi } from 'react-icons/io';
 
-const TopBar = ({openWindow}) => {
+const TopBar = ({activeWindow}) => {
   const [formattedDate, setFormattedDate] = useState([]);
+  // console.log(activeWindow);
 
   useEffect(() => {
     const updateDate = () => {
@@ -21,8 +22,9 @@ const TopBar = ({openWindow}) => {
 
   return (
     <div className='w-screen h-7 bg-[#1a1e4b] px-4 flex items-center text-white justify-between'>
-      <div className='flex items-center'>
+      <div className='flex items-center gap-2'>
         <FaApple className='text-white text-lg' />
+        <p className='text-[13px] font-extrabold capitalize'>{activeWindow && activeWindow.length > 0 && activeWindow[0].appName}</p>
       </div>
       <div className='flex cursor-default items-center gap-3'>
         <IoBluetooth />

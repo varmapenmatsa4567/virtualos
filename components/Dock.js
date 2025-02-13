@@ -25,6 +25,7 @@ return (
                 <AppIcon appName={'settings'} onClick={() => openWindow('settings')} isOpen={isAppOpen("settings")}/>
                 <AppIcon appName={'vscode'} onClick={() => openWindow('vscode')} isOpen={isAppOpen("vscode")}/>
                 <AppIcon appName={'calendar'} onClick={() => openWindow('calendar')} isOpen={isAppOpen("calendar")} />
+                <AppIcon appName={'sudoko'} onClick={() => openWindow('sudoko')} isOpen={isAppOpen("sudoko")} />
                 {minimizedWindows.length > 0 && (
                     <div className='h-14 border-[1px] mx-2'></div>
                 )}
