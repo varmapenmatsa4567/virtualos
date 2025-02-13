@@ -26,7 +26,7 @@ const Window = ({ onClick, isActive, isMinimized, isMaximized, onClose, toggleMi
       }}
     >
       <div onClick={onClick} className={`bg-[#242227] overflow-hidden flex flex-col shadow-2xl cursor-default h-full rounded-lg`}>
-        <div className="bg-[#3c3639] rounded-t-lg w-full h-10 flex items-center toolbar">
+        <div onDoubleClick={toggleMaximize} className="bg-[#3c3639] rounded-t-lg w-full h-10 flex items-center toolbar">
           <WnManager
             onClose={onClose}
             toggleMinimize={toggleMinimize}

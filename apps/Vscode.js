@@ -55,6 +55,21 @@ const Vscode = ({fileStructure, setFileStructure, ...props}) => {
   }
 
   useEffect(() => {
+    const handleKeyDown = (event) => {
+      if ((event.ctrlKey || event.metaKey) && event.key === 's') {
+        event.preventDefault(); // Prevent the default save dialog
+        changeContent(); // Save the file content
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [content]); 
+
+  useEffect(() => {
     getContent();
   }, [openedFile]);
 

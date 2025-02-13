@@ -1,6 +1,6 @@
 import React from 'react'
 import {ContextMenu, ContextMenuTrigger} from '@/components/ui/context-menu';
-import FolderContextMenu from './context-menu/FolderContextMenu';
+import FolderContextMenu from '../../components/context-menu/FolderContextMenu';
 
 const Folder = ({folderName, onClick, onFolderDelete, onFolderDuplicate, onCopyItem, onCutItem, onSelect, isSelected}) => {
   return (

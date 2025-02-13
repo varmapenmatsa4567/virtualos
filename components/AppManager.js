@@ -1,4 +1,4 @@
-import Finder from '@/apps/Finder'
+import Finder from '@/apps/Finder/Finder'
 import Vscode from '@/apps/Vscode'
 import Terminal from '@/apps/Terminal'
 import React from 'react'

@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import Window from '@/components/Window';
-import Folder from '@/components/Folder';
-import File from '../components/File';
+import Folder from '@/apps/Finder/Folder';
+import File from './File';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { ContextMenu, ContextMenuTrigger } from '@/components/ui/context-menu';
 import FinderContextMenu from '@/components/context-menu/FinderContextMenu';
-import { initialStructure } from '@/utils/data';
 
 // Helper function to recursively find a folder by path
 const getFolderByPath = (structure, path) => {

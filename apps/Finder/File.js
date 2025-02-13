@@ -1,5 +1,5 @@
 import React, {useRef, useEffect} from 'react';
-import FileContextMenu from './context-menu/FileContextMenu';
+import FileContextMenu from '../../components/context-menu/FileContextMenu';
 import { ContextMenu, ContextMenuTrigger } from '@/components/ui/context-menu';
 
 const File = ({ onFileOpen, fileName, onCopyItem, onDeleteItem, onCutItem, onSelect, isSelected, onRename }) => {
