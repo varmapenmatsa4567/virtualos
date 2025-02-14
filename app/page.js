@@ -5,6 +5,7 @@ import TopBar from "@/components/TopBar";
 import { useState, useEffect } from "react";
 import { initialStructure } from "@/utils/data";
 import AppSwitcher from "@/components/AppSwitcher";
+import Launchpad from "@/apps/Launchpad/Launchpad";
 
 export default function Home() {
   const [windows, setWindows] = useState([]);
@@ -14,8 +15,14 @@ export default function Home() {
   const [selectedAppIndex, setSelectedAppIndex] = useState(0); // Track the selected app in the switcher
   const [isAppSwitcherVisible, setIsAppSwitcherVisible] = useState(false); // Control visibility of the app switcher
   const [isAltKeyPressed, setIsAltKeyPressed] = useState(false); // Track if Alt key is pressed
+  const [isLaunchpadOpen, setIsLaunchpadOpen] = useState(false); // Track if Launchpad is open
 
   const [fileStructure, setFileStructure] = useState(initialStructure);
+
+  const toggleLaunchpad = () => {
+    setIsLaunchpadOpen(!isLaunchpadOpen);
+  }
+
 
   // Load fileStructure from localStorage on component mount
   useEffect(() => {
@@ -104,8 +111,8 @@ export default function Home() {
 
   return (
     <div className="w-screen h-screen flex flex-col items-center">
-      <TopBar activeWindow={windows.filter((window) => window.id == activeWindow)}/>
-      <div className="main flex-1 w-screen bg-wallpaper bg-cover">
+      {!isLaunchpadOpen && <TopBar activeWindow={windows.filter((window) => window.id == activeWindow)}/>}
+      {!isLaunchpadOpen && <div className="main flex-1 w-screen bg-wallpaper bg-cover">
         {windows.map((window) => (
           <AppManager
             openedFile={openedFile}
@@ -123,8 +130,9 @@ export default function Home() {
             toggleMaximize={() => setWindows(windows.map((w) => w.id === window.id ? { ...w, isMaximized: !w.isMaximized } : w))}
           />
         ))}
-      </div>
-      <Dock setWindows={setWindows} openWindow={openWindow} windows={windows} />
+      </div>}
+      <Dock isVisible={isLaunchpadOpen} toggleLaunchpad={toggleLaunchpad} setWindows={setWindows} openWindow={openWindow} windows={windows} />
+      {isLaunchpadOpen && <Launchpad toggleLaunchpad={toggleLaunchpad}/>}
       {isAppSwitcherVisible && (
         <AppSwitcher openedApps={openedApps} selectedAppIndex={selectedAppIndex} />
       )}

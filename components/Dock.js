@@ -2,8 +2,9 @@
 import React from 'react';
 import AppIcon from './AppIcon';
 import { TooltipProvider } from './ui/tooltip';
+import Launchpad from '@/apps/Launchpad/Launchpad';
 
-const Dock = ({ setWindows, openWindow, windows }) => {
+const Dock = ({ isVisible, toggleLaunchpad, setWindows, openWindow, windows }) => {
   const minimizedWindows = windows.filter((window) => window.isMinimized);
 
   const isAppOpen = (appName) => {
@@ -12,12 +13,12 @@ const Dock = ({ setWindows, openWindow, windows }) => {
 
 return (
     <TooltipProvider>
-        <div className='absolute bottom-1 w-full flex justify-center group'>
-            <div className='w-fit invisible group-hover:visible flex z-20 p-1 gap-1 items-center h-fit bg-black bg-opacity-30 border-[0.1px] border-gray-700 px-2 rounded-2xl'>
+        <div className='absolute z-20 bottom-1 w-full flex justify-center group'>
+            <div className={`w-fit ${isVisible ? "visible" : "invisible"} group-hover:visible flex z-20 p-1 gap-1 items-center h-fit bg-black bg-opacity-30 border-[0.1px] border-gray-700 px-2 rounded-2xl`}>
                 <AppIcon appName={'finder'} onClick={() => openWindow('finder')} isOpen={isAppOpen("finder")}/>
                 <AppIcon appName={'clock'} onClick={() => openWindow('clock')} isOpen={isAppOpen("clock")}/>
                 <AppIcon appName={'terminal'} onClick={() => openWindow('terminal')} isOpen={isAppOpen("terminal")}/>
-                <AppIcon appName={'launchpad'} onClick={() => {}}  />
+                <AppIcon appName={'launchpad'} onClick={toggleLaunchpad}  />
                 <AppIcon appName={'calculator'} onClick={() => openWindow('calculator')} isOpen={isAppOpen("calculator")}/>
                 <AppIcon appName={'notes'} onClick={() => openWindow('notes')} isOpen={isAppOpen("notes")}/>
                 <AppIcon appName={'photos'} onClick={() => openWindow('photos')} isOpen={isAppOpen("photos")}/>

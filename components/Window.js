@@ -7,8 +7,8 @@ const Window = ({ onClick, isCustomized, customSize, isActive, isMinimized, isMa
   return (
     <Rnd
       default={{
-        x: 150,
-        y: 205,
+        x: 300,
+        y: 50,
         width: 600,
         height: 400,
       }}
