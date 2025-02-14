@@ -132,7 +132,7 @@ export default function Home() {
         ))}
       </div>}
       <Dock isVisible={isLaunchpadOpen} toggleLaunchpad={toggleLaunchpad} setWindows={setWindows} openWindow={openWindow} windows={windows} />
-      {isLaunchpadOpen && <Launchpad toggleLaunchpad={toggleLaunchpad}/>}
+      {isLaunchpadOpen && <Launchpad openWindow={openWindow} toggleLaunchpad={toggleLaunchpad}/>}
       {isAppSwitcherVisible && (
         <AppSwitcher openedApps={openedApps} selectedAppIndex={selectedAppIndex} />
       )}
