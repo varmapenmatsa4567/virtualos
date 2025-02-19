@@ -4,6 +4,7 @@ import Terminal from '@/apps/Terminal'
 import React from 'react'
 import Safari from '@/apps/Safari'
 import Sudoko from '@/apps/Sudoko/Sudoko'
+import Notes from '@/apps/Notes/Notes'
 
 const AppManager = (props) => {
 
@@ -21,6 +22,9 @@ const AppManager = (props) => {
     }
     else if(props.appName === 'sudoko') {
         return <Sudoko {...props}/>
+    }
+    else if(props.appName === 'notes') {
+        return <Notes {...props}/>
     }
   return null;
 }

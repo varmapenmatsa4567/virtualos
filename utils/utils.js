@@ -1,3 +1,5 @@
+import { v4 as uuidv4 } from 'uuid';
+
 export const formatDate = (date) => {
     const weekday = date.toLocaleString('en-US', { weekday: 'short' });
     const day = date.getDate().toString();
@@ -40,14 +42,22 @@ export const isYesterday = (someDate) => {
 }
 
 export const noteDate = (date) => {
-    const month = date.toLocaleString('en-US', { month: 'short' });
-    const day = date.getDate().toString().padStart(2, '0');
-    const year = date.getFullYear().toString().slice(2);
+    const dt = new Date(date);
+    const month = dt.toLocaleString('en-US', { month: 'short' });
+    const day = dt.getDate().toString().padStart(2, '0');
+    const year = dt.getFullYear().toString().slice(2);
+    const hours = dt.getHours() % 12 || 12; // Convert to 12-hour format
+    const minutes = dt.getMinutes().toString().padStart(2, '0'); // Pad minutes to 2 digits
+    const ampm = dt.getHours() >= 12 ? 'PM' : 'AM'; // Determine AM/PM
 
-    if(isToday(date)) return `${date.getHours() % 12 || 12}:${date.getMinutes()} ${date.getHours() >= 12 ? 'PM' : 'AM'} `;
-    else if(isYesterday(date)) return `Yesterday`;
-    else return `${month} ${day}, ${year}`;
-}
+    if (isToday(dt)) {
+        return `${hours}:${minutes} ${ampm}`;
+    } else if (isYesterday(dt)) {
+        return `Yesterday`;
+    } else {
+        return `${month} ${day}, ${year}`;
+    }
+};
 
 export const getLanguageFromExtension = (fileName) => {
     const extension = fileName.split('.').pop().toLowerCase();
@@ -71,4 +81,8 @@ export const getLanguageFromExtension = (fileName) => {
   
     return languageMap[extension] || 'plaintext'; // Default to plaintext if extension is not recognized
   };
+
+export const getId = () => {
+    return uuidv4();
+}
 

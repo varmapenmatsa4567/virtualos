@@ -11,6 +11,7 @@ export default {
   	extend: {
 		backgroundImage: {
 			'wallpaper': "url('/wallpaper.png')",
+			'launchpad': "url('/launchpad.jpg')",
 		},
   		colors: {
   			background: 'hsl(var(--background))',
