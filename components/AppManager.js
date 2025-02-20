@@ -6,6 +6,7 @@ import Safari from '@/apps/Safari'
 import Sudoko from '@/apps/Sudoko/Sudoko'
 import Notes from '@/apps/Notes/Notes'
 import Photos from '@/apps/Photos/Photos'
+import Photobooth from '@/apps/Photobooth/Photobooth'
 
 const AppManager = (props) => {
 
@@ -29,6 +30,9 @@ const AppManager = (props) => {
     }
     else if(props.appName === 'photos') {
         return <Photos {...props}/>
+    }
+    else if(props.appName === 'photobooth'){
+        return <Photobooth {...props}/>
     }
   return null;
 }

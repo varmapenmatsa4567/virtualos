@@ -21,6 +21,7 @@ return (
                 <AppIcon appName={'launchpad'} onClick={toggleLaunchpad}  />
                 <AppIcon appName={'calculator'} onClick={() => openWindow('calculator')} isOpen={isAppOpen("calculator")}/>
                 <AppIcon appName={'notes'} onClick={() => openWindow('notes')} isOpen={isAppOpen("notes")}/>
+                <AppIcon appName={'photobooth'} onClick={() => openWindow('photobooth')} isOpen={isAppOpen("photobooth")}/>
                 <AppIcon appName={'photos'} onClick={() => openWindow('photos')} isOpen={isAppOpen("photos")}/>
                 <AppIcon appName={'safari'} onClick={() => openWindow('safari')} isOpen={isAppOpen("safari")}/>
                 <AppIcon appName={'settings'} onClick={() => openWindow('settings')} isOpen={isAppOpen("settings")}/>
