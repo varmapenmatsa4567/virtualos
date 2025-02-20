@@ -6,11 +6,16 @@ import { Input } from '@/components/ui/input'
 const Launchpad = ({toggleLaunchpad, openWindow}) => {
 
   const input = useRef(null);
+
+  const handleInputClick = (e) => {
+    e.stopPropagation(); // Stop event propagation
+    input.current.focus();
+  };
   return (
-    <div  className='fixed duration-75 transition-all top-0 left-0 bg-wallpaper w-screen h-screen bg-cover'>
+    <div onClick={toggleLaunchpad} className='fixed duration-75 transition-all top-0 left-0 bg-wallpaper w-screen h-screen bg-cover'>
         <TooltipProvider>
             <div>
-              <Input ref={input} onClick={() => input.current.focus()} type='text' placeholder='Search' className='w-1/6 placeholder:text-center text-center mx-auto mt-10 text-white' />
+              <Input ref={input} onClick={handleInputClick} type='text' placeholder='Search' className='w-1/6 placeholder:text-center text-center mx-auto mt-10 text-white' />
             </div>
             <div className='w-full h-full px-32 pt-10 pb-40 backdrop-filter backdrop-blur-lg'>
 
