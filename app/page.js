@@ -6,6 +6,7 @@ import { useState, useEffect } from "react";
 import { initialStructure } from "@/utils/data";
 import AppSwitcher from "@/components/AppSwitcher";
 import Launchpad from "@/apps/Launchpad/Launchpad";
+import { SampleDock } from "@/components/SampleDock";
 
 export default function Home() {
   const [windows, setWindows] = useState([]);
@@ -75,6 +76,7 @@ export default function Home() {
 
   useEffect(() => {
     const handleKeyDown = (event) => {
+      console.log(event);
       if (event.key === 'Alt') {
         setIsAltKeyPressed(true); // Set Alt key as pressed
         setIsAppSwitcherVisible(true); // Show the app switcher
@@ -83,6 +85,11 @@ export default function Home() {
       if (event.key === 'Tab' && isAltKeyPressed) {
         event.preventDefault(); // Prevent default Tab behavior
         setSelectedAppIndex((prevIndex) => (prevIndex + 1) % openedApps.length); // Cycle through apps
+      }
+
+      if( event.code === 'KeyW' && isAltKeyPressed) {
+        event.preventDefault(); // Prevent default behavior
+        closeWindow(activeWindow); // Close the active window
       }
     };
 
@@ -132,6 +139,7 @@ export default function Home() {
         ))}
       </div>}
       <Dock isVisible={isLaunchpadOpen} toggleLaunchpad={toggleLaunchpad} setWindows={setWindows} openWindow={openWindow} windows={windows} />
+      {/* <SampleDock /> */}
       {isLaunchpadOpen && <Launchpad openWindow={openWindow} toggleLaunchpad={toggleLaunchpad}/>}
       {isAppSwitcherVisible && (
         <AppSwitcher openedApps={openedApps} selectedAppIndex={selectedAppIndex} />

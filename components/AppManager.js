@@ -7,6 +7,7 @@ import Sudoko from '@/apps/Sudoko/Sudoko'
 import Notes from '@/apps/Notes/Notes'
 import Photos from '@/apps/Photos/Photos'
 import Photobooth from '@/apps/Photobooth/Photobooth'
+import VlcPlayer from '@/apps/VlcPlayer/VlcPlayer'
 
 const AppManager = (props) => {
 
@@ -33,6 +34,9 @@ const AppManager = (props) => {
     }
     else if(props.appName === 'photobooth'){
         return <Photobooth {...props}/>
+    }
+    else if(props.appName === 'vlcplayer') {
+        return <VlcPlayer {...props}/>
     }
   return null;
 }
