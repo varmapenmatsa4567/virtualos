@@ -4,12 +4,13 @@ import { ChevronLeft, Minus, Plus } from "lucide-react";
 
 const Photos = ({ fileStructure, setFileStructure, ...props }) => {
   const gridRef = useRef(null);
-  const cols = ["grid-cols-3", "grid-cols-5", "grid-cols-7", "grid-cols-9"]; // Allowed odd column values
-  const [colIndex, setColIndex] = useState(1); // Start at index 1 (cols = 5)
+  const cols = ["grid-cols-3", "grid-cols-5", "grid-cols-7", "grid-cols-9"];
+  const [colIndex, setColIndex] = useState(1);
   const [selectedItem, setSelectedItem] = useState(0);
   const [photos, setPhotos] = useState([]);
   const [db, setDb] = useState(null);
-  const [fullScreenImage, setFullScreenImage] = useState(null); // State for full-screen image
+  const [fullScreenImage, setFullScreenImage] = useState(null);
+  const [isDragging, setIsDragging] = useState(false);
 
   // Open or create IndexedDB database
   useEffect(() => {
@@ -26,7 +27,7 @@ const Photos = ({ fileStructure, setFileStructure, ...props }) => {
     request.onsuccess = (event) => {
       const db = event.target.result;
       setDb(db);
-      getPhotos(db); // Fetch photos after database is opened
+      getPhotos(db);
     };
 
     request.onerror = (event) => {
@@ -54,8 +55,7 @@ const Photos = ({ fileStructure, setFileStructure, ...props }) => {
   };
 
   // Handle image upload from system
-  const handleImageUpload = (event) => {
-    const file = event.target.files[0];
+  const handleImageUpload = (file) => {
     if (!file) return;
 
     const reader = new FileReader();
@@ -81,6 +81,40 @@ const Photos = ({ fileStructure, setFileStructure, ...props }) => {
     reader.readAsDataURL(file); // Read the file as a data URL
   };
 
+  // Handle drag-and-drop events
+  const handleDragEnter = (e) => {
+    e.preventDefault();
+    setIsDragging(true);
+  };
+
+  const handleDragOver = (e) => {
+    e.preventDefault();
+    setIsDragging(true);
+  };
+
+  const handleDragLeave = (e) => {
+    e.preventDefault();
+    setIsDragging(false);
+  };
+
+  const handleDrop = (e) => {
+    e.preventDefault();
+    setIsDragging(false);
+
+    const files = e.dataTransfer.files;
+    if (files.length > 0) {
+      // Process each file
+      for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+        if (file.type.startsWith("image/")) {
+          handleImageUpload(file);
+        } else {
+          console.warn("Skipped non-image file:", file.name);
+        }
+      }
+    }
+  };
+
   const increaseCols = () => {
     if (colIndex === cols.length - 1) return;
     setColIndex((prevIndex) => prevIndex + 1);
@@ -95,29 +129,33 @@ const Photos = ({ fileStructure, setFileStructure, ...props }) => {
   useEffect(() => {
     const handleKeyDown = (event) => {
       const totalItems = photos.length;
-      console.log("Total items:", totalItems);
-      if (totalItems === 0) return; // No photos to navigate
-      const colsCount = parseInt(cols[colIndex].split("-")[2]); // Get the current number of columns
+      if (totalItems === 0) return;
+      const colsCount = parseInt(cols[colIndex].split("-")[2]);
 
       switch (event.key) {
         case "ArrowRight":
           setSelectedItem((prev) => (prev + 1) % totalItems);
+          if(fullScreenImage) setFullScreenImage(photos[selectedItem].imageUrl);
+          setFullScreenImage
           break;
         case "ArrowLeft":
           setSelectedItem((prev) => (prev - 1 + totalItems) % totalItems);
+          if(fullScreenImage) setFullScreenImage(photos[selectedItem].imageUrl);
           break;
         case "ArrowDown":
           setSelectedItem((prev) => (prev + colsCount) % totalItems);
+          if(fullScreenImage) setFullScreenImage(photos[selectedItem].imageUrl);
           break;
         case "ArrowUp":
           setSelectedItem((prev) => (prev - colsCount + totalItems) % totalItems);
+          if(fullScreenImage) setFullScreenImage(photos[selectedItem].imageUrl);
           break;
-        case " ": // Space key
-          event.preventDefault(); // Prevent scrolling
-          setFullScreenImage(photos[selectedItem].imageUrl); // Open selected image in full-screen
+        case " ":
+          event.preventDefault();
+          setFullScreenImage(photos[selectedItem].imageUrl);
           break;
         case "Escape":
-          setFullScreenImage(null); // Close full-screen mode on Escape key
+          setFullScreenImage(null);
           break;
         default:
           break;
@@ -128,7 +166,7 @@ const Photos = ({ fileStructure, setFileStructure, ...props }) => {
     return () => {
       window.removeEventListener("keydown", handleKeyDown);
     };
-  }, [colIndex, photos.length, selectedItem, photos]); // Re-run effect when dependencies change
+  }, [colIndex, photos.length, selectedItem, photos]);
 
   // Handle double-click to show full-screen image
   const handleDoubleClick = (index) => {
@@ -148,13 +186,20 @@ const Photos = ({ fileStructure, setFileStructure, ...props }) => {
           <Minus onClick={increaseCols} className="w-6 h-6 cursor-pointer p-1" />
           <Plus onClick={decreaseCols} className="w-6 h-6 cursor-pointer p-1" />
           {fullScreenImage && <ChevronLeft onClick={closeFullScreen} className="w-6 h-6 cursor-pointer p-1" />}
-          {/* Add a file input for image upload */}
           <input
             type="file"
             accept="image/*"
-            onChange={handleImageUpload}
+            onChange={(e) => {
+              const files = e.target.files;
+              if (files.length > 0) {
+                for (let i = 0; i < files.length; i++) {
+                  handleImageUpload(files[i]);
+                }
+              }
+            }}
             className="hidden"
             id="upload-input"
+            multiple // Allow multiple file selection
           />
           <label
             htmlFor="upload-input"
@@ -165,9 +210,17 @@ const Photos = ({ fileStructure, setFileStructure, ...props }) => {
         </div>
       }
     >
-      <div ref={gridRef} className="w-full relative h-full flex flex-col ">
-        {/* Make the grid container scrollable */}
-        <div className={`grid ${cols[colIndex]} gap-[2px]  overflow-y-auto`}>
+      <div
+        ref={gridRef}
+        className={`w-full relative h-full flex flex-col ${
+          isDragging ? "border-2 border-dashed border-blue-500" : ""
+        }`}
+        onDragEnter={handleDragEnter}
+        onDragOver={handleDragOver}
+        onDragLeave={handleDragLeave}
+        onDrop={handleDrop}
+      >
+        <div className={`grid ${cols[colIndex]} gap-[2px] overflow-y-auto`}>
           {photos.length > 0 &&
             photos.map((photo, index) => (
               <div
@@ -176,7 +229,7 @@ const Photos = ({ fileStructure, setFileStructure, ...props }) => {
                   selectedItem === index ? "border-[3px] border-[#0158d0]" : ""
                 }`}
                 onClick={() => setSelectedItem(index)}
-                onDoubleClick={() => handleDoubleClick(index)} // Handle double-click
+                onDoubleClick={() => handleDoubleClick(index)}
               >
                 <img
                   className="w-full h-full object-cover"
@@ -186,13 +239,12 @@ const Photos = ({ fileStructure, setFileStructure, ...props }) => {
               </div>
             ))}
         </div>
-        {/* <p className="text-white text-center text-md p-4 font-bold">{photos.length} Photos, 0 Videos</p> */}
 
         {/* Full-screen image overlay */}
         {fullScreenImage && (
           <div
             className="absolute inset-0 bg-black flex items-center justify-center z-50"
-            onClick={closeFullScreen} // Close on click outside the image
+            onClick={closeFullScreen}
           >
             <img
               className="w-full h-full object-contain"
