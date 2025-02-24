@@ -112,7 +112,7 @@ const Photobooth = ({ fileStructure, setFileStructure, onClose, ...props }) => {
     };
 
     return (
-        <Window isCustomized={true} onClose={handleClose} {...props}>
+        <Window isCustomized={true} onClose={handleClose} customSize={{width: 800, height: 500}} {...props}>
             <div className="flex-1 relative">
                 {/* Apply mirror effect to the video */}
                 <video

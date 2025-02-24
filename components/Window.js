@@ -13,12 +13,14 @@ const Window = ({ onClick, isCustomized, customSize, isActive, isMinimized, isMa
         height: 400,
       }}
       className={`${isActive && 'z-50'}`}
-      size={isMaximized ? { width: "100vw", height: "100vh" } : isCustomized ? customSize : null}
+      // size={{ width: "100%", height: "100%" }}
+      // position={{ x: 0, y: 0 }}
+      size={isMaximized ? { width: "100%", height: "766px" } : isCustomized ? customSize : null}
       position={isMaximized ? { x: 0, y: 0 } : null}
       enableResizing={!isMaximized && !isCustomized}
       disableDragging={isMaximized}
-      minWidth={500}
-      minHeight={200}
+      minWidth={isCustomized ? customSize.width : 500}
+      minHeight={isCustomized ? customSize.height : 300}
       bounds=".main"
       dragHandleClassName="toolbar"
       style={{
@@ -37,7 +39,7 @@ const Window = ({ onClick, isCustomized, customSize, isActive, isMinimized, isMa
             {toolbar}
           </div>
         </div>
-        <div className='flex-1 w-full h-full'>
+        <div className='h-[calc(100%-40px)] w-full'>
           {children}
         </div>
       </div>

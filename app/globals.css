@@ -13,6 +13,16 @@ body {
   overflow: hidden;
 }
 
+::-webkit-scrollbar {
+  width: 8px; /* Width of the scrollbar */
+  padding: 2px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #6b6b6b; /* Color of the scrollbar thumb */
+  border-radius: 4px; /* Rounded corners */
+}
+
 @layer base {
   :root {
     --background: 0 0% 100%;

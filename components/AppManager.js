@@ -8,6 +8,8 @@ import Notes from '@/apps/Notes/Notes'
 import Photos from '@/apps/Photos/Photos'
 import Photobooth from '@/apps/Photobooth/Photobooth'
 import VlcPlayer from '@/apps/VlcPlayer/VlcPlayer'
+import Calculator from '@/apps/Calculator/Calculator'
+import Clock from '@/apps/Clock/Clock'
 
 const AppManager = (props) => {
 
@@ -37,6 +39,12 @@ const AppManager = (props) => {
     }
     else if(props.appName === 'vlcplayer') {
         return <VlcPlayer {...props}/>
+    }
+    else if(props.appName === 'calculator') {
+        return <Calculator {...props}/>
+    }
+    else if(props.appName === 'clock') {
+        return <Clock {...props}/>
     }
   return null;
 }

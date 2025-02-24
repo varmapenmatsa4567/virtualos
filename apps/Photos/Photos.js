@@ -165,9 +165,9 @@ const Photos = ({ fileStructure, setFileStructure, ...props }) => {
         </div>
       }
     >
-      <div ref={gridRef} className="w-full relative h-full flex flex-col">
+      <div ref={gridRef} className="w-full relative h-full flex flex-col ">
         {/* Make the grid container scrollable */}
-        <div className={`grid ${cols[colIndex]} gap-[2px] overflow-y-auto pb-20`}>
+        <div className={`grid ${cols[colIndex]} gap-[2px]  overflow-y-auto`}>
           {photos.length > 0 &&
             photos.map((photo, index) => (
               <div
@@ -186,6 +186,7 @@ const Photos = ({ fileStructure, setFileStructure, ...props }) => {
               </div>
             ))}
         </div>
+        {/* <p className="text-white text-center text-md p-4 font-bold">{photos.length} Photos, 0 Videos</p> */}
 
         {/* Full-screen image overlay */}
         {fullScreenImage && (

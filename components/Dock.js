@@ -14,7 +14,7 @@ const Dock = ({ isVisible, toggleLaunchpad, setWindows, openWindow, windows }) =
   const apps = [
     { appName: 'finder'},
     { appName: 'clock'},
-    { appName: 'terminal'},
+    // { appName: 'terminal'},
     { appName: 'launchpad', onClick: toggleLaunchpad, isApp: false},
     { appName: 'calculator'},
     { appName: 'notes'},
@@ -26,6 +26,7 @@ const Dock = ({ isVisible, toggleLaunchpad, setWindows, openWindow, windows }) =
     { appName: 'calendar'},
     { appName: 'sudoko'},
     { appName: 'vlcplayer'},
+
   ]
 
 return (
