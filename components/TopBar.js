@@ -8,23 +8,24 @@ import BluetoothMenu from './topbar-menus/BluetoothMenu';
 import { MdOutlineWifiOff, MdOutlineWifi } from "react-icons/md";
 import { Bluetooth, BluetoothOff } from 'lucide-react';
 import { useOutsideClick } from '@/hooks/useOutsideClick';
+import useToggle from '@/hooks/useToggle';
 
 const TopBar = ({activeWindow}) => {
   const [formattedDate, setFormattedDate] = useState([]);
 
   // Wifi
-  const [isWifiOpen, setIsWifiOpen] = useState(false);
-  const [isWifiOn, setIsWifiOn] = useState(false);
-  const [isWifiConnected, setIsWifiConnected] = useState(false);
+  const [isWifiOpen, toggleWifiOpen] = useToggle(false);
+  const [isWifiOn, toggleWifi] = useToggle(false);
+  const [isWifiConnected, toggleWifiConnected] = useToggle(false);
   const wifiRef = useRef(null);
-  useOutsideClick(wifiRef, () => setIsWifiOpen(false));
+  useOutsideClick(wifiRef, () => toggleWifiOpen(false));
 
   // Bluetooth
-  const [isBluetoothOpen, setIsBluetoothOpen] = useState(false);
-  const [isBluetoothOn, setIsBluetoothOn] = useState(false);
-  const [isDeviceConnected, setIsDeviceConnected] = useState(false);
+  const [isBluetoothOpen, toggleBluetoothOpen] = useToggle(false);
+  const [isBluetoothOn, toggleBluetooth] = useToggle(false);
+  const [isDeviceConnected, toggleBluetoothConnected] = useToggle(false);
   const bluetoothRef = useRef(null);
-  useOutsideClick(bluetoothRef, () => setIsBluetoothOpen(false));
+  useOutsideClick(bluetoothRef, () => toggleBluetoothOpen(false));
   
 
   // console.log(activeWindow);
@@ -49,20 +50,20 @@ const TopBar = ({activeWindow}) => {
       </div>
       <div className='flex cursor-default items-center gap-3'>
         <div className={`${isBluetoothOpen && 'bg-white'} relative p-1 px-2 rounded-md bg-opacity-20`}>
-          {isBluetoothOn ? <Bluetooth size={17} className={`${isDeviceConnected ? "text-white" : "text-white text-opacity-40"}`} onClick={() => setIsBluetoothOpen(!isBluetoothOpen)}/> : (
-            <BluetoothOff size={17} className='text-white text-opacity-40' onClick={() => setIsBluetoothOpen(!isBluetoothOpen)}/>
+          {isBluetoothOn ? <Bluetooth size={17} className={`${isDeviceConnected ? "text-white" : "text-white text-opacity-40"}`} onClick={toggleBluetoothOpen}/> : (
+            <BluetoothOff size={17} className='text-white text-opacity-40' onClick={toggleBluetoothOpen}/>
           )}
-          {isBluetoothOpen && <BluetoothMenu ref={bluetoothRef} isDeviceConnected={isDeviceConnected} setIsDeviceConnected={setIsDeviceConnected} isBluetoothOn={isBluetoothOn} setIsBluetoothOn={setIsBluetoothOn}/>}
+          {isBluetoothOpen && <BluetoothMenu ref={bluetoothRef} isDeviceConnected={isDeviceConnected} toggleBluetoothConnected={toggleBluetoothConnected} isBluetoothOn={isBluetoothOn} toggleBluetooth={toggleBluetooth}/>}
         </div>
         <div className='flex items-center gap-1'>
           <p className='text-xs font-semibold'>100%</p>
           <IoBatteryFull className='text-white text-2xl'/>
         </div>
         <div className={`${isWifiOpen && 'bg-white'} relative p-1 px-2 rounded-md bg-opacity-20`}>
-          {isWifiOn ? <MdOutlineWifi onClick={() => setIsWifiOpen(!isWifiOpen)} className={`${isWifiConnected ? "text-white" : "text-white text-opacity-40"} text-lg`}/> : (
-            <MdOutlineWifiOff onClick={() => setIsWifiOpen(!isWifiOpen)} className='text-lg text-white text-opacity-40'/>
+          {isWifiOn ? <MdOutlineWifi onClick={toggleWifiOpen} className={`${isWifiConnected ? "text-white" : "text-white text-opacity-40"} text-lg`}/> : (
+            <MdOutlineWifiOff onClick={toggleWifiOpen} className='text-lg text-white text-opacity-40'/>
           )}
-          {isWifiOpen && <WifiMenu ref={wifiRef} isWifiConnected={isWifiConnected} setIsWifiConnected={setIsWifiConnected} isWifiOn={isWifiOn} setIsWifiOn={setIsWifiOn}/>}
+          {isWifiOpen && <WifiMenu ref={wifiRef} isWifiConnected={isWifiConnected} toggleWifiConnected={toggleWifiConnected} isWifiOn={isWifiOn} toggleWifi={toggleWifi}/>}
         </div>
         <IoSearch className="text-white" />
         <div className='flex items-center gap-2'>

@@ -4,17 +4,13 @@ import { Separator } from '../ui/separator'
 import { PiHeadphonesFill } from "react-icons/pi";
 import { FaLock } from 'react-icons/fa'
 
-const BluetoothMenu = ({ref, isBluetoothOn, setIsBluetoothOn, isDeviceConnected, setIsDeviceConnected}) => {
+const BluetoothMenu = ({ref, isBluetoothOn, toggleBluetooth, isDeviceConnected, toggleBluetoothConnected}) => {
 
-    const toggleBluetooth = () => {
-        setIsBluetoothOn(!isBluetoothOn);
+    const toggle = () => {
+        toggleBluetooth();
         if(!isBluetoothOn) {
-            setIsDeviceConnected(false);
+            toggleBluetoothConnected(false);
         }
-    }
-
-    const toggleDeviceConnectivity = () => {
-        setIsDeviceConnected(!isDeviceConnected);
     }
 
 
@@ -22,11 +18,11 @@ const BluetoothMenu = ({ref, isBluetoothOn, setIsBluetoothOn, isDeviceConnected,
     <div ref={ref} className='bg-[#2f292e] flex-col p-2 flex w-72 absolute top-[28px] right-0 bg-opacity-40 border border-[#4d494c] rounded-md'>
         <div className='flex justify-between w-full'>
             <p className='text-[13px] font-bold'>Bluetooth</p>
-            <Switch onCheckedChange={toggleBluetooth}  checked={isBluetoothOn} />
+            <Switch onCheckedChange={toggle}  checked={isBluetoothOn} />
         </div>
         <Separator className='bg-[#4d494c] my-2'/>
         {isBluetoothOn && <p className='text-xs font-bold text-white text-opacity-65'>Devices</p>}
-        {isBluetoothOn && <div onClick={toggleDeviceConnectivity} className='my-1 flex items-center gap-2 hover:bg-white hover:bg-opacity-25 p-1 rounded-md'>
+        {isBluetoothOn && <div onClick={toggleBluetoothConnected} className='my-1 flex items-center gap-2 hover:bg-white hover:bg-opacity-25 p-1 rounded-md'>
             <div className={`${isDeviceConnected ? "bg-blue-500" : "bg-white bg-opacity-20"} rounded-full w-fit p-1`}>
                 <PiHeadphonesFill/>
             </div>
