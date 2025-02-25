@@ -69,7 +69,7 @@ function Dock({
           mouseX.set(Infinity);
         }}
         className={cn(
-          'mx-auto flex w-fit gap-2 rounded-2xl bg-[#767476] px-4 bg-opacity-30',
+          'mx-auto flex w-fit gap-2 rounded-2xl px-4',
           className
         )}
         style={{ height: panelHeight }}
@@ -85,7 +85,8 @@ function Dock({
 
 function DockItem({
   children,
-  className
+  className,
+  ...props
 }) {
   const ref = useRef(null);
 
@@ -98,13 +99,14 @@ function DockItem({
     return val - domRect.x - domRect.width / 2;
   });
 
-  const widthTransform = useTransform(mouseDistance, [-distance, 0, distance], [40, magnification, 40]);
+  const widthTransform = useTransform(mouseDistance, [-distance, 0, distance], [50, magnification, 50]);
 
   const width = useSpring(widthTransform, spring);
 
   return (
     (<motion.div
       ref={ref}
+      {...props}
       style={{ width }}
       onHoverStart={() => isHovered.set(1)}
       onHoverEnd={() => isHovered.set(0)}
@@ -167,7 +169,6 @@ function DockIcon({
   const width = restProps['width'];
 
   const widthTransform = useTransform(width, (val) => val / 2);
-  console.log(widthTransform);
 
   return (
     (<motion.div

@@ -2,7 +2,6 @@
 import React from 'react';
 import AppIcon from './AppIcon';
 import { TooltipProvider } from './ui/tooltip';
-import Launchpad from '@/apps/Launchpad/Launchpad';
 
 const Dock = ({ isVisible, toggleLaunchpad, setWindows, openWindow, windows }) => {
   const minimizedWindows = windows.filter((window) => window.isMinimized);

@@ -49,21 +49,21 @@ const TopBar = ({activeWindow}) => {
         <p className='text-[13px] font-extrabold capitalize'>{activeWindow && activeWindow.length > 0 && activeWindow[0].appName}</p>
       </div>
       <div className='flex cursor-default items-center gap-3'>
-        <div className={`${isBluetoothOpen && 'bg-white'} relative p-1 px-2 rounded-md bg-opacity-20`}>
+        <div ref={bluetoothRef} className={`${isBluetoothOpen && 'bg-white'} relative p-1 px-2 rounded-md bg-opacity-20`}>
           {isBluetoothOn ? <Bluetooth size={17} className={`${isDeviceConnected ? "text-white" : "text-white text-opacity-40"}`} onClick={toggleBluetoothOpen}/> : (
             <BluetoothOff size={17} className='text-white text-opacity-40' onClick={toggleBluetoothOpen}/>
           )}
-          {isBluetoothOpen && <BluetoothMenu ref={bluetoothRef} isDeviceConnected={isDeviceConnected} toggleBluetoothConnected={toggleBluetoothConnected} isBluetoothOn={isBluetoothOn} toggleBluetooth={toggleBluetooth}/>}
+          {isBluetoothOpen && <BluetoothMenu isDeviceConnected={isDeviceConnected} toggleBluetoothConnected={toggleBluetoothConnected} isBluetoothOn={isBluetoothOn} toggleBluetooth={toggleBluetooth}/>}
         </div>
         <div className='flex items-center gap-1'>
           <p className='text-xs font-semibold'>100%</p>
           <IoBatteryFull className='text-white text-2xl'/>
         </div>
-        <div className={`${isWifiOpen && 'bg-white'} relative p-1 px-2 rounded-md bg-opacity-20`}>
+        <div  ref={wifiRef} className={`${isWifiOpen && 'bg-white'} relative p-1 px-2 rounded-md bg-opacity-20`}>
           {isWifiOn ? <MdOutlineWifi onClick={toggleWifiOpen} className={`${isWifiConnected ? "text-white" : "text-white text-opacity-40"} text-lg`}/> : (
             <MdOutlineWifiOff onClick={toggleWifiOpen} className='text-lg text-white text-opacity-40'/>
           )}
-          {isWifiOpen && <WifiMenu ref={wifiRef} isWifiConnected={isWifiConnected} toggleWifiConnected={toggleWifiConnected} isWifiOn={isWifiOn} toggleWifi={toggleWifi}/>}
+          {isWifiOpen && <WifiMenu isWifiConnected={isWifiConnected} toggleWifiConnected={toggleWifiConnected} isWifiOn={isWifiOn} toggleWifi={toggleWifi}/>}
         </div>
         <IoSearch className="text-white" />
         <div className='flex items-center gap-2'>

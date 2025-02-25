@@ -6,7 +6,7 @@ import { useState, useEffect } from "react";
 import { initialStructure } from "@/utils/data";
 import AppSwitcher from "@/components/AppSwitcher";
 import Launchpad from "@/apps/Launchpad/Launchpad";
-import { SampleDock } from "@/components/SampleDock";
+import { ModernDock } from "@/components/ModernDock";
 
 export default function Home() {
   const [windows, setWindows] = useState([]);
@@ -15,7 +15,7 @@ export default function Home() {
   const [openedApps, setOpenedApps] = useState([]); // Track opened apps in order
   const [selectedAppIndex, setSelectedAppIndex] = useState(0); // Track the selected app in the switcher
   const [isAppSwitcherVisible, setIsAppSwitcherVisible] = useState(false); // Control visibility of the app switcher
-  const [isAltKeyPressed, setIsAltKeyPressed] = useState(false); // Track if Alt key is pressed
+  const [isShiftKeyPressed, setIsShiftKeyPressed] = useState(false); // Track if Alt key is pressed
   const [isLaunchpadOpen, setIsLaunchpadOpen] = useState(false); // Track if Launchpad is open
 
   const [fileStructure, setFileStructure] = useState(initialStructure);
@@ -78,16 +78,16 @@ export default function Home() {
     const handleKeyDown = (event) => {
       console.log(event);
       if (event.key === 'Shift') {
-        setIsAltKeyPressed(true); // Set Alt key as pressed
+        setIsShiftKeyPressed(true); // Set Alt key as pressed
         setIsAppSwitcherVisible(true); // Show the app switcher
       }
 
-      if (event.key === 'Tab' && isAltKeyPressed) {
+      if (event.key === 'Tab' && isShiftKeyPressed) {
         event.preventDefault(); // Prevent default Tab behavior
         setSelectedAppIndex((prevIndex) => (prevIndex + 1) % openedApps.length); // Cycle through apps
       }
 
-      if( event.code === 'KeyW' && isAltKeyPressed) {
+      if( event.code === 'KeyW' && event.altKey) {
         event.preventDefault(); // Prevent default behavior
         closeWindow(activeWindow); // Close the active window
       }
@@ -95,7 +95,7 @@ export default function Home() {
 
     const handleKeyUp = (event) => {
       if (event.key === 'Shift') {
-        setIsAltKeyPressed(false); // Set Alt key as released
+        setIsShiftKeyPressed(false); // Set Alt key as released
         setIsAppSwitcherVisible(false); // Hide the app switcher
 
         // Switch to the selected app when Alt is released
@@ -114,7 +114,7 @@ export default function Home() {
       window.removeEventListener('keydown', handleKeyDown);
       window.removeEventListener('keyup', handleKeyUp);
     };
-  }, [isAltKeyPressed, openedApps, selectedAppIndex, windows]);
+  }, [isShiftKeyPressed, openedApps, selectedAppIndex, windows]);
 
   return (
     <div className="w-screen h-screen flex flex-col items-center">
@@ -138,8 +138,7 @@ export default function Home() {
           />
         ))}
       </div>}
-      <Dock isVisible={isLaunchpadOpen} toggleLaunchpad={toggleLaunchpad} setWindows={setWindows} openWindow={openWindow} windows={windows} />
-      {/* <SampleDock /> */}
+      <ModernDock isVisible={isLaunchpadOpen} toggleLaunchpad={toggleLaunchpad} setWindows={setWindows} openWindow={openWindow} windows={windows}  />
       {isLaunchpadOpen && <Launchpad openWindow={openWindow} toggleLaunchpad={toggleLaunchpad}/>}
       {isAppSwitcherVisible && (
         <AppSwitcher openedApps={openedApps} selectedAppIndex={selectedAppIndex} />
