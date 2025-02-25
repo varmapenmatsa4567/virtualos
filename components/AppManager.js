@@ -10,6 +10,7 @@ import Photobooth from '@/apps/Photobooth/Photobooth'
 import VlcPlayer from '@/apps/VlcPlayer/VlcPlayer'
 import Calculator from '@/apps/Calculator/Calculator'
 import Clock from '@/apps/Clock/Clock'
+import Compiler from '@/apps/Compiler'
 
 const AppManager = (props) => {
 
@@ -45,6 +46,9 @@ const AppManager = (props) => {
     }
     else if(props.appName === 'clock') {
         return <Clock {...props}/>
+    }
+    else if(props.appName === 'compiler') {
+        return <Compiler {...props}/>
     }
   return null;
 }

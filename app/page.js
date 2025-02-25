@@ -77,7 +77,7 @@ export default function Home() {
   useEffect(() => {
     const handleKeyDown = (event) => {
       console.log(event);
-      if (event.key === 'Alt') {
+      if (event.key === 'Shift') {
         setIsAltKeyPressed(true); // Set Alt key as pressed
         setIsAppSwitcherVisible(true); // Show the app switcher
       }
@@ -94,7 +94,7 @@ export default function Home() {
     };
 
     const handleKeyUp = (event) => {
-      if (event.key === 'Alt') {
+      if (event.key === 'Shift') {
         setIsAltKeyPressed(false); // Set Alt key as released
         setIsAppSwitcherVisible(false); // Hide the app switcher
 

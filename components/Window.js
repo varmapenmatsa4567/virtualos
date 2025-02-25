@@ -4,6 +4,9 @@ import { Rnd } from 'react-rnd';
 import WnManager from './WnManager';
 
 const Window = ({ onClick, isCustomized, customSize, isActive, isMinimized, isMaximized, onClose, toggleMinimize, toggleMaximize, toolbar, children }) => {
+  
+  const height = window.innerHeight - 28;
+
   return (
     <Rnd
       default={{
@@ -13,9 +16,7 @@ const Window = ({ onClick, isCustomized, customSize, isActive, isMinimized, isMa
         height: 400,
       }}
       className={`${isActive && 'z-50'}`}
-      // size={{ width: "100%", height: "100%" }}
-      // position={{ x: 0, y: 0 }}
-      size={isMaximized ? { width: "100%", height: "766px" } : isCustomized ? customSize : null}
+      size={isMaximized ? { width: "100%", height: height+"px" } : isCustomized ? customSize : null}
       position={isMaximized ? { x: 0, y: 0 } : null}
       enableResizing={!isMaximized && !isCustomized}
       disableDragging={isMaximized}
