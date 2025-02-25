@@ -48,7 +48,7 @@ const TopBar = ({activeWindow}) => {
         <p className='text-[13px] font-extrabold capitalize'>{activeWindow && activeWindow.length > 0 && activeWindow[0].appName}</p>
       </div>
       <div className='flex cursor-default items-center gap-3'>
-        <div className='relative p-1 px-2 rounded-md bg-opacity-20'>
+        <div className={`${isBluetoothOpen && 'bg-white'} relative p-1 px-2 rounded-md bg-opacity-20`}>
           {isBluetoothOn ? <Bluetooth size={17} className={`${isDeviceConnected ? "text-white" : "text-white text-opacity-40"}`} onClick={() => setIsBluetoothOpen(!isBluetoothOpen)}/> : (
             <BluetoothOff size={17} className='text-white text-opacity-40' onClick={() => setIsBluetoothOpen(!isBluetoothOpen)}/>
           )}
