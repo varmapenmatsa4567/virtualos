@@ -30,8 +30,8 @@ export function ModernDock({ isVisible, toggleLaunchpad, setWindows, openWindow,
   ]
 
   return (
-    <div className='absolute bottom-2 left-1/2 max-w-full -translate-x-1/2 z-50'>
-      <Dock className='items-end p-1.5 px-2 bg-black/30'>
+    <div className='absolute bottom-2 group left-1/2 max-w-full -translate-x-1/2 z-50'>
+      <Dock className={'invisible group-hover:visible items-end p-1.5 px-2 bg-black/50'}>
         {apps.map((app, idx) => (
           <DockAppIcon 
             onClick={() => app.onClick ? app.onClick() : openWindow(app.appName)}

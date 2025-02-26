@@ -3,6 +3,7 @@ import Window from "@/components/Window";
 import { Plus } from "lucide-react";
 import { useState } from "react";
 import Stopwatch from "./Stopwatch";
+import Timer from "./Timer";
 
 const Clock = ({fileStructure, setFileStructure, ...props}) => {
 
@@ -13,7 +14,7 @@ const Clock = ({fileStructure, setFileStructure, ...props}) => {
     }
 
   return (
-    <Window {...props} 
+    <Window {...props} isCustomized={true} customSize={{ width: "600px", height: "550px" }}
         toolbar={
             <div className="flex items-center gap-2 justify-between w-full  ">
                 <div className="border-[1.5px] border-[#464244] flex mx-auto rounded-md text-sm text-[#bab6b7]">
@@ -33,9 +34,7 @@ const Clock = ({fileStructure, setFileStructure, ...props}) => {
             <p className="text-center text-sm text-[#bab6b7]">No alarms added</p>
         </div>}
         {option == "Stopwatch" && <Stopwatch />}
-        {option == "Timer" && <div className="flex flex-col gap-2 p-4">
-            <p className="text-center text-sm text-[#bab6b7]">No timers added</p>
-        </div>}
+        {option == "Timer" && <Timer />}
     </Window>
   )
 }

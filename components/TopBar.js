@@ -9,6 +9,7 @@ import { MdOutlineWifiOff, MdOutlineWifi } from "react-icons/md";
 import { Bluetooth, BluetoothOff } from 'lucide-react';
 import { useOutsideClick } from '@/hooks/useOutsideClick';
 import useToggle from '@/hooks/useToggle';
+import { appMenus } from '@/utils/data';
 
 const TopBar = ({activeWindow}) => {
   const [formattedDate, setFormattedDate] = useState([]);
@@ -47,6 +48,11 @@ const TopBar = ({activeWindow}) => {
       <div className='flex items-center gap-2'>
         <FaApple className='text-white text-lg' />
         <p className='text-[13px] font-extrabold capitalize'>{activeWindow && activeWindow.length > 0 && activeWindow[0].appName}</p>
+        {activeWindow && activeWindow.length > 0 && <div className='flex ml-3 gap-5'>
+          {appMenus[activeWindow[0].appName].map((menu, index) => (
+            <p key={index} className='text-[13px] capitalize'>{menu}</p>
+          ))}
+        </div>}
       </div>
       <div className='flex cursor-default items-center gap-3'>
         <div ref={bluetoothRef} className={`${isBluetoothOpen && 'bg-white'} relative p-1 px-2 rounded-md bg-opacity-20`}>

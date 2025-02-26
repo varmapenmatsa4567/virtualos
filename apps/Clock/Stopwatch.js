@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { SlidingNumber } from '@/components/ui/sliding-number';
 import Lap from './Lap';
+import Dots from './Dots';
 
 const Stopwatch = () => {
 
@@ -55,9 +56,9 @@ const Stopwatch = () => {
 
   return (
     <div className='w-full h-full p-4 flex flex-col'>
-        <div className='flex text-white text-8xl font-thin items-center justify-center'>
+        <div className='flex text-white text-8xl font-extralight items-center justify-center'>
             <SlidingNumber value={minutes} padStart={true} />
-            <span className=''>:</span>
+            <Dots />
             <SlidingNumber value={seconds} padStart={true} />
             <span className=''>.</span>
             <SlidingNumber value={milliseconds} padStart={true} />
@@ -74,7 +75,7 @@ const Stopwatch = () => {
                 ))}
             </div>
         </div>
-        <div className='flex items-center justify-center gap-4 text-white'>
+        <div className='flex items-center justify-center gap-4 mb-10 text-white'>
             <button disabled={!isStarted} onClick={isPaused ? handleReset : handleLap} className={`${isStarted ? "bg-[#565656]" : "bg-[#3a3a3a] text-[#6c6c6c]"} py-1 rounded-md px-16 text-sm font-medium`}>{isPaused ? "Reset" : "Lap"}</button>
             <button onClick={isRunning ? handleStop : handleStart} className={`${isRunning ? "bg-[#be3d27]" : "bg-[#26a444]"} py-1 rounded-md px-16 text-sm font-medium`}>{isRunning ? "Stop" : "Start"}</button>
         </div>

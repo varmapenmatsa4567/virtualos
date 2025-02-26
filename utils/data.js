@@ -37,4 +37,16 @@ export const initialStructure = [
         { id: getId(), title: 'Meeting notes', content: 'Meeting notes', dateCreated: new Date(), dateModified: new Date() }
         ]
     }
-]
+];
+
+export const appMenus = {
+  "clock": ["File", "Edit", "View", "Window", "Help"],
+  "calculator": ["Edit", "View", "Window", "Help"],
+  "notes": ["File", "Edit", "Format", "View", "Window", "Help"],
+  "finder": ["File", "Edit", "View", "Go", "Window", "Help"],
+  "photobooth": ["File", "Edit", "View", "Camera", "Window", "Help"],
+  "photos": ["File", "Edit", "Image", "View", "Window", "Help"],
+  "vscode": ["File", "Edit", "Selection", "View", "Go", "Run", "Terminal", "Window", "Help"],
+  "sudoko": ["File", "Edit", "Format", "View", "Window", "Help"],
+  "vlcplayer": ["File", "Playback", "Audio", "Video", "Subtitle", "Tools", "View", "Help"],
+}

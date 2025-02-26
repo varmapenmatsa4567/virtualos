@@ -55,8 +55,13 @@ export default function Home() {
   };
 
   const closeWindow = (id) => {
-    setOpenedApps(openedApps.filter((app) => app !== windows.find((w) => w.id === id).appName));
+    // setOpenedApps(openedApps.filter((app) => app !== windows.find((w) => w.id === id).appName));
     setWindows(windows.filter((window) => window.id !== id));
+  }
+
+  const closeAllWindows = (id) => {
+    const findApp = windows.find((w) => w.id === id).appName;
+    setWindows(windows.filter((window) => window.appName !== findApp));
   }
 
   // Function to handle file clicks
@@ -90,6 +95,11 @@ export default function Home() {
       if( event.code === 'KeyW' && event.altKey) {
         event.preventDefault(); // Prevent default behavior
         closeWindow(activeWindow); // Close the active window
+      }
+      if( event.code === 'KeyQ' && event.altKey) {
+        console.log('Q');
+        event.preventDefault(); // Prevent default behavior
+        closeAllWindows(activeWindow); // Close the active window
       }
     };
 

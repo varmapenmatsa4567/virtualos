@@ -14,12 +14,12 @@ body {
 }
 
 ::-webkit-scrollbar {
-  width: 8px; /* Width of the scrollbar */
+  width: 7px; /* Width of the scrollbar */
   padding: 2px;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #6b6b6b; /* Color of the scrollbar thumb */
+  background: #4b4b4b; /* Color of the scrollbar thumb */
   border-radius: 4px; /* Rounded corners */
 }
 

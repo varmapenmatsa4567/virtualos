@@ -9,6 +9,9 @@ export default {
   ],
   theme: {
   	extend: {
+		fontFamily: {
+			sans: ['San Francisco', 'sans-serif'],
+		},
 		backgroundImage: {
 			'wallpaper': "url('/wallpaper.png')",
 			'launchpad': "url('/launchpad.jpg')",
