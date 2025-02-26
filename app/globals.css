@@ -4,7 +4,9 @@
 @tailwind components;
 @tailwind utilities;
 
-
+body {
+  font-family: 'Inter', Arial, Helvetica, sans-serif;
+}
 
 :root,
 body {

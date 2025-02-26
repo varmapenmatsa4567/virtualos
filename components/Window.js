@@ -28,7 +28,7 @@ const Window = ({ onClick, isCustomized, customSize, isActive, isMinimized, isMa
         display: isMinimized ? "none" : "block",  
       }}
     >
-      <div onClick={onClick} className={`bg-[#242227] overflow-hidden flex flex-col shadow-2xl cursor-default h-full rounded-lg`}>
+      <div onClick={onClick} className={`bg-[#242227] overflow-hidden flex flex-col shadow-2xl cursor-default h-full rounded-lg border-[0.5px] border-[#7f7e7f]`}>
         <div onDoubleClick={toggleMaximize} className="bg-[#3c3639] rounded-t-lg w-full h-10 flex items-center toolbar">
           <WnManager
             onClose={onClose}

@@ -212,7 +212,7 @@ const Photos = ({ fileStructure, setFileStructure, ...props }) => {
     >
       <div
         ref={gridRef}
-        className={`w-full relative h-full flex flex-col ${
+        className={`w-full relative h-full flex flex-col p-2 ${
           isDragging ? "border-2 border-dashed border-blue-500" : ""
         }`}
         onDragEnter={handleDragEnter}
