@@ -49,7 +49,7 @@ const TopBar = ({activeWindow}) => {
         <FaApple className='text-white text-lg' />
         <p className='text-[13px] font-extrabold capitalize'>{activeWindow && activeWindow.length > 0 && activeWindow[0].appName}</p>
         {activeWindow && activeWindow.length > 0 && <div className='flex ml-3 gap-5'>
-          {appMenus[activeWindow[0].appName].map((menu, index) => (
+          {appMenus[activeWindow[0].appName] && appMenus[activeWindow[0].appName].map((menu, index) => (
             <p key={index} className='text-[13px] capitalize'>{menu}</p>
           ))}
         </div>}
