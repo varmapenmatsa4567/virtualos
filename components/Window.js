@@ -16,7 +16,7 @@ const Window = ({ onClick, isCustomized, customSize, isActive, isMinimized, isMa
         height: 400,
       }}
       className={`${isActive && 'z-50'}`}
-      size={isMaximized ? { width: "100%", height: height+"px" } : isCustomized ? customSize : null}
+      size={isMaximized ? { width: "100%", height: height+"px" } : null}
       position={isMaximized ? { x: 0, y: 0 } : null}
       enableResizing={!isMaximized}
       disableDragging={isMaximized}

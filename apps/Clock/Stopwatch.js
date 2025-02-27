@@ -50,18 +50,16 @@ const Stopwatch = () => {
 
     const minutes = Math.floor((time / 1000 / 60) % 60);
     const seconds = Math.floor((time / 1000) % 60);
-    const milliseconds = Math.floor((time % 1000) / 10);
-
-    
+    const milliseconds = Math.floor((time % 1000) / 10);    
 
   return (
     <div className='w-full h-full p-4 flex flex-col'>
-        <div className='flex text-white text-8xl font-extralight items-center justify-center'>
-            <SlidingNumber value={minutes} padStart={true} />
-            <Dots />
-            <SlidingNumber value={seconds} padStart={true} />
+        <div className='flex tabular-nums text-white text-8xl font-extralight items-center justify-center'>
+            <p>{String(minutes).padStart(2, '0')}</p>
+            <Dots/>
+            <p>{String(seconds).padStart(2, '0')}</p>
             <span className=''>.</span>
-            <SlidingNumber value={milliseconds} padStart={true} />
+            <p>{String(milliseconds).padStart(2, '0')}</p>
         </div>
         <div className='w-72 mx-auto flex flex-col my-6 flex-1 h-3/6'>
             <div className='text-[#565656] border-b py-1 my-2 text-sm border-[#565656] w-full justify-between flex'>
@@ -76,8 +74,8 @@ const Stopwatch = () => {
             </div>
         </div>
         <div className='flex items-center justify-center gap-4 mb-10 text-white'>
-            <button disabled={!isStarted} onClick={isPaused ? handleReset : handleLap} className={`${isStarted ? "bg-[#565656]" : "bg-[#3a3a3a] text-[#6c6c6c]"} py-1 rounded-md px-16 text-sm font-medium`}>{isPaused ? "Reset" : "Lap"}</button>
-            <button onClick={isRunning ? handleStop : handleStart} className={`${isRunning ? "bg-[#be3d27]" : "bg-[#26a444]"} py-1 rounded-md px-16 text-sm font-medium`}>{isRunning ? "Stop" : "Start"}</button>
+            <button disabled={!isStarted} onClick={isPaused ? handleReset : handleLap} className={`${isStarted ? "bg-[#565656]" : "bg-[#3a3a3a] text-[#6c6c6c]"} py-1 rounded-md w-36 text-[13px] font-normal`}>{isPaused ? "Reset" : "Lap"}</button>
+            <button onClick={isRunning ? handleStop : handleStart} className={`${isRunning ? "bg-[#be3d27]" : "bg-[#26a444]"} py-1 rounded-md w-36 text-[13px] font-normal`}>{isRunning ? "Stop" : "Start"}</button>
         </div>
     </div>
   )

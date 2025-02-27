@@ -5,6 +5,9 @@ import Dots from './Dots';
 
 const Timer = () => {
     const [selectedItem, setSelectedItem] = useState(-1);
+    const [isRunning, setIsRunning] = useState(false);
+    const [intervalId, setIntervalId] = useState(null);
+    var total = 0;
 
     const handleItemClick = (item) => {
         setSelectedItem(item);
@@ -17,19 +20,22 @@ const Timer = () => {
     })
 
     const startTimer = () => {
-        var total = time[0] * 3600 + time[1] * 60 + time[2];
-        var timer = setInterval(() => {
+        setIsRunning(true);
+        if(total == 0) total = time[0] * 3600 + time[1] * 60 + time[2];
+        var intervalId = setInterval(() => {
             if(total <= 0){
-                clearInterval(timer);
+                clearInterval(intervalId);
                 return;
             }
             total--;
-            setTime({
-                0: Math.floor(total / 3600),
-                1: Math.floor((total % 3600) / 60),
-                2: total % 60
-            })
+            console.log(total);
         }, 1000);
+        setIntervalId(intervalId);
+    }
+
+    const pauseTimer = () => {
+        clearInterval(intervalId);
+        setIsRunning(false);
     }
 
     useEffect(() => {
@@ -73,11 +79,11 @@ const Timer = () => {
                 <p>min</p>
                 <p>sec</p>
             </div>
-            <div className='flex items-center bg-[#292929] font-[250] px-4 p-2 text-8xl justify-center'>
+            <div className='flex tabular-nums items-center bg-[#292929] font-[250] px-4 p-2 text-8xl justify-center'>
                 <p className={`${selectedItem === 0 && 'bg-[#ce841f]'} rounded-md`} onClick={() => handleItemClick(0)}>{time[0].toString().padStart(2, '0')}</p>
-                <Dots />
+                <Dots/>
                 <p className={`${selectedItem === 1 && 'bg-[#ce841f]'} rounded-md`} onClick={() => handleItemClick(1)}>{time[1].toString().padStart(2, '0')}</p>
-                <Dots />
+                <Dots/>
                 <p className={`${selectedItem === 2 && 'bg-[#ce841f]'} rounded-md`} onClick={() => handleItemClick(2)}>{time[2].toString().padStart(2, '0')}</p>
             </div>
             <div className='my-2'>
@@ -85,8 +91,8 @@ const Timer = () => {
             </div>
         </div>
         <div className='flex items-center justify-center gap-4 mb-10 text-white'>
-            <button className={`bg-[#3a3a3a] text-[#6c6c6c] py-1 rounded-md px-16 text-sm font-medium`}>Cancel</button>
-            <button className={`bg-[#26a444] py-1 rounded-md px-16 text-sm font-medium`}>Start</button>
+            <button onClick={pauseTimer} className={`bg-[#3a3a3a] text-[#6c6c6c] shadow-md py-1 rounded-md w-36 text-[13px] font-normal`}>Cancel</button>
+            <button onClick={startTimer} className={`bg-[#26a444] py-1 rounded-md shadow-md w-36 text-[13px] font-normal`}>Start</button>
         </div>
     </div>
   )
