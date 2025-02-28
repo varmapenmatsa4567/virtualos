@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Window from "@/components/Window";
 import CalcBtn from "./CalcBtn";
-import { CalculatorIcon, Cross, Delete, Diff, Divide, Equal, Minus, Percent, Plus } from "lucide-react";
+import { CalculatorIcon, Delete, Diff, Divide, Equal, Minus, Percent, Plus } from "lucide-react";
 import { RxCross2 } from "react-icons/rx";
 
 const Calculator = ({ fileStructure, setFileStructure, isMaximized, toggleMaximize, ...props }) => {
@@ -60,7 +60,7 @@ const Calculator = ({ fileStructure, setFileStructure, isMaximized, toggleMaximi
   };
 
   return (
-    <Window isCustomized={true} customSize={{ width: "215px", height: "375px" }} {...props}>
+    <Window isFixed={true} isCustomized={true} customSize={{ width: "215px", height: "375px" }} {...props}>
       <div className="w-full h-full flex flex-col">
         <div className="flex-1 flex flex-col text-white items-end justify-end px-3">
           <p className="text-xl text-[#9f9fa1] whitespace-nowrap overflow-x-auto">{result && expression}</p>

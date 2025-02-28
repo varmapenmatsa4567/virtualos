@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-import { SlidingNumber } from '@/components/ui/sliding-number';
 import Lap from './Lap';
 import Dots from './Dots';
 
@@ -40,7 +39,7 @@ const Stopwatch = () => {
 
     const handleLap = () => {
         console.log(laps);
-        if(laps.length != 0){
+        if(laps.length !== 0){
             setLaps([...laps, {split: time - laps[laps.length - 1].total, total: time}]);
         }
         else{
@@ -56,7 +55,7 @@ const Stopwatch = () => {
     <div className='w-full h-full p-4 flex flex-col'>
         <div className='flex tabular-nums text-white text-8xl font-extralight items-center justify-center'>
             <p>{String(minutes).padStart(2, '0')}</p>
-            <Dots/>
+            <Dots />
             <p>{String(seconds).padStart(2, '0')}</p>
             <span className=''>.</span>
             <p>{String(milliseconds).padStart(2, '0')}</p>
