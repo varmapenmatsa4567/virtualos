@@ -8,7 +8,7 @@ const Dots = ({height = "h-24", gap = "gap-8", size = "2", px = "px-2"}) => {
     }
 
   return (
-    <div className={`${height} flex flex-col justify-center ${gap} ${px}`}>
+    <div className={`flex flex-col justify-center ${gap} ${px}`}>
         <div className={`bg-white ${dim} rounded-full`}></div>
         <div className={`bg-white ${dim} rounded-full`}></div>
     </div>
