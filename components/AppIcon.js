@@ -1,7 +1,7 @@
 import React from 'react';
 import { Tooltip, TooltipTrigger, TooltipContent } from './ui/tooltip';
 
-const AppIcon = ({ appName, onClick, isOpen, isAppSwitcher }) => {
+const AppIcon = ({ appName, onClick, isOpen, isAppSwitcher, isMobile }) => {
   return (
     <Tooltip>
       <TooltipTrigger>
@@ -9,7 +9,7 @@ const AppIcon = ({ appName, onClick, isOpen, isAppSwitcher }) => {
           <img
             onClick={onClick}
             src={`${appName.toLowerCase()}.png`}
-            className={`${isAppSwitcher ? 'w-24' : 'w-14'} transition-transform duration-200 hover:scale-125`}
+            className={`${isAppSwitcher ? 'w-24' : isMobile ? 'w-28' : 'w-14'} transition-transform duration-200 ${isMobile ? "" : "hover:scale-125"}`}
           />
           {isOpen && <div className='w-1 h-1 bg-white rounded-full mt-1'></div>}
         </div>

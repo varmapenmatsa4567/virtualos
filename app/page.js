@@ -7,6 +7,8 @@ import { initialStructure } from "@/utils/data";
 import AppSwitcher from "@/components/AppSwitcher";
 import Launchpad from "@/apps/Launchpad/Launchpad";
 import { ModernDock } from "@/components/ModernDock";
+import Iphone from "@/mobile/Iphone";
+
 
 export default function Home() {
   const [windows, setWindows] = useState([]);
@@ -19,6 +21,7 @@ export default function Home() {
   const [isLaunchpadOpen, setIsLaunchpadOpen] = useState(false); // Track if Launchpad is open
 
   const [fileStructure, setFileStructure] = useState(initialStructure);
+  const [isMobile, setIsMobile] = useState(false);
 
   const toggleLaunchpad = () => {
     setIsLaunchpadOpen(!isLaunchpadOpen);
@@ -71,15 +74,6 @@ export default function Home() {
   };
 
   useEffect(() => {
-    const disableContextMenu = (event) => event.preventDefault();
-    document.addEventListener("contextmenu", disableContextMenu);
-
-    return () => {
-      document.removeEventListener("contextmenu", disableContextMenu);
-    };
-  }, []);
-
-  useEffect(() => {
     const handleKeyDown = (event) => {
       console.log(event);
       if (event.key === 'Shift') {
@@ -125,6 +119,29 @@ export default function Home() {
       window.removeEventListener('keyup', handleKeyUp);
     };
   }, [isShiftKeyPressed, openedApps, selectedAppIndex, windows]);
+
+  useEffect(() => {
+    // Check screen width on component mount
+    const checkScreenWidth = () => {
+        setIsMobile(window.innerWidth <= 500);
+    };
+
+    // Add event listener for window resize
+    window.addEventListener('resize', checkScreenWidth);
+
+    // Initial check
+    checkScreenWidth();
+
+    // Cleanup event listener on unmount
+    return () => window.removeEventListener('resize', checkScreenWidth);
+}, []);
+
+
+  if(isMobile) {
+    return (
+      <Iphone />
+    )
+  }
 
   return (
     <div className="w-screen h-screen flex flex-col items-center">
