@@ -4,6 +4,7 @@ import { Plus } from "lucide-react";
 import { useState } from "react";
 import Stopwatch from "./Stopwatch";
 import Timer from "./Timer";
+import WorldClock from "./WorldClock";
 
 const Clock = ({fileStructure, setFileStructure, ...props}) => {
 
@@ -27,14 +28,12 @@ const Clock = ({fileStructure, setFileStructure, ...props}) => {
             </div>
         }
     >
-        {option == "World Clock" && <div className="flex flex-col gap-2 p-4">
-            <p className="text-center text-sm text-[#bab6b7]">No clocks added</p>
-        </div>}
+        <WorldClock isActive={option == "World Clock"}/>
         {option == "Alarms" && <div className="flex flex-col gap-2 p-4">
             <p className="text-center text-sm text-[#bab6b7]">No alarms added</p>
         </div>}
-        {option == "Stopwatch" && <Stopwatch />}
-        {option == "Timer" && <Timer />}
+        <Stopwatch isActive={option == "Stopwatch"}/>
+        <Timer isActive={option == "Timer"}/>
     </Window>
   )
 }

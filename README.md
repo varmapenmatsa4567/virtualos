@@ -1,36 +1,92 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+## Virtual OS ( MacOS in Website )
+Experience a sleek macOS-inspired interface built with Next.js. This project replicates the macOS desktop environment in a web browser, complete with interactive apps, a functional dock, and a stunning UI. Perfect for showcasing your frontend skills and creativity!
 
-## Getting Started
+🚀 Live Demo: [VirtualOS](https://virtualos.vercel.app/)
 
-First, run the development server:
+💻 Tech Stack: **Next.js, Tailwind CSS, React**
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+### Windows
+- [Draggable and Resizable](https://github.com/bokuweb/react-rnd)
+- Minimize, Maximize and Close buttons
+- Persists state when minimized
+- Double tap on window top to toggle maximize
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Finder
+- Back and Forward
+- Stores in LocalStorage
+- Context Menu
+  - New folder, New file and Add File
+  - Copy, Cut, Paste, Rename and Duplicate
+  - Move to Trash
+- Open text files with VS Code
+- Keyboard Shortcuts
+  - CMD + C
+  - CMD + X
+  - CMD + V
+  - CMD + Del
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+### Dock
+- It Shows some Existing apps
+- Indicator for Opened apps
+- Minimized apps will visible in Dock
+- Magnifying Visual Effect when hover on apps
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### MenuBar
+- It shows the Current Date and time at Right
+- Wifi and Bluetooth Options ( Dummy )
+- On the left, shows the Active app name.
 
-## Learn More
+## Apps
 
-To learn more about Next.js, take a look at the following resources:
+### Notes
+- Create New folders and New Notes
+- Sort Notes inside folder
+  - Date Edited
+  - Date Created
+  - Title
+  - Ascending & Descending Order
+- Context Menu
+  - New Note
+  - Duplicate, Rename and Delete Note
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### Clock
+- StopWatch
+  - Start, Stop, Reset and Lap the stopwatch
+  - Laps will be displayed in the bottom of stopwatch
+  - Stopwatch will run in the background
+- Timer
+  - Select time (Hrs, Mins, Secs)
+  - Start, Pause, Resume and Cancel the timer
+  - Shows the Ending time
+- Alarms
+- World Clock
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### VSCode
+- Made with [Monaco Editor](https://github.com/microsoft/monaco-editor)
+- Opens text files from Finder
+- Syntax Highlighting for several Programming languauges
+- CMD + S to Save the file
 
-## Deploy on Vercel
+### Photobooth
+- Use front camera of Desktop
+- Can take picture
+- Stores in IndexDB
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### Photos
+- Shows the images taken from Photobooth
+- Option to upload images from Device
+- Option to Zoom in/out of the Gallery
+- Arrow keys to move between the images
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### VLC Player
+- Select file from Local Device
+- Plays the video which is selected
+
+## Games
+
+### Sudoko
+- New Game with Easy, Medium, Hard and Expert Levels
+- Undo and Erase options
+
+
+

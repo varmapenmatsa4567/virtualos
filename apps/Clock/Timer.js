@@ -7,7 +7,7 @@ import Dots from './Dots';
 import { FaBell } from "react-icons/fa6";
 
 
-const Timer = () => {
+const Timer = ({isActive}) => {
     const [selectedItem, setSelectedItem] = useState(-1);
     const [remainingTime, setRemainingTime] = useState(0);
     const [isRunning, setIsRunning] = useState(false);
@@ -104,7 +104,7 @@ const Timer = () => {
     })
 
   return (
-    <div className='flex text-white flex-col w-full h-full overflow-y-auto'>
+    <div className={`${isActive ? "flex" : "hidden"} text-white flex-col w-full h-full overflow-y-auto`}>
         {showTimer ? (
             <div className='mx-auto my-24 w-[350px]'>
                 <CircularProgressbarWithChildren

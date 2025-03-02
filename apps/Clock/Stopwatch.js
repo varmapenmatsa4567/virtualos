@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import Lap from './Lap';
 import Dots from './Dots';
 
-const Stopwatch = () => {
+const Stopwatch = ({isActive}) => {
 
     const [time, setTime] = useState(0);
     const [isRunning, setIsRunning] = useState(false);
@@ -52,7 +52,7 @@ const Stopwatch = () => {
     const milliseconds = Math.floor((time % 1000) / 10);    
 
   return (
-    <div className='w-full h-full p-4 flex flex-col'>
+    <div className={`w-full h-full p-4 ${isActive ? "flex" : "hidden"} flex-col`}>
         <div className='flex tabular-nums text-white text-8xl font-extralight items-center justify-center'>
             <p>{String(minutes).padStart(2, '0')}</p>
             <Dots />
