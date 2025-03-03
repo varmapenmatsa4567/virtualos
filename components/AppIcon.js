@@ -5,7 +5,7 @@ const AppIcon = ({ appName, openApp, onClick, isOpen, isAppSwitcher, isMobile, t
   return (
     <Tooltip>
       <TooltipTrigger>
-        <div onClick={() => openApp(appName)} className='flex flex-col items-center'>
+        <div onClick={isMobile ? () => openApp(appName) : onClick} className='flex flex-col items-center'>
           <img
             draggable={false}
             onContextMenu={(e) => e.preventDefault()}
