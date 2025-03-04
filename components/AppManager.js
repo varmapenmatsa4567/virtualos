@@ -11,6 +11,7 @@ import VlcPlayer from '@/apps/VlcPlayer/VlcPlayer'
 import Calculator from '@/apps/Calculator/Calculator'
 import Clock from '@/apps/Clock/Clock'
 import Compiler from '@/apps/Compiler'
+import Settings from '@/apps/Settings/Settings'
 
 const AppManager = (props) => {
 
@@ -49,6 +50,9 @@ const AppManager = (props) => {
     }
     else if(props.appName === 'compiler') {
         return <Compiler {...props}/>
+    }
+    else if(props.appName === 'settings') {
+        return <Settings {...props}/>
     }
   return null;
 }

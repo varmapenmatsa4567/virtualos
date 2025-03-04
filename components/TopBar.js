@@ -6,10 +6,12 @@ import { IoIosWifi } from 'react-icons/io';
 import WifiMenu from './topbar-menus/WifiMenu';
 import BluetoothMenu from './topbar-menus/BluetoothMenu';
 import { MdOutlineWifiOff, MdOutlineWifi } from "react-icons/md";
-import { Bluetooth, BluetoothOff } from 'lucide-react';
+import { Battery, Bluetooth, BluetoothOff } from 'lucide-react';
 import { useOutsideClick } from '@/hooks/useOutsideClick';
 import useToggle from '@/hooks/useToggle';
 import { appMenus } from '@/utils/data';
+import BatteryIndicator from './Battery';
+import SystemMenu from './topbar-menus/SystemMenu';
 
 const TopBar = ({activeWindow}) => {
   const [formattedDate, setFormattedDate] = useState([]);
@@ -27,6 +29,11 @@ const TopBar = ({activeWindow}) => {
   const [isDeviceConnected, toggleBluetoothConnected] = useToggle(false);
   const bluetoothRef = useRef(null);
   useOutsideClick(bluetoothRef, () => toggleBluetoothOpen(false));
+
+  // System Menu
+  const [isSystemMenuOpen, toggleSystemMenuOpen] = useToggle(false);
+  const systemMenuRef = useRef(null);
+  useOutsideClick(systemMenuRef, () => toggleSystemMenuOpen(false));
   
 
   // console.log(activeWindow);
@@ -46,7 +53,10 @@ const TopBar = ({activeWindow}) => {
   return (
     <div className='w-screen h-7 bg-[#1a1e4b] px-4 flex items-center text-white justify-between'>
       <div className='flex items-center gap-2'>
-        <FaApple className='text-white text-lg' />
+        <div ref={systemMenuRef} className={`${isSystemMenuOpen && 'bg-white'} relative p-1 px-2 rounded-md bg-opacity-20`}>
+          <FaApple className='text-white text-lg' onClick={toggleSystemMenuOpen}/>
+          {isSystemMenuOpen && <SystemMenu />}
+        </div>
         <p className='text-[13px] font-extrabold capitalize'>{activeWindow && activeWindow.length > 0 && activeWindow[0].appName}</p>
         {activeWindow && activeWindow.length > 0 && <div className='flex ml-3 gap-5'>
           {appMenus[activeWindow[0].appName] && appMenus[activeWindow[0].appName].map((menu, index) => (
@@ -64,6 +74,7 @@ const TopBar = ({activeWindow}) => {
         <div className='flex items-center gap-1'>
           <p className='text-xs font-semibold'>100%</p>
           <IoBatteryFull className='text-white text-2xl'/>
+          {/* <BatteryIndicator/> */}
         </div>
         <div  ref={wifiRef} className={`${isWifiOpen && 'bg-white'} relative p-1 px-2 rounded-md bg-opacity-20`}>
           {isWifiOn ? <MdOutlineWifi onClick={toggleWifiOpen} className={`${isWifiConnected ? "text-white" : "text-white text-opacity-40"} text-lg`}/> : (
