@@ -1,0 +1,24 @@
+import { create } from 'zustand';
+import { persist } from 'zustand/middleware';
+
+const useSettingsStore = create(
+  persist(
+    (set) => ({
+      wallpaper: 'wallpaper', // Default wallpaper
+      wifi: false, // Wi-Fi state
+      bluetooth: false, // Bluetooth state
+      darkMode: false, // Dark mode state
+
+      setWallpaper: (wallpaper) => set({ wallpaper }),
+      toggleWifi: () => set((state) => ({ wifi: !state.wifi })),
+      toggleBluetooth: () => set((state) => ({ bluetooth: !state.bluetooth })),
+      toggleDarkMode: () => set((state) => ({ darkMode: !state.darkMode })),
+    }),
+    {
+      name: 'settings-storage', // Unique name for localStorage key
+      getStorage: () => localStorage, // Use localStorage as the storage
+    }
+  )
+);
+
+export default useSettingsStore;

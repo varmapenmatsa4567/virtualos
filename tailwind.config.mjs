@@ -15,6 +15,8 @@ export default {
 		},
 		backgroundImage: {
 			'wallpaper': "url('/wallpaper.png')",
+			'wallpaper2': "url('/wallpaper2.jpg')",
+			'wallpaper3': "url('/wallpaper3.jpg')",
 			'launchpad': "url('/launchpad.jpg')",
 		},
   		colors: {

@@ -8,6 +8,7 @@ import AppSwitcher from "@/components/AppSwitcher";
 import Launchpad from "@/apps/Launchpad/Launchpad";
 import { ModernDock } from "@/components/ModernDock";
 import Iphone from "@/mobile/Iphone";
+import useSettingsStore from "@/stores/settings-store";
 
 
 export default function Home() {
@@ -19,6 +20,8 @@ export default function Home() {
   const [isAppSwitcherVisible, setIsAppSwitcherVisible] = useState(false); // Control visibility of the app switcher
   const [isShiftKeyPressed, setIsShiftKeyPressed] = useState(false); // Track if Alt key is pressed
   const [isLaunchpadOpen, setIsLaunchpadOpen] = useState(false); // Track if Launchpad is open
+
+  const {wallpaper} = useSettingsStore();
 
   const [fileStructure, setFileStructure] = useState(initialStructure);
   const [isMobile, setIsMobile] = useState(false);
@@ -146,7 +149,7 @@ export default function Home() {
   return (
     <div className="w-screen h-screen flex flex-col items-center">
       {!isLaunchpadOpen && <TopBar activeWindow={windows.filter((window) => window.id == activeWindow)}/>}
-      {!isLaunchpadOpen && <div className="main flex-1 w-screen bg-wallpaper bg-cover">
+      {!isLaunchpadOpen && <div className={`main flex-1 w-screen bg-${wallpaper} bg-cover`}>
         {windows.map((window) => (
           <AppManager
             openedFile={openedFile}
