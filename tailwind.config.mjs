@@ -14,9 +14,10 @@ export default {
 			sans: ['San Francisco', 'sans-serif'],
 		},
 		backgroundImage: {
-			'wallpaper': "url('/wallpaper.png')",
+			'wallpaper0': "url('/wallpaper.png')",
 			'wallpaper2': "url('/wallpaper2.jpg')",
 			'wallpaper3': "url('/wallpaper3.jpg')",
+			'wallpaper4': "url('/wallpaper4.jpg')",
 			'launchpad': "url('/launchpad.jpg')",
 		},
   		colors: {

@@ -4,7 +4,7 @@ import { persist } from 'zustand/middleware';
 const useSettingsStore = create(
   persist(
     (set) => ({
-      wallpaper: 'wallpaper', // Default wallpaper
+      wallpaper: 'wallpaper0', // Default wallpaper
       wifi: false, // Wi-Fi state
       bluetooth: false, // Bluetooth state
       darkMode: false, // Dark mode state
