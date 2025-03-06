@@ -4,12 +4,13 @@ import { useState } from "react";
 import { IoIosBluetooth, IoIosFingerPrint, IoIosGlobe, IoIosNotifications, IoIosSwitch, IoIosWifi } from 'react-icons/io'
 import { IoAccessibility, IoBatteryFull, IoHandLeft, IoSearch, IoSettingsOutline, IoSunny, IoVolumeHigh } from "react-icons/io5";
 import { CgDarkMode, CgSandClock } from "react-icons/cg";
-import Spacer from "./Spacer";
+import Spacer from "./common/Spacer";
 import { MdAssistant, MdDarkMode, MdWallpaper } from "react-icons/md";
 import { FaLock, FaUsers } from "react-icons/fa";
 import { LuDock } from "react-icons/lu";
 import WallpaperSettings from "./WallpaperSettings";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import WifiSettings from "./WifiSettings";
 
 const Settings = ({fileStructure, setFileStructure, toggleMaximize, ...props}) => {
   const [selected, setSelected] = useState(0);
@@ -44,7 +45,7 @@ const Settings = ({fileStructure, setFileStructure, toggleMaximize, ...props}) =
   const renderContent = () => {
     switch (selected) {
       case 0:
-        return <div className='p-4 text-white'>Wi-Fi Settings Content</div>;
+        return <WifiSettings/>;
       case 1:
         return <div className='p-4 text-white'>Bluetooth Settings Content</div>;
       case 2:
@@ -75,7 +76,7 @@ const Settings = ({fileStructure, setFileStructure, toggleMaximize, ...props}) =
       }
     >
       <div className="flex w-full h-full">
-        <div className="w-1/3 bg-black bg-opacity-70 backdrop-filter backdrop-blur-2xl bg- p-2 px-2 flex flex-col">
+        <div className="w-1/3 bg-[#28263d] bg-opacity-70 backdrop-filter backdrop-blur-2xl p-2 px-2 flex flex-col">
           {settingsItems.map((item, index) => (
             item.type === "spacer" ? (
               <Spacer key={`spacer-${index}`} />

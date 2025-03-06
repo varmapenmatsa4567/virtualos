@@ -6,6 +6,7 @@ const useSettingsStore = create(
     (set) => ({
       wallpaper: 'wallpaper0', // Default wallpaper
       wifi: false, // Wi-Fi state
+      connectedWifi: "", // Wi-Fi connected state
       bluetooth: false, // Bluetooth state
       darkMode: false, // Dark mode state
       isLocked: false, // Lock state
@@ -15,6 +16,7 @@ const useSettingsStore = create(
       toggleLock: () => set((state) => ({ isLocked: !state.isLocked })),
       setWallpaper: (wallpaper) => set({ wallpaper }),
       toggleWifi: () => set((state) => ({ wifi: !state.wifi })),
+      setConnectedWifi: (connected) => set({ connectedWifi: connected }),
       toggleBluetooth: () => set((state) => ({ bluetooth: !state.bluetooth })),
       toggleDarkMode: () => set((state) => ({ darkMode: !state.darkMode })),
     }),

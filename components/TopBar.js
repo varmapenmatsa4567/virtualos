@@ -10,14 +10,15 @@ import { useOutsideClick } from '@/hooks/useOutsideClick';
 import useToggle from '@/hooks/useToggle';
 import { appMenus } from '@/utils/data';
 import SystemMenu from './topbar-menus/SystemMenu';
+import useSettingsStore from '@/stores/settings-store';
 
 const TopBar = ({activeWindow}) => {
   const [formattedDate, setFormattedDate] = useState([]);
 
   // Wifi
   const [isWifiOpen, toggleWifiOpen] = useToggle(false);
-  const [isWifiOn, toggleWifi] = useToggle(false);
-  const [isWifiConnected, toggleWifiConnected] = useToggle(false);
+  const {wifi, toggleWifi, connectedWifi} = useSettingsStore();
+  // const [isWifiConnected, toggleWifiConnected] = useToggle(false);
   const wifiRef = useRef(null);
   useOutsideClick(wifiRef, () => toggleWifiOpen(false));
 
@@ -74,11 +75,11 @@ const TopBar = ({activeWindow}) => {
           <IoBatteryFull className='text-white text-2xl'/>
           {/* <BatteryIndicator/> */}
         </div>
-        <div  ref={wifiRef} className={`${isWifiOpen && 'bg-white'} relative p-1 px-2 rounded-md bg-opacity-20`}>
-          {isWifiOn ? <MdOutlineWifi onClick={toggleWifiOpen} className={`${isWifiConnected ? "text-white" : "text-white text-opacity-40"} text-lg`}/> : (
+        <div ref={wifiRef} className={`${isWifiOpen && 'bg-white'} relative p-1 px-2 rounded-md bg-opacity-20`}>
+          {wifi ? <MdOutlineWifi onClick={toggleWifiOpen} className={`${connectedWifi != "" ? "text-white" : "text-white text-opacity-40"} text-lg`}/> : (
             <MdOutlineWifiOff onClick={toggleWifiOpen} className='text-lg text-white text-opacity-40'/>
           )}
-          {isWifiOpen && <WifiMenu isWifiConnected={isWifiConnected} toggleWifiConnected={toggleWifiConnected} isWifiOn={isWifiOn} toggleWifi={toggleWifi}/>}
+          {isWifiOpen && <WifiMenu />}
         </div>
         <IoSearch className="text-white" />
         <div className='flex items-center gap-2'>
