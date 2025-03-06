@@ -1,16 +1,14 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { FaApple } from 'react-icons/fa';
 import { formatDate } from '../utils/utils';
-import { IoBatteryFull, IoSearch, IoBluetooth } from 'react-icons/io5';
-import { IoIosWifi } from 'react-icons/io';
+import { IoBatteryFull, IoSearch } from 'react-icons/io5';
 import WifiMenu from './topbar-menus/WifiMenu';
 import BluetoothMenu from './topbar-menus/BluetoothMenu';
 import { MdOutlineWifiOff, MdOutlineWifi } from "react-icons/md";
-import { Battery, Bluetooth, BluetoothOff } from 'lucide-react';
+import { Bluetooth, BluetoothOff } from 'lucide-react';
 import { useOutsideClick } from '@/hooks/useOutsideClick';
 import useToggle from '@/hooks/useToggle';
 import { appMenus } from '@/utils/data';
-import BatteryIndicator from './Battery';
 import SystemMenu from './topbar-menus/SystemMenu';
 
 const TopBar = ({activeWindow}) => {

@@ -3,7 +3,7 @@ import React from 'react';
 import { Rnd } from 'react-rnd';
 import WnManager from './WnManager';
 
-const Window = ({ onClick, isCustomized, isFixed, customSize, isActive, isMinimized, isMaximized, onClose, toggleMinimize, toggleMaximize, toolbar, children }) => {
+const Window = ({ onClick, isCustomized, isTransparent, isFixed, customSize, isActive, isMinimized, isMaximized, onClose, toggleMinimize, toggleMaximize, toolbar, children }) => {
   
   const height = window.innerHeight - 28;
 
@@ -28,7 +28,7 @@ const Window = ({ onClick, isCustomized, isFixed, customSize, isActive, isMinimi
         display: isMinimized ? "none" : "block",  
       }}
     >
-      <div onClick={onClick} className={`bg-[#242227] overflow-hidden flex flex-col shadow-2xl cursor-default h-full rounded-lg border-[0.5px] border-[#7f7e7f]`}>
+      <div onClick={onClick} className={`${!isTransparent && "bg-[#242227]"} overflow-hidden flex flex-col shadow-2xl cursor-default h-full rounded-lg border-[0.5px] border-[#7f7e7f]`}>
         <div onDoubleClick={toggleMaximize} className="bg-[#3c3639] rounded-t-lg w-full h-10 flex items-center toolbar">
           <WnManager
             onClose={onClose}

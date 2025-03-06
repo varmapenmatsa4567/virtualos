@@ -8,7 +8,11 @@ const useSettingsStore = create(
       wifi: false, // Wi-Fi state
       bluetooth: false, // Bluetooth state
       darkMode: false, // Dark mode state
+      isLocked: false, // Lock state
 
+      hydrated: false, // Hydration state
+
+      toggleLock: () => set((state) => ({ isLocked: !state.isLocked })),
       setWallpaper: (wallpaper) => set({ wallpaper }),
       toggleWifi: () => set((state) => ({ wifi: !state.wifi })),
       toggleBluetooth: () => set((state) => ({ bluetooth: !state.bluetooth })),
@@ -17,6 +21,10 @@ const useSettingsStore = create(
     {
       name: 'settings-storage', // Unique name for localStorage key
       getStorage: () => localStorage, // Use localStorage as the storage
+      onRehydrateStorage: () => (state) => {
+        // Called after rehydration
+        state.hydrated = true;
+      }
     }
   )
 );

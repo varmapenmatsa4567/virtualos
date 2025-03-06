@@ -9,6 +9,7 @@ import Launchpad from "@/apps/Launchpad/Launchpad";
 import { ModernDock } from "@/components/ModernDock";
 import Iphone from "@/mobile/Iphone";
 import useSettingsStore from "@/stores/settings-store";
+import LockScreen from "@/apps/LockScreen";
 
 
 export default function Home() {
@@ -21,7 +22,7 @@ export default function Home() {
   const [isShiftKeyPressed, setIsShiftKeyPressed] = useState(false); // Track if Alt key is pressed
   const [isLaunchpadOpen, setIsLaunchpadOpen] = useState(false); // Track if Launchpad is open
 
-  const {wallpaper} = useSettingsStore();
+  const {wallpaper, isLocked, hydrated} = useSettingsStore();
 
   const [fileStructure, setFileStructure] = useState(initialStructure);
   const [isMobile, setIsMobile] = useState(false);
@@ -144,6 +145,12 @@ export default function Home() {
     return (
       <Iphone />
     )
+  }
+
+  if(!hydrated) return null;
+
+  if(isLocked) {
+    return <LockScreen/>
   }
 
   return (

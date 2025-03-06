@@ -59,7 +59,7 @@ const Settings = ({fileStructure, setFileStructure, toggleMaximize, ...props}) =
   console.log(selected);
 
   return (
-    <Window isFixed={true} isCustomized={true} customSize={{width: 650, height: 700}} {...props}
+    <Window isTransparent={true} isFixed={true} isCustomized={true} customSize={{width: 650, height: 700}} {...props}
       toolbar={
         <div className='flex items-center gap-2'>
           <button className='p-0.5 hover:bg-[#242227] rounded-md'>
@@ -75,7 +75,7 @@ const Settings = ({fileStructure, setFileStructure, toggleMaximize, ...props}) =
       }
     >
       <div className="flex w-full h-full">
-        <div className="w-1/3 bg-[#252427] bg- p-2 px-2 flex flex-col">
+        <div className="w-1/3 bg-black bg-opacity-70 backdrop-filter backdrop-blur-2xl bg- p-2 px-2 flex flex-col">
           {settingsItems.map((item, index) => (
             item.type === "spacer" ? (
               <Spacer key={`spacer-${index}`} />
