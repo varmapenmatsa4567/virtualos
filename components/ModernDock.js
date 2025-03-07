@@ -2,46 +2,34 @@
 import { Dock, DockIcon, DockItem, DockLabel } from '@/components/ui/dock';
 import { Separator } from './ui/separator';
 import DockAppIcon from './DockAppIcon';
+import useSettingsStore from '@/stores/settings-store';
+import useDockStore from '@/stores/dock-store';
   
 export function ModernDock({ isVisible, toggleLaunchpad, setWindows, openWindow, windows }) {
 
   const minimizedWindows = windows.filter((window) => window.isMinimized);
 
+  const { autoDock, openedAppsDots, showOpenedApps } = useSettingsStore();
+
+  const { apps } = useDockStore();
+
   const isAppOpen = (appName) => {
     return windows.some((window) => window.appName === appName);
   }
 
-  const apps = [
-    { appName: 'finder'},
-    { appName: 'clock'},
-    { appName: 'launchpad', onClick: toggleLaunchpad, isApp: false},
-    { appName: 'calculator'},
-    { appName: 'notes'},
-    { appName: 'photobooth'},
-    { appName: 'photos'},
-    { appName: 'safari'},
-    { appName: 'settings'},
-    { appName: 'vscode'},
-    { appName: 'compiler'},
-    { appName: 'calendar'},
-    { appName: 'sudoko'},
-    { appName: 'vlcplayer'},
-  
-  ]
-
   return (
     <div className='absolute bottom-2 group left-1/2 max-w-full -translate-x-1/2 z-50'>
-      <Dock className={'invisible group-hover:visible items-end p-1.5 px-2 bg-black/50'}>
+      <Dock className={`${autoDock && "invisible"} group-hover:visible items-end p-1.5 px-2 bg-black/50`}>
         {apps.map((app, idx) => (
           <DockAppIcon 
-            onClick={() => app.onClick ? app.onClick() : openWindow(app.appName)}
+            onClick={() => app.appName == "launchpad" ? toggleLaunchpad() : openWindow(app.appName)}
             appName={app.appName}
             key={idx}
-            isAppOpen={app.onClick ? false: isAppOpen(app.appName)}
+            isAppOpen={app.isApp ? false: openedAppsDots && isAppOpen(app.appName)}
           />
         ))}
-        {minimizedWindows.length > 0 && <Separator orientation='vertical' className='h-10 mb-1 bg-gray-200' />}
-        {minimizedWindows && minimizedWindows.map((window, idx) => (
+        {showOpenedApps && minimizedWindows.length > 0 && <Separator orientation='vertical' className='h-10 mb-1 bg-gray-200' />}
+        {showOpenedApps && minimizedWindows && minimizedWindows.map((window, idx) => (
             <DockAppIcon 
               onClick={() => setWindows(windows.map((w) => w.id === window.id ? { ...w, isMinimized: !w.isMinimized } : w))}
               appName={window.appName}

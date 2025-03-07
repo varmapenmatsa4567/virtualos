@@ -2,10 +2,13 @@
 import React from 'react';
 import { Rnd } from 'react-rnd';
 import WnManager from './WnManager';
+import useSettingsStore from '@/stores/settings-store';
 
 const Window = ({ onClick, isCustomized, isTransparent, isFixed, customSize, isActive, isMinimized, isMaximized, onClose, toggleMinimize, toggleMaximize, toolbar, children }) => {
   
   const height = window.innerHeight - 28;
+
+  const { titleBarAction } = useSettingsStore();
 
   return (
     <Rnd
@@ -29,7 +32,7 @@ const Window = ({ onClick, isCustomized, isTransparent, isFixed, customSize, isA
       }}
     >
       <div onClick={onClick} className={`${!isTransparent && "bg-[#242227]"} overflow-hidden flex flex-col shadow-2xl cursor-default h-full rounded-lg border-[0.5px] border-[#7f7e7f]`}>
-        <div onDoubleClick={toggleMaximize} className="bg-[#3c3639] rounded-t-lg w-full h-10 flex items-center toolbar">
+        <div onDoubleClick={titleBarAction == "maximize" ? toggleMaximize : titleBarAction == "minimize" ? toggleMinimize : null} className="bg-[#3c3639] rounded-t-lg w-full h-10 flex items-center toolbar">
           <WnManager
             onClose={onClose}
             toggleMinimize={toggleMinimize}

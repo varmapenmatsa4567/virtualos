@@ -2,23 +2,26 @@ import React, { useRef } from 'react'
 import AppIcon from '@/components/AppIcon'
 import { TooltipProvider } from '@/components/ui/tooltip'
 import { Input } from '@/components/ui/input'
+import useSettingsStore from '@/stores/settings-store'
 
 const Launchpad = ({toggleLaunchpad, openWindow}) => {
 
   const input = useRef(null);
+
+  const { wallpaper } = useSettingsStore();
 
   const handleInputClick = (e) => {
     e.stopPropagation(); // Stop event propagation
     input.current.focus();
   };
   return (
-    <div onClick={toggleLaunchpad} className='fixed duration-75 transition-all top-0 left-0 bg-wallpaper w-screen h-screen bg-cover'>
+    <div onClick={toggleLaunchpad} className={`fixed duration-75 transition-all top-0 left-0 bg-${wallpaper} w-screen h-screen bg-cover `}>
         <TooltipProvider>
-            <div>
-              <Input ref={input} onClick={handleInputClick} type='text' placeholder='Search' className='w-1/6 placeholder:text-center text-center mx-auto mt-10 text-white' />
-            </div>
-            <div className='w-full h-full px-32 pt-10 pb-40 backdrop-filter backdrop-blur-lg'>
-
+            
+            <div className='w-full h-full px-32 pb-40  backdrop-filter backdrop-blur-lg'>
+              <div className='mb-10'>
+                <Input ref={input} onClick={handleInputClick} type='text' placeholder='Search' className='w-1/6 placeholder:text-center text-center mx-auto mt-8 text-white' />
+              </div>
               <div className='grid grid-cols-9 gap-x-4 gap-y-7'>
                   <AppIcon isAppSwitcher={true} appName={'finder'} onClick={() => openWindow('finder')} />
                   <AppIcon isAppSwitcher={true} appName={'terminal'} onClick={() => openWindow('terminal')} />

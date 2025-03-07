@@ -11,6 +11,10 @@ const useSettingsStore = create(
       darkMode: false, // Dark mode state
       isLocked: false, // Lock state
       restart: false, // Restart state
+      autoDock: true,
+      openedAppsDots: true, // Show open apps state
+      showOpenedApps: true, // Show opened apps state
+      titleBarAction: "maximize", // Default title bar action
 
       hydrated: false, // Hydration state
 
@@ -21,6 +25,10 @@ const useSettingsStore = create(
       setConnectedWifi: (connected) => set({ connectedWifi: connected }),
       toggleBluetooth: () => set((state) => ({ bluetooth: !state.bluetooth })),
       toggleDarkMode: () => set((state) => ({ darkMode: !state.darkMode })),
+      toggleAutoDock: () => set((state) => ({ autoDock: !state.autoDock })),
+      toggleOpenedAppsDots: () => set((state) => ({ openedAppsDots: !state.openedAppsDots })),
+      toggleShowOpenedApps: () => set((state) => ({ showOpenedApps: !state.showOpenedApps })),
+      setTitleBarAction: (action) => set({ titleBarAction: action }),
     }),
     {
       name: 'settings-storage', // Unique name for localStorage key

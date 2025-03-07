@@ -11,6 +11,7 @@ import { LuDock } from "react-icons/lu";
 import WallpaperSettings from "./WallpaperSettings";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import WifiSettings from "./WifiSettings";
+import DockSettings from "./DockSettings";
 
 const Settings = ({fileStructure, setFileStructure, toggleMaximize, ...props}) => {
   const [selected, setSelected] = useState(0);
@@ -50,6 +51,8 @@ const Settings = ({fileStructure, setFileStructure, toggleMaximize, ...props}) =
         return <div className='p-4 text-white'>Bluetooth Settings Content</div>;
       case 2:
         return <div className='p-4 text-white'>Network Settings Content</div>;
+      case 11:
+        return <DockSettings />;
       case 13:
         return <WallpaperSettings />;
       default:

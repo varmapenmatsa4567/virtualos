@@ -47,6 +47,12 @@ export default function Home() {
   }, [fileStructure]);
 
   const openWindow = (appName) => {
+    if(windows.some((window) => window.appName === appName)) {
+      const existingWindow = windows.find((window) => window.appName === appName);
+      setActiveWindow(existingWindow.id); // Bring the existing window to the front
+      setWindows(windows.map((window) => window.id === existingWindow.id ? { ...window, isMinimized: false } : window)); // Unminimize the existing window
+      return;
+    }
     const newWindow = {
       id: Date.now(),
       isMinimized: false,
@@ -65,6 +71,7 @@ export default function Home() {
   const closeWindow = (id) => {
     // setOpenedApps(openedApps.filter((app) => app !== windows.find((w) => w.id === id).appName));
     setWindows(windows.filter((window) => window.id !== id));
+    setActiveWindow(windows[0]?.id || null); // Set the first window as active if available
   }
 
   const closeAllWindows = (id) => {
