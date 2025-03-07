@@ -10,10 +10,12 @@ const useSettingsStore = create(
       bluetooth: false, // Bluetooth state
       darkMode: false, // Dark mode state
       isLocked: false, // Lock state
+      restart: false, // Restart state
 
       hydrated: false, // Hydration state
 
       toggleLock: () => set((state) => ({ isLocked: !state.isLocked })),
+      toggleRestart: () => set((state) => ({ restart: !state.restart })),
       setWallpaper: (wallpaper) => set({ wallpaper }),
       toggleWifi: () => set((state) => ({ wifi: !state.wifi })),
       setConnectedWifi: (connected) => set({ connectedWifi: connected }),

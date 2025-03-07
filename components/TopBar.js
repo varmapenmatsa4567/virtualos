@@ -12,13 +12,12 @@ import { appMenus } from '@/utils/data';
 import SystemMenu from './topbar-menus/SystemMenu';
 import useSettingsStore from '@/stores/settings-store';
 
-const TopBar = ({activeWindow}) => {
+const TopBar = ({activeWindow, openWindow}) => {
   const [formattedDate, setFormattedDate] = useState([]);
 
   // Wifi
   const [isWifiOpen, toggleWifiOpen] = useToggle(false);
-  const {wifi, toggleWifi, connectedWifi} = useSettingsStore();
-  // const [isWifiConnected, toggleWifiConnected] = useToggle(false);
+  const {wifi, connectedWifi} = useSettingsStore();
   const wifiRef = useRef(null);
   useOutsideClick(wifiRef, () => toggleWifiOpen(false));
 
@@ -54,7 +53,7 @@ const TopBar = ({activeWindow}) => {
       <div className='flex items-center gap-2'>
         <div ref={systemMenuRef} className={`${isSystemMenuOpen && 'bg-white'} relative p-1 px-2 rounded-md bg-opacity-20`}>
           <FaApple className='text-white text-lg' onClick={toggleSystemMenuOpen}/>
-          {isSystemMenuOpen && <SystemMenu />}
+          {isSystemMenuOpen && <SystemMenu openWindow={openWindow}/>}
         </div>
         <p className='text-[13px] font-extrabold capitalize'>{activeWindow && activeWindow.length > 0 && activeWindow[0].appName}</p>
         {activeWindow && activeWindow.length > 0 && <div className='flex ml-3 gap-5'>

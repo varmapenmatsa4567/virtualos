@@ -10,6 +10,7 @@ import { ModernDock } from "@/components/ModernDock";
 import Iphone from "@/mobile/Iphone";
 import useSettingsStore from "@/stores/settings-store";
 import LockScreen from "@/apps/LockScreen";
+import RestartScreen from "@/apps/RestartScreen";
 
 
 export default function Home() {
@@ -22,7 +23,7 @@ export default function Home() {
   const [isShiftKeyPressed, setIsShiftKeyPressed] = useState(false); // Track if Alt key is pressed
   const [isLaunchpadOpen, setIsLaunchpadOpen] = useState(false); // Track if Launchpad is open
 
-  const {wallpaper, isLocked, hydrated} = useSettingsStore();
+  const {wallpaper, isLocked, hydrated, restart} = useSettingsStore();
 
   const [fileStructure, setFileStructure] = useState(initialStructure);
   const [isMobile, setIsMobile] = useState(false);
@@ -147,6 +148,10 @@ export default function Home() {
     )
   }
 
+  if(restart){
+    return <RestartScreen/>
+  }
+
   if(!hydrated) return null;
 
   if(isLocked) {
@@ -155,7 +160,7 @@ export default function Home() {
 
   return (
     <div className="w-screen h-screen flex flex-col items-center">
-      {!isLaunchpadOpen && <TopBar activeWindow={windows.filter((window) => window.id == activeWindow)}/>}
+      {!isLaunchpadOpen && <TopBar openWindow={openWindow} activeWindow={windows.filter((window) => window.id == activeWindow)}/>}
       {!isLaunchpadOpen && <div className={`main flex-1 w-screen bg-${wallpaper} bg-cover`}>
         {windows.map((window) => (
           <AppManager
