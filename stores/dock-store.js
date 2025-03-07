@@ -14,20 +14,14 @@ const useDockStore = create(
             { appName: 'photos'},
             { appName: 'safari'},
             { appName: 'settings'},
-            { appName: 'vscode'},
-            { appName: 'compiler'},
+            // { appName: 'vscode'},
+            // { appName: 'compiler'},
             { appName: 'calendar'},
-            { appName: 'sudoko'},
-            { appName: 'vlcplayer'},
+            // { appName: 'sudoko'},
+            // { appName: 'vlcplayer'},
           ],
         
-        addApp: (appName) => set((state) => {
-          const appExists = state.apps.some(app => app.appName === appName);
-          if (!appExists) {
-            return { apps: [...state.apps, { appName }] };
-          }
-          return state;
-        }),
+        addApp: (appName) => set((state) => ({ apps: [...state.apps, { appName }] })),
 
         removeApp: (appName) => set((state) => ({
           apps: state.apps.filter(app => app.appName !== appName)

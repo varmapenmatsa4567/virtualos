@@ -35,6 +35,7 @@ const Launchpad = ({toggleLaunchpad, openWindow}) => {
                   <AppIcon isAppSwitcher={true} appName={'vscode'} onClick={() => openWindow('vscode')} />
                   <AppIcon isAppSwitcher={true} appName={'calendar'} onClick={() => openWindow('calendar')}  />
                   <AppIcon isAppSwitcher={true} appName={'sudoko'} onClick={() => openWindow('sudoko')}  />
+                  <AppIcon isAppSwitcher={true} appName={'compiler'} onClick={() => openWindow('compiler')}  />
                   <AppIcon isAppSwitcher={true} appName={'finder'} />
                   <AppIcon isAppSwitcher={true} appName={'vscode'} />
                   <AppIcon isAppSwitcher={true} appName={'finder'} />

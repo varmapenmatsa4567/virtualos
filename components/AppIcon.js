@@ -2,10 +2,15 @@ import React from 'react';
 import { Tooltip, TooltipTrigger, TooltipContent } from './ui/tooltip';
 
 const AppIcon = ({ appName, openApp, onClick, isOpen, isAppSwitcher, isMobile, titleRequired }) => {
+
+  const handleDragStart = (e) => {
+    e.dataTransfer.setData('text/plain', appName);
+  }
+
   return (
     <Tooltip>
       <TooltipTrigger>
-        <div onClick={isMobile ? () => openApp(appName) : onClick} className='flex flex-col items-center'>
+        <div draggable onDragStart={handleDragStart} onClick={isMobile ? () => openApp(appName) : onClick} className='flex flex-col items-center'>
           <img
             draggable={false}
             onContextMenu={(e) => e.preventDefault()}
