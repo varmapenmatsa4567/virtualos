@@ -1,5 +1,5 @@
 
-import { Dock, DockIcon, DockItem, DockLabel } from '@/components/ui/dock';
+import { Dock } from '@/components/ui/dock';
 import { Separator } from './ui/separator';
 import DockAppIcon from './DockAppIcon';
 import useSettingsStore from '@/stores/settings-store';

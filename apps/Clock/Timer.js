@@ -5,6 +5,7 @@ import 'react-circular-progressbar/dist/styles.css';
 import {buildStyles} from "react-circular-progressbar";
 import Dots from './Dots';
 import { FaBell } from "react-icons/fa6";
+import useTimerStore from '@/stores/timer-store';
 
 
 const Timer = ({isActive}) => {
@@ -13,13 +14,18 @@ const Timer = ({isActive}) => {
     const [isRunning, setIsRunning] = useState(false);
     const intervalRef = useRef(null);
 
+    const {setBalanceTime, setIsTimer} = useTimerStore();
+
     const [showTimer, setShowTimer] = useState(false);
 
     const startTimer = () => {
         setShowTimer(true);
+        setIsTimer(true);
+
         if (!isRunning && totalSeconds > 0){
             if(remainingTime === 0){
                 setRemainingTime(totalSeconds);
+                setBalanceTime(totalSeconds);
             }
             setIsRunning(true);
             intervalRef.current = setInterval(() => {
@@ -30,6 +36,7 @@ const Timer = ({isActive}) => {
                         setShowTimer(false);
                         return 0;
                     }
+                    setBalanceTime(prev - 1);
                     return prev - 1;
                 });
             }, 1000);
@@ -39,6 +46,7 @@ const Timer = ({isActive}) => {
     // Pause the countdown
     const pauseTimer = () => {
         clearInterval(intervalRef.current);
+        setIsTimer(false);
         setIsRunning(false);
     };
 
@@ -48,6 +56,8 @@ const Timer = ({isActive}) => {
         setIsRunning(false);
         setRemainingTime(0);
         setShowTimer(false);
+        setBalanceTime(0);
+        setIsTimer(false);
     };
 
     const getFinishTime = () => {

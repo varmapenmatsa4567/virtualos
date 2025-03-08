@@ -15,8 +15,8 @@ const Launchpad = ({toggleLaunchpad, openWindow}) => {
     input.current.focus();
   };
   return (
-    <div onClick={toggleLaunchpad} className={`fixed duration-75 transition-all top-0 left-0 bg-${wallpaper} w-screen h-screen bg-cover `}>
-        <TooltipProvider>
+    <div onClick={toggleLaunchpad} className={`fixed duration-75 transition-all top-0 left-0 bg-${wallpaper} w-screen h-screen bg-cover z-[60]`}>
+        {/* <TooltipProvider> */}
             
             <div className='w-full h-full px-32 pb-40  backdrop-filter backdrop-blur-lg'>
               <div className='mb-10'>
@@ -33,21 +33,17 @@ const Launchpad = ({toggleLaunchpad, openWindow}) => {
                   <AppIcon isAppSwitcher={true} appName={'safari'} onClick={() => openWindow('safari')} />
                   <AppIcon isAppSwitcher={true} appName={'settings'} onClick={() => openWindow('settings')} />
                   <AppIcon isAppSwitcher={true} appName={'vscode'} onClick={() => openWindow('vscode')} />
+                  <AppIcon isAppSwitcher={true} appName={'vlcplayer'} onClick={() => openWindow('vlcplayer')} />
                   <AppIcon isAppSwitcher={true} appName={'calendar'} onClick={() => openWindow('calendar')}  />
                   <AppIcon isAppSwitcher={true} appName={'sudoko'} onClick={() => openWindow('sudoko')}  />
                   <AppIcon isAppSwitcher={true} appName={'compiler'} onClick={() => openWindow('compiler')}  />
-                  <AppIcon isAppSwitcher={true} appName={'finder'} />
-                  <AppIcon isAppSwitcher={true} appName={'vscode'} />
-                  <AppIcon isAppSwitcher={true} appName={'finder'} />
-                  <AppIcon isAppSwitcher={true} appName={'finder'} />
-                  <AppIcon isAppSwitcher={true} appName={'finder'} />
-                  <AppIcon isAppSwitcher={true} appName={'finder'} />
-                
-                
-                  
+                  <AppIcon isAppSwitcher={true} appName={'appstore'} onClick={() => openWindow('appstore')}  />
+                  <AppIcon isAppSwitcher={true} appName={'2048'} onClick={() => openWindow('2048')}  />
+                  <AppIcon isAppSwitcher={true} appName={'chess'} onClick={() => openWindow('chess')}  />
+                  <AppIcon isAppSwitcher={true} appName={'tictactoe'} onClick={() => openWindow('tictactoe')}  />
               </div>
             </div>
-        </TooltipProvider>
+        {/* </TooltipProvider> */}
     </div>
   )
 }

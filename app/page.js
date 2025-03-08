@@ -1,6 +1,5 @@
 "use client";
 import AppManager from "@/components/AppManager";
-import Dock from "@/components/Dock";
 import TopBar from "@/components/TopBar";
 import { useState, useEffect } from "react";
 import { initialStructure } from "@/utils/data";
@@ -168,7 +167,7 @@ export default function Home() {
   return (
     <div className="w-screen h-screen flex flex-col items-center">
       {!isLaunchpadOpen && <TopBar openWindow={openWindow} activeWindow={windows.filter((window) => window.id == activeWindow)}/>}
-      {!isLaunchpadOpen && <div className={`main flex-1 w-screen bg-${wallpaper} bg-cover`}>
+      <div className={`main flex-1 w-screen bg-${wallpaper} bg-cover`}>
         {windows.map((window) => (
           <AppManager
             openedFile={openedFile}
@@ -186,7 +185,7 @@ export default function Home() {
             toggleMaximize={() => setWindows(windows.map((w) => w.id === window.id ? { ...w, isMaximized: !w.isMaximized } : w))}
           />
         ))}
-      </div>}
+      </div>
       <ModernDock isVisible={isLaunchpadOpen} toggleLaunchpad={toggleLaunchpad} setWindows={setWindows} openWindow={openWindow} windows={windows}  />
       {isLaunchpadOpen && <Launchpad openWindow={openWindow} toggleLaunchpad={toggleLaunchpad}/>}
       {isAppSwitcherVisible && (

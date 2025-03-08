@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { FaApple } from 'react-icons/fa';
 import { formatDate } from '../utils/utils';
-import { IoBatteryFull, IoSearch } from 'react-icons/io5';
+import { IoBatteryFull, IoSearch, IoTimerOutline } from 'react-icons/io5';
 import WifiMenu from './topbar-menus/WifiMenu';
 import BluetoothMenu from './topbar-menus/BluetoothMenu';
 import { MdOutlineWifiOff, MdOutlineWifi } from "react-icons/md";
@@ -11,6 +11,8 @@ import useToggle from '@/hooks/useToggle';
 import { appMenus } from '@/utils/data';
 import SystemMenu from './topbar-menus/SystemMenu';
 import useSettingsStore from '@/stores/settings-store';
+import useTimerStore from '@/stores/timer-store';
+import Dots from '@/apps/Clock/Dots';
 
 const TopBar = ({activeWindow, openWindow}) => {
   const [formattedDate, setFormattedDate] = useState([]);
@@ -32,6 +34,9 @@ const TopBar = ({activeWindow, openWindow}) => {
   const [isSystemMenuOpen, toggleSystemMenuOpen] = useToggle(false);
   const systemMenuRef = useRef(null);
   useOutsideClick(systemMenuRef, () => toggleSystemMenuOpen(false));
+
+  // Timer
+  const {isTimer, balanceTime} = useTimerStore();
   
 
   // console.log(activeWindow);
@@ -63,6 +68,20 @@ const TopBar = ({activeWindow, openWindow}) => {
         </div>}
       </div>
       <div className='flex cursor-default items-center gap-3'>
+        {isTimer && <div className='flex gap-1 items-center'>
+          <IoTimerOutline className='text-white text-md' />
+          <div className={`flex text-xs font-light tabular-nums items-center`}>
+              {(balanceTime / 3600) >= 1 && (
+                  <>
+                      <p>{String(Math.floor(balanceTime / 3600)).padStart(2, '0')}</p>
+                      <Dots gap="gap-1"/>
+                  </>
+              )}
+              <p>{String(Math.floor((balanceTime % 3600) / 60)).padStart(2, '0')}</p>
+              <Dots size='' px='px-[2px]' gap="gap-1"/>
+              <p>{String((balanceTime % 60)).padStart(2, '0')}</p>
+          </div>
+        </div>}
         <div ref={bluetoothRef} className={`${isBluetoothOpen && 'bg-white'} relative p-1 px-2 rounded-md bg-opacity-20`}>
           {isBluetoothOn ? <Bluetooth size={17} className={`${isDeviceConnected ? "text-white" : "text-white text-opacity-40"}`} onClick={toggleBluetoothOpen}/> : (
             <BluetoothOff size={17} className='text-white text-opacity-40' onClick={toggleBluetoothOpen}/>
