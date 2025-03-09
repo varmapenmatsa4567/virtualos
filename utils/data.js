@@ -55,7 +55,6 @@ export const apps = [
   "finder",
   "terminal",
   "clock",
-  "launchpad",
   "calculator",
   "notes",
   "photos",
