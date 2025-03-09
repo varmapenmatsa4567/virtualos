@@ -19,19 +19,31 @@ const Window = ({db, appName, onClick, isCustomized, isTransparent, isFixed, cus
 
   const { isWindowScreenshot, setScreenshotUrl } = useGlobalStore();
 
-  if(!(appName in appsState)) {
-    const newAppState = {...appsState, 
-      [appName]: { 
-        x: 300,
-        y: 50,
-        width: isFixed ? customSize.width : 600,
-        height: isFixed ? customSize.height : 400,
-      } 
-    };
-    setAppsState(newAppState);
-  }
+  useEffect(() => {
+    if (!(appName in appsState)) {
+      const newAppState = {
+        ...appsState,
+        [appName]: {
+          x: 300,
+          y: 50,
+          width: isFixed ? customSize.width : 600,
+          height: isFixed ? customSize.height : 400,
+        },
+      };
+      setAppsState(newAppState); // Safe to call setState inside useEffect
+    }
+  }, [appName, appsState, isFixed, customSize, setAppsState]); // Add dependencies
 
-  const defaults = appsState[appName];
+  let defaults = {
+    x: 300,
+    y: 50,
+    width: isFixed ? customSize.width : 600,
+    height: isFixed ? customSize.height : 400,
+  };
+
+  if(appName in appsState) {
+    defaults = appsState[appName];
+  }
 
   const handleDragStop = (e, data) => {
     const app = appsState[appName];
@@ -78,12 +90,6 @@ const Window = ({db, appName, onClick, isCustomized, isTransparent, isFixed, cus
       });
     }
   }
-
-  const [isMounted, setIsMounted] = useState(false);
-
-  useEffect(() => {
-    setIsMounted(true);
-  }, []);
 
   return (
     <Rnd
