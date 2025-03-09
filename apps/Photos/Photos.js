@@ -2,38 +2,22 @@ import Window from "@/components/Window";
 import { useRef, useState, useEffect } from "react";
 import { ChevronLeft, Minus, Plus } from "lucide-react";
 
-const Photos = ({ fileStructure, setFileStructure, ...props }) => {
+const Photos = ({ fileStructure, setFileStructure, db, ...props }) => {
   const gridRef = useRef(null);
   const cols = ["grid-cols-3", "grid-cols-5", "grid-cols-7", "grid-cols-9"];
   const [colIndex, setColIndex] = useState(1);
   const [selectedItem, setSelectedItem] = useState(0);
   const [photos, setPhotos] = useState([]);
-  const [db, setDb] = useState(null);
   const [fullScreenImage, setFullScreenImage] = useState(null);
   const [isDragging, setIsDragging] = useState(false);
 
   // Open or create IndexedDB database
   useEffect(() => {
-    console.log("Opening IndexedDB...");
-    const request = indexedDB.open("PhotoboothDB", 1);
-
-    request.onupgradeneeded = (event) => {
-      const db = event.target.result;
-      if (!db.objectStoreNames.contains("photos")) {
-        db.createObjectStore("photos", { keyPath: "id", autoIncrement: true });
-      }
-    };
-
-    request.onsuccess = (event) => {
-      const db = event.target.result;
-      setDb(db);
+    if(db){
       getPhotos(db);
-    };
-
-    request.onerror = (event) => {
-      console.error("Error opening IndexedDB:", event.target.error);
-    };
-  }, []);
+      return;
+    }
+  }, [db]);
 
   // Fetch photos from IndexedDB
   const getPhotos = (db) => {

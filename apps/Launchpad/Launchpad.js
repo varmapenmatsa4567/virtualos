@@ -3,6 +3,7 @@ import AppIcon from '@/components/AppIcon'
 import { TooltipProvider } from '@/components/ui/tooltip'
 import { Input } from '@/components/ui/input'
 import useSettingsStore from '@/stores/settings-store'
+import { apps } from '@/utils/data'
 
 const Launchpad = ({toggleLaunchpad, openWindow}) => {
 
@@ -15,35 +16,23 @@ const Launchpad = ({toggleLaunchpad, openWindow}) => {
     input.current.focus();
   };
   return (
-    <div onClick={toggleLaunchpad} className={`fixed duration-75 transition-all top-0 left-0 bg-${wallpaper} w-screen h-screen bg-cover z-[60]`}>
-        {/* <TooltipProvider> */}
-            
+    <div onClick={toggleLaunchpad} className={`fixed duration-300 ease-in-out transition-all top-0 left-0 bg-${wallpaper} w-screen h-screen bg-cover z-[60]`}>            
             <div className='w-full h-full px-32 pb-40  backdrop-filter backdrop-blur-lg'>
               <div className='mb-10'>
                 <Input ref={input} onClick={handleInputClick} type='text' placeholder='Search' className='w-1/6 placeholder:text-center text-center mx-auto mt-8 text-white' />
               </div>
               <div className='grid grid-cols-9 gap-x-4 gap-y-7'>
-                  <AppIcon isAppSwitcher={true} appName={'finder'} onClick={() => openWindow('finder')} />
-                  <AppIcon isAppSwitcher={true} appName={'terminal'} onClick={() => openWindow('terminal')} />
-                  <AppIcon isAppSwitcher={true} appName={'clock'} onClick={() => openWindow('clock')} />
-                  <AppIcon isAppSwitcher={true} appName={'launchpad'} onClick={toggleLaunchpad}  />
-                  <AppIcon isAppSwitcher={true} appName={'calculator'} onClick={() => openWindow('calculator')} />
-                  <AppIcon isAppSwitcher={true} appName={'notes'} onClick={() => openWindow('notes')} />
-                  <AppIcon isAppSwitcher={true} appName={'photos'} onClick={() => openWindow('photos')} />
-                  <AppIcon isAppSwitcher={true} appName={'safari'} onClick={() => openWindow('safari')} />
-                  <AppIcon isAppSwitcher={true} appName={'settings'} onClick={() => openWindow('settings')} />
-                  <AppIcon isAppSwitcher={true} appName={'vscode'} onClick={() => openWindow('vscode')} />
-                  <AppIcon isAppSwitcher={true} appName={'vlcplayer'} onClick={() => openWindow('vlcplayer')} />
-                  <AppIcon isAppSwitcher={true} appName={'calendar'} onClick={() => openWindow('calendar')}  />
-                  <AppIcon isAppSwitcher={true} appName={'sudoko'} onClick={() => openWindow('sudoko')}  />
-                  <AppIcon isAppSwitcher={true} appName={'compiler'} onClick={() => openWindow('compiler')}  />
-                  <AppIcon isAppSwitcher={true} appName={'appstore'} onClick={() => openWindow('appstore')}  />
-                  <AppIcon isAppSwitcher={true} appName={'2048'} onClick={() => openWindow('2048')}  />
-                  <AppIcon isAppSwitcher={true} appName={'chess'} onClick={() => openWindow('chess')}  />
-                  <AppIcon isAppSwitcher={true} appName={'tictactoe'} onClick={() => openWindow('tictactoe')}  />
+                  {apps.map((app, idx) => (
+                    <AppIcon
+                      titleRequired={true}
+                      isAppSwitcher={true}
+                      appName={app}
+                      key={idx}
+                      onClick={() => openWindow(app)}
+                    />
+                  ))}
               </div>
             </div>
-        {/* </TooltipProvider> */}
     </div>
   )
 }

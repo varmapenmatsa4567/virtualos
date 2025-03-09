@@ -10,6 +10,8 @@ import Iphone from "@/mobile/Iphone";
 import useSettingsStore from "@/stores/settings-store";
 import LockScreen from "@/apps/LockScreen";
 import RestartScreen from "@/apps/RestartScreen";
+import useGlobalStore from "@/stores/global-store";
+import html2canvas from "html2canvas";
 
 
 export default function Home() {
@@ -21,8 +23,11 @@ export default function Home() {
   const [isAppSwitcherVisible, setIsAppSwitcherVisible] = useState(false); // Control visibility of the app switcher
   const [isShiftKeyPressed, setIsShiftKeyPressed] = useState(false); // Track if Alt key is pressed
   const [isLaunchpadOpen, setIsLaunchpadOpen] = useState(false); // Track if Launchpad is open
+  const [db, setDb] = useState(null); // State to hold the IndexedDB instance
 
   const {wallpaper, isLocked, hydrated, restart} = useSettingsStore();
+
+  const {isFullScreenshot, screenshotUrl, setScreenshotUrl} = useGlobalStore();
 
   const [fileStructure, setFileStructure] = useState(initialStructure);
   const [isMobile, setIsMobile] = useState(false);
@@ -30,6 +35,25 @@ export default function Home() {
   const toggleLaunchpad = () => {
     setIsLaunchpadOpen(!isLaunchpadOpen);
   }
+
+  useEffect(() => {
+    const request = indexedDB.open("PhotoboothDB", 1);
+
+    request.onupgradeneeded = (event) => {
+        const db = event.target.result;
+        if (!db.objectStoreNames.contains("photos")) {
+            db.createObjectStore("photos", { keyPath: "id", autoIncrement: true });
+        }
+    };
+
+    request.onsuccess = (event) => {
+        setDb(event.target.result);
+    };
+
+    request.onerror = (event) => {
+        console.error("Error opening IndexedDB:", event.target.error);
+    };
+}, []);
 
 
   // Load fileStructure from localStorage on component mount
@@ -67,10 +91,42 @@ export default function Home() {
     }
   };
 
+  const takeScreenshot = () => {
+    const screenshotElement = document.getElementById("screen");
+    const elementToHide = document.getElementById("screenshot");
+    elementToHide.style.display = 'hidden';
+    if (screenshotElement) {
+      html2canvas(screenshotElement).then((canvas) => {
+        const link = canvas.toDataURL('image/png');
+        setScreenshotUrl(link); 
+        if (db) {
+          const transaction = db.transaction("photos", "readwrite");
+          const store = transaction.objectStore("photos");
+          const request = store.add({ imageUrl: link, timestamp: new Date() });
+
+          request.onsuccess = () => {
+              console.log("Photo saved to IndexedDB");
+          };
+
+          request.onerror = (event) => {
+              console.error("Error saving photo to IndexedDB:", event.target.error);
+          };
+        }
+        setTimeout(() => {
+          setScreenshotUrl(null);
+        }, 2000); // Delay to allow the screenshot to be taken
+      });
+    }
+    setTimeout(() => {
+      elementToHide.style.display = 'block';
+    }, 1000);
+  }
+
   const closeWindow = (id) => {
     // setOpenedApps(openedApps.filter((app) => app !== windows.find((w) => w.id === id).appName));
     setWindows(windows.filter((window) => window.id !== id));
     setActiveWindow(windows[0]?.id || null); // Set the first window as active if available
+    setOpenedApps(openedApps.filter((app) => app !== windows.find((w) => w.id === id).appName)); // Remove the app from openedApps
   }
 
   const closeAllWindows = (id) => {
@@ -165,32 +221,37 @@ export default function Home() {
   }
 
   return (
-    <div className="w-screen h-screen flex flex-col items-center">
-      {!isLaunchpadOpen && <TopBar openWindow={openWindow} activeWindow={windows.filter((window) => window.id == activeWindow)}/>}
-      <div className={`main flex-1 w-screen bg-${wallpaper} bg-cover`}>
-        {windows.map((window) => (
-          <AppManager
-            openedFile={openedFile}
-            fileStructure={fileStructure}
-            setFileStructure={setFileStructure}
-            handleFileClick={handleFileClick}
-            appName={window.appName}
-            key={window.id}
-            onClick={() => setActiveWindow(window.id)}
-            isActive={activeWindow === window.id}
-            isMinimized={window.isMinimized}
-            isMaximized={window.isMaximized}
-            onClose={() => closeWindow(window.id)}
-            toggleMinimize={() => setWindows(windows.map((w) => w.id === window.id ? { ...w, isMinimized: !w.isMinimized } : w))}
-            toggleMaximize={() => setWindows(windows.map((w) => w.id === window.id ? { ...w, isMaximized: !w.isMaximized } : w))}
-          />
-        ))}
+    <div className={`relative ${isFullScreenshot && "group"}`}>
+      <div id='screen' className="w-screen h-screen flex flex-col items-center">
+        {!isLaunchpadOpen && <TopBar openWindow={openWindow} activeWindow={windows.filter((window) => window.id == activeWindow)}/>}
+        <div className={`main flex-1 w-screen bg-${wallpaper} bg-cover`}>
+          {windows.map((window) => (
+            <AppManager
+              db={db}
+              openedFile={openedFile}
+              fileStructure={fileStructure}
+              setFileStructure={setFileStructure}
+              handleFileClick={handleFileClick}
+              appName={window.appName}
+              key={window.id}
+              onClick={() => setActiveWindow(window.id)}
+              isActive={activeWindow === window.id}
+              isMinimized={window.isMinimized}
+              isMaximized={window.isMaximized}
+              onClose={() => closeWindow(window.id)}
+              toggleMinimize={() => setWindows(windows.map((w) => w.id === window.id ? { ...w, isMinimized: !w.isMinimized } : w))}
+              toggleMaximize={() => setWindows(windows.map((w) => w.id === window.id ? { ...w, isMaximized: !w.isMaximized } : w))}
+            />
+          ))}
+        </div>
+        <ModernDock isVisible={isLaunchpadOpen} toggleLaunchpad={toggleLaunchpad} setWindows={setWindows} openWindow={openWindow} windows={windows}  />
+        {isLaunchpadOpen && <Launchpad openWindow={openWindow} toggleLaunchpad={toggleLaunchpad}/>}
+        {isAppSwitcherVisible && (
+          <AppSwitcher openedApps={openedApps} selectedAppIndex={selectedAppIndex} />
+        )}
       </div>
-      <ModernDock isVisible={isLaunchpadOpen} toggleLaunchpad={toggleLaunchpad} setWindows={setWindows} openWindow={openWindow} windows={windows}  />
-      {isLaunchpadOpen && <Launchpad openWindow={openWindow} toggleLaunchpad={toggleLaunchpad}/>}
-      {isAppSwitcherVisible && (
-        <AppSwitcher openedApps={openedApps} selectedAppIndex={selectedAppIndex} />
-      )}
+      {isFullScreenshot && <div onClick={takeScreenshot} className='hidden group-hover:block cursor-camera absolute top-0 left-0 w-full h-full bg-blue-300 rounded-md bg-opacity-35'></div>}
+      {screenshotUrl && <div className="fixed w-40 right-2 bottom-2 border border-gray-100 rounded-md"><img className="rounded-md" src={screenshotUrl}/></div>}
     </div>
   );
 }

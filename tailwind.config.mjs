@@ -10,6 +10,9 @@ export default {
   ],
   theme: {
   	extend: {
+		cursor: {
+			'camera': 'url("/cursor.png"), auto',
+		},
 		fontFamily: {
 			sans: ['San Francisco', 'sans-serif'],
 		},

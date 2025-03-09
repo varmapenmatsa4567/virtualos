@@ -2,33 +2,12 @@ import { useRef, useState, useEffect } from "react";
 import { BsCameraFill } from "react-icons/bs";
 import Window from "@/components/Window";
 
-const Photobooth = ({ fileStructure, setFileStructure, onClose, ...props }) => {
+const Photobooth = ({ fileStructure, setFileStructure, onClose, db, ...props }) => {
     const videoRef = useRef(null);
     const canvasRef = useRef(null);
     const [isCameraOn, setIsCameraOn] = useState(false);
     const [countdown, setCountdown] = useState(0);
-    const [db, setDb] = useState(null);
     const [isFlashVisible, setIsFlashVisible] = useState(false); // State for flash effect
-
-    // Open or create IndexedDB database
-    useEffect(() => {
-        const request = indexedDB.open("PhotoboothDB", 1);
-
-        request.onupgradeneeded = (event) => {
-            const db = event.target.result;
-            if (!db.objectStoreNames.contains("photos")) {
-                db.createObjectStore("photos", { keyPath: "id", autoIncrement: true });
-            }
-        };
-
-        request.onsuccess = (event) => {
-            setDb(event.target.result);
-        };
-
-        request.onerror = (event) => {
-            console.error("Error opening IndexedDB:", event.target.error);
-        };
-    }, []);
 
     const startCamera = async () => {
         try {

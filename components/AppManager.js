@@ -12,6 +12,9 @@ import Calculator from '@/apps/Calculator/Calculator'
 import Clock from '@/apps/Clock/Clock'
 import Compiler from '@/apps/Compiler'
 import Settings from '@/apps/Settings/Settings'
+import TicTacToe from '@/apps/TicTacToe/TicTacToe'
+import Screenshot from '@/apps/Screenshot/Screenshot'
+import useGlobalStore from '@/stores/global-store'
 
 const AppManager = (props) => {
 
@@ -53,6 +56,12 @@ const AppManager = (props) => {
     }
     else if(props.appName === 'settings') {
         return <Settings {...props}/>
+    }
+    else if(props.appName === 'tictactoe') {
+        return <TicTacToe {...props}/>
+    }
+    else if(props.appName === 'screenshot') {
+        return <Screenshot {...props}/>
     }
   return null;
 }
