@@ -15,6 +15,7 @@ const useSettingsStore = create(
       openedAppsDots: true, // Show open apps state
       showOpenedApps: true, // Show opened apps state
       titleBarAction: "maximize", // Default title bar action
+      dockPosition: "bottom", // Default dock position
 
       hydrated: false, // Hydration state
 
@@ -29,6 +30,7 @@ const useSettingsStore = create(
       toggleOpenedAppsDots: () => set((state) => ({ openedAppsDots: !state.openedAppsDots })),
       toggleShowOpenedApps: () => set((state) => ({ showOpenedApps: !state.showOpenedApps })),
       setTitleBarAction: (action) => set({ titleBarAction: action }),
+      setDockPosition: (position) => set({ dockPosition: position }),
     }),
     {
       name: 'settings-storage', // Unique name for localStorage key

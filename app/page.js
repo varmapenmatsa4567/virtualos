@@ -12,13 +12,16 @@ import LockScreen from "@/apps/LockScreen";
 import RestartScreen from "@/apps/RestartScreen";
 import useGlobalStore from "@/stores/global-store";
 import html2canvas from "html2canvas";
+import useWindowsStore from "@/stores/windows-store";
 
 
 export default function Home() {
-  const [windows, setWindows] = useState([]);
-  const [activeWindow, setActiveWindow] = useState(null);
+
+  const {windows, setWindows, activeWindow, setActiveWindow, openedApps, setOpenedApps} = useWindowsStore();
+  // const [windows, setWindows] = useState([]);
+  // const [activeWindow, setActiveWindow] = useState(null);
   const [openedFile, setOpenedFile] = useState(null); // State to track the opened file
-  const [openedApps, setOpenedApps] = useState([]); // Track opened apps in order
+  // const [openedApps, setOpenedApps] = useState([]); // Track opened apps in order
   const [selectedAppIndex, setSelectedAppIndex] = useState(0); // Track the selected app in the switcher
   const [isAppSwitcherVisible, setIsAppSwitcherVisible] = useState(false); // Control visibility of the app switcher
   const [isShiftKeyPressed, setIsShiftKeyPressed] = useState(false); // Track if Alt key is pressed
@@ -27,7 +30,7 @@ export default function Home() {
 
   const {wallpaper, isLocked, hydrated, restart} = useSettingsStore();
 
-  const {isFullScreenshot, screenshotUrl, setScreenshotUrl} = useGlobalStore();
+  const {isFullScreenshot, screenshotUrl, setScreenshotUrl, closeScreenshot} = useGlobalStore();
 
   const [fileStructure, setFileStructure] = useState(initialStructure);
   const [isMobile, setIsMobile] = useState(false);
@@ -84,18 +87,18 @@ export default function Home() {
       appName: appName || "New Window",
     };
     setWindows([...windows, newWindow]);
-    setActiveWindow(newWindow.id);
+    if(appName !== "screenshot") setActiveWindow(newWindow.id);
 
     // Add the app to the openedApps list if it's not already there
-    if (!openedApps.includes(appName)) {
+    if (!openedApps.includes(appName) && appName !== "screenshot") {
       setOpenedApps([...openedApps, appName]);
     }
   };
 
   const takeScreenshot = () => {
     const screenshotElement = document.getElementById("screen");
-    const elementToHide = document.getElementById("screenshot");
-    elementToHide.style.display = 'hidden';
+    setWindows(windows.filter((window) => window.appName !== "screenshot"));
+    closeScreenshot();
     if (screenshotElement) {
       html2canvas(screenshotElement).then((canvas) => {
         const link = canvas.toDataURL('image/png');
@@ -120,9 +123,6 @@ export default function Home() {
         }, 2000); // Delay to allow the screenshot to be taken
       });
     }
-    setTimeout(() => {
-      elementToHide.style.display = 'block';
-    }, 1000);
   }
 
   const closeWindow = (id) => {
@@ -253,7 +253,7 @@ export default function Home() {
           <AppSwitcher openedApps={openedApps} selectedAppIndex={selectedAppIndex} />
         )}
       </div>
-      {isFullScreenshot && <div onClick={takeScreenshot} className='hidden group-hover:block cursor-camera absolute top-0 left-0 w-full h-full bg-blue-300 rounded-md bg-opacity-35'></div>}
+      {isFullScreenshot && <div onClick={takeScreenshot} className='hidden group-hover:block z-[65] cursor-camera absolute top-0 left-0 w-full h-full bg-blue-300 rounded-md bg-opacity-35'></div>}
       {screenshotUrl && <div className="fixed w-40 right-2 bottom-2 border border-gray-100 rounded-md"><img className="rounded-md" src={screenshotUrl}/></div>}
     </div>
   );

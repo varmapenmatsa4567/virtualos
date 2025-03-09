@@ -7,19 +7,28 @@ import useSettingsStore from '@/stores/settings-store'
 const DockSettings = () => {
 
     const { autoDock, openedAppsDots, toggleAutoDock, toggleOpenedAppsDots,
-        showOpenedApps, toggleShowOpenedApps, } = useSettingsStore();
+        showOpenedApps, toggleShowOpenedApps, titleBarAction, setTitleBarAction,
+        dockPosition, setDockPosition } = useSettingsStore();
 
   return (
     <div className='h-full w-full p-2 px-3 flex flex-col gap-2 text-white'>
         <Box padding={"p-1 px-2"}>
             <div className='flex justify-between py-1 items-center'>
                 <p className='text-[13px]'>Position on Screen</p>
-                <Switch checked={autoDock} onCheckedChange={toggleAutoDock} className='ml-auto h-4 w-7' thumbClassName='h-3 w-3 data-[state=checked]:translate-x-3' />
+                <select value={dockPosition} onChange={(e) => setDockPosition(e.target.value)} className="rounded-md text-right bg-transparent text-xs outline-none">
+                    <option value="left">Left</option>
+                    <option value="bottom">Bottom</option>
+                    <option value="right">Right</option>
+                </select>
             </div>
             <Separator className='bg-[#3b363a]'/>
             <div className='flex justify-between py-1 items-center'>
                 <p className='text-[13px]'>Double-click a window's title bar to</p>
-                <Switch checked={autoDock} onCheckedChange={toggleAutoDock} className='ml-auto h-4 w-7' thumbClassName='h-3 w-3 data-[state=checked]:translate-x-3' />
+                <select value={titleBarAction} onChange={(e) => setTitleBarAction(e.target.value)} className="rounded-md text-right bg-transparent text-xs outline-none">
+                    <option value="minimize">Minimize</option>
+                    <option value="maximize">Maximize</option>
+                    <option value="nothing">Do Nothing</option>
+                </select>
             </div>
             <Separator className='bg-[#3b363a]'/>
             <div className='flex justify-between py-1 items-center'>
