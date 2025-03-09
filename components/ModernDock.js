@@ -9,7 +9,7 @@ export function ModernDock({ isVisible, toggleLaunchpad, setWindows, openWindow,
 
   const minimizedWindows = windows.filter((window) => window.isMinimized);
 
-  const { autoDock, openedAppsDots, showOpenedApps } = useSettingsStore();
+  const { autoDock, openedAppsDots, showOpenedApps, dockSize, dockMagnification } = useSettingsStore();
 
   const { apps, addApp } = useDockStore();
 
@@ -33,6 +33,7 @@ export function ModernDock({ isVisible, toggleLaunchpad, setWindows, openWindow,
     <div onDragOver={handleDragOver}
     onDrop={handleDrop} className='absolute bottom-2 group left-1/2 max-w-full -translate-x-1/2 z-[65]'>
       <Dock
+      magnification={50 + dockMagnification * 10}
        className={`${autoDock && !isVisible && "invisible"} group-hover:visible items-end p-1.5 px-2 bg-black/50`}>
         {apps.map((app, idx) => (
           <DockAppIcon 

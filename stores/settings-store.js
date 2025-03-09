@@ -16,9 +16,14 @@ const useSettingsStore = create(
       showOpenedApps: true, // Show opened apps state
       titleBarAction: "maximize", // Default title bar action
       dockPosition: "bottom", // Default dock position
+      dockMagnification: 5, // Default dock magnification
+      dockSize: 5, // Default dock size
+
 
       hydrated: false, // Hydration state
 
+      setDockMagnification: (magnification) => set({ dockMagnification: magnification }),
+      setDockSize: (size) => set({ dockSize: size }),
       toggleLock: () => set((state) => ({ isLocked: !state.isLocked })),
       toggleRestart: () => set((state) => ({ restart: !state.restart })),
       setWallpaper: (wallpaper) => set({ wallpaper }),
