@@ -6,6 +6,7 @@ import useSettingsStore from '@/stores/settings-store';
 import html2canvas from 'html2canvas';
 import useGlobalStore from '@/stores/global-store';
 import useWindowsStore from '@/stores/windows-store';
+import { useEffect, useState } from 'react';
 
 const Window = ({db, appName, onClick, isCustomized, isTransparent, isFixed, customSize, isActive, isMinimized, isMaximized, onClose, toggleMinimize, toggleMaximize, toolbar, children }) => {
   
@@ -77,6 +78,12 @@ const Window = ({db, appName, onClick, isCustomized, isTransparent, isFixed, cus
       });
     }
   }
+
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   return (
     <Rnd
