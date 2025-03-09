@@ -30,7 +30,7 @@ export default function Home() {
 
   const {wallpaper, isLocked, hydrated, restart} = useSettingsStore();
 
-  const {isFullScreenshot, screenshotUrl, setScreenshotUrl, closeScreenshot} = useGlobalStore();
+  const {isFullScreenshot, screenshotUrl, setScreenshotUrl, closeScreenshot, showScreenshot, setShowScreenshot} = useGlobalStore();
 
   const [fileStructure, setFileStructure] = useState(initialStructure);
   const [isMobile, setIsMobile] = useState(false);
@@ -87,13 +87,24 @@ export default function Home() {
       appName: appName || "New Window",
     };
     setWindows([...windows, newWindow]);
-    if(appName !== "screenshot") setActiveWindow(newWindow.id);
+    if(appName !== "screenshot" && appName !== "imageviewer") setActiveWindow(newWindow.id);
 
     // Add the app to the openedApps list if it's not already there
-    if (!openedApps.includes(appName) && appName !== "screenshot") {
+    if (!openedApps.includes(appName) && appName !== "screenshot" && appName !== "imageviewer") {
       setOpenedApps([...openedApps, appName]);
     }
   };
+
+  const openScreenshot = () => {
+    const imageUrl = screenshotUrl;
+    const newWindow = {
+      id: Date.now(),
+      isMinimized: false,
+      isMaximized: false,
+      appName: "screenshot",
+    };
+    setWindows([...windows, newWindow]);
+  }
 
   const takeScreenshot = () => {
     const screenshotElement = document.getElementById("screen");
@@ -103,6 +114,7 @@ export default function Home() {
       html2canvas(screenshotElement).then((canvas) => {
         const link = canvas.toDataURL('image/png');
         setScreenshotUrl(link); 
+        setShowScreenshot(true);
         const audio = new Audio("/audio/ScreenCapture.mp3");
         audio.play();
         if (db) {
@@ -119,7 +131,7 @@ export default function Home() {
           };
         }
         setTimeout(() => {
-          setScreenshotUrl(null);
+          setShowScreenshot(false);
         }, 2000); // Delay to allow the screenshot to be taken
       });
     }
@@ -254,7 +266,7 @@ export default function Home() {
         )}
       </div>
       {isFullScreenshot && <div onClick={takeScreenshot} className='hidden group-hover:block z-[65] cursor-camera absolute top-0 left-0 w-full h-full bg-blue-300 rounded-md bg-opacity-35'></div>}
-      {screenshotUrl && <div className="fixed w-40 right-2 bottom-2 border border-gray-100 rounded-md"><img className="rounded-md" src={screenshotUrl}/></div>}
+      {showScreenshot && <div className="fixed w-40 right-2 bottom-2 border border-gray-100 rounded-md"><img className="rounded-md" src={screenshotUrl}/></div>}
     </div>
   );
 }
