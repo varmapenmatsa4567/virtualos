@@ -17,7 +17,7 @@ const Window = ({db, appName, onClick, isCustomized, isTransparent, isFixed, cus
 
   const { titleBarAction } = useSettingsStore();
 
-  const { isWindowScreenshot, setScreenshotUrl } = useGlobalStore();
+  const { isWindowScreenshot, setScreenshotUrl, setShowScreenshot} = useGlobalStore();
 
   useEffect(() => {
     if (!(appName in appsState)) {
@@ -71,6 +71,7 @@ const Window = ({db, appName, onClick, isCustomized, isTransparent, isFixed, cus
         const audio = new Audio("/audio/ScreenCapture.mp3");
         audio.play();
         setScreenshotUrl(link);
+        setShowScreenshot(true);
         if (db) {
           const transaction = db.transaction("photos", "readwrite");
           const store = transaction.objectStore("photos");
@@ -86,6 +87,7 @@ const Window = ({db, appName, onClick, isCustomized, isTransparent, isFixed, cus
       }
         setTimeout(() => {
           setScreenshotUrl(null);
+          setShowScreenshot(false);
         }, 2000); // Delay to allow the screenshot to be taken
       });
     }

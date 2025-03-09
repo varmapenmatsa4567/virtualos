@@ -72,9 +72,9 @@ export default function Home() {
     localStorage.setItem('fileStructure', JSON.stringify(fileStructure));
   }, [fileStructure]);
 
-  const openWindow = (appName) => {
+  const openWindow = (appName, extraProps = {}) => {
     setIsLaunchpadOpen(false); // Close the Launchpad when opening a new window
-    if(windows.some((window) => window.appName === appName)) {
+    if(windows.some((window) => window.appName === appName) && appName !== "imageviewer") {
       const existingWindow = windows.find((window) => window.appName === appName);
       setActiveWindow(existingWindow.id); // Bring the existing window to the front
       setWindows(windows.map((window) => window.id === existingWindow.id ? { ...window, isMinimized: false } : window)); // Unminimize the existing window
@@ -85,6 +85,7 @@ export default function Home() {
       isMinimized: false,
       isMaximized: false,
       appName: appName || "New Window",
+      extraProps: extraProps
     };
     setWindows([...windows, newWindow]);
     if(appName !== "screenshot" && appName !== "imageviewer") setActiveWindow(newWindow.id);
@@ -97,13 +98,7 @@ export default function Home() {
 
   const openScreenshot = () => {
     const imageUrl = screenshotUrl;
-    const newWindow = {
-      id: Date.now(),
-      isMinimized: false,
-      isMaximized: false,
-      appName: "screenshot",
-    };
-    setWindows([...windows, newWindow]);
+    openWindow("imageviewer", { imageUrl });
   }
 
   const takeScreenshot = () => {
@@ -249,6 +244,7 @@ export default function Home() {
               handleFileClick={handleFileClick}
               appName={window.appName}
               key={window.id}
+              extraProps={window.extraProps}
               onClick={() => setActiveWindow(window.id)}
               isActive={activeWindow === window.id}
               isMinimized={window.isMinimized}
@@ -266,7 +262,7 @@ export default function Home() {
         )}
       </div>
       {isFullScreenshot && <div onClick={takeScreenshot} className='hidden group-hover:block z-[65] cursor-camera absolute top-0 left-0 w-full h-full bg-blue-300 rounded-md bg-opacity-35'></div>}
-      {showScreenshot && <div className="fixed w-40 right-2 bottom-2 border border-gray-100 rounded-md"><img className="rounded-md" src={screenshotUrl}/></div>}
+      {showScreenshot && <div onClick={openScreenshot} className="fixed w-40 right-2 bottom-2 border border-gray-100 rounded-md"><img className="rounded-md" src={screenshotUrl}/></div>}
     </div>
   );
 }
