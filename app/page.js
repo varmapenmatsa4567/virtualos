@@ -70,6 +70,7 @@ export default function Home() {
   }, [fileStructure]);
 
   const openWindow = (appName) => {
+    setIsLaunchpadOpen(false); // Close the Launchpad when opening a new window
     if(windows.some((window) => window.appName === appName)) {
       const existingWindow = windows.find((window) => window.appName === appName);
       setActiveWindow(existingWindow.id); // Bring the existing window to the front
@@ -99,6 +100,8 @@ export default function Home() {
       html2canvas(screenshotElement).then((canvas) => {
         const link = canvas.toDataURL('image/png');
         setScreenshotUrl(link); 
+        const audio = new Audio("/audio/ScreenCapture.mp3");
+        audio.play();
         if (db) {
           const transaction = db.transaction("photos", "readwrite");
           const store = transaction.objectStore("photos");

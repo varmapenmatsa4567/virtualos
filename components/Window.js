@@ -19,6 +19,8 @@ const Window = ({db, appName, onClick, isCustomized, isTransparent, isFixed, cus
     if (screenshotElement) {
       html2canvas(screenshotElement).then((canvas) => {
         const link = canvas.toDataURL('image/png');
+        const audio = new Audio("/audio/ScreenCapture.mp3");
+        audio.play();
         setScreenshotUrl(link);
         if (db) {
           const transaction = db.transaction("photos", "readwrite");

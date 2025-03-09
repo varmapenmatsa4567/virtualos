@@ -73,6 +73,8 @@ const Photobooth = ({ fileStructure, setFileStructure, onClose, db, ...props }) 
 
         // Show flash effect
         setIsFlashVisible(true);
+        const audio = new Audio("/audio/Shutter.mp3");
+        audio.play();
         setTimeout(() => setIsFlashVisible(false), 200); // Hide flash after 200ms
     };
 
