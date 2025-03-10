@@ -15,7 +15,7 @@ const BluetoothMenu = ({ref, isBluetoothOn, toggleBluetooth, isDeviceConnected, 
 
 
   return (
-    <div ref={ref} className='bg-[#2f292e] flex-col p-2 flex w-72 absolute top-[28px] right-0 bg-opacity-40 border border-[#4d494c] rounded-md'>
+    <div ref={ref} className='bg-[#2f292e] z-[55] flex-col p-2 flex w-72 absolute top-[28px] right-0 bg-opacity-40 border border-[#4d494c] rounded-md'>
         <div className='flex justify-between w-full'>
             <p className='text-[13px] font-bold'>Bluetooth</p>
             <Switch onCheckedChange={toggle}  checked={isBluetoothOn} />

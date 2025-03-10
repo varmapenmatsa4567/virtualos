@@ -249,6 +249,7 @@ const Notes = ({ fileStructure, setFileStructure, ...props }) => {
                                     isSelected={selectedNote === note.id}
                                     onClick={() => setSelectedNote(note.id)}
                                     folderName={note.title}
+                                    content={note.content}
                                 />
                             </ContextMenuTrigger>
                             <NoteContextMenu 

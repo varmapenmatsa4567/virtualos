@@ -172,7 +172,6 @@ function DockIcon({
 
   return (
     (<motion.div
-      style={{ width: "40p" }}
       className={cn('flex items-center justify-center', className)}>
       {children}
     </motion.div>)
