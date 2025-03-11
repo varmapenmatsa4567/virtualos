@@ -86,6 +86,11 @@ const DockSettings = () => {
                 <p className='text-[13px]'>Show indicators for open applications</p>
                 <Switch checked={openedAppsDots} onCheckedChange={toggleOpenedAppsDots} className='ml-auto h-4 w-7' thumbClassName='h-3 w-3 data-[state=checked]:translate-x-3' />
             </div>
+            <Separator className='bg-[#3b363a]'/>
+            <div className='flex justify-between py-1 items-center'>
+                <p className='text-[13px]'>Show suggested and recent apps in Dock</p>
+                <Switch className='ml-auto h-4 w-7' thumbClassName='h-3 w-3 data-[state=checked]:translate-x-3' />
+            </div>
         </Box>
     </div>
   )

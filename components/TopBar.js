@@ -100,6 +100,7 @@ const TopBar = ({activeWindow, openWindow}) => {
           {isWifiOpen && <WifiMenu />}
         </div>
         <IoSearch className="text-white" />
+        <img src='/siri.png' alt='siri' className='w-5 h-5'/>
         <div className='flex items-center gap-2'>
             <p className='text-sm'>{formattedDate[0]}</p>
             <p className='text-sm'>{formattedDate[1]}</p>

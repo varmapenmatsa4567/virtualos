@@ -16,6 +16,7 @@ import TicTacToe from '@/apps/TicTacToe/TicTacToe'
 import Screenshot from '@/apps/Screenshot/Screenshot'
 import useGlobalStore from '@/stores/global-store'
 import ImageViewer from '@/apps/Viewers/ImageViewer'
+import Tips from '@/apps/Tips/Tips'
 
 const AppManager = (props) => {
 
@@ -66,6 +67,9 @@ const AppManager = (props) => {
     }
     else if(props.appName === 'imageviewer') {
         return <ImageViewer {...props}/>
+    }
+    else if(props.appName === 'tips') {
+        return <Tips {...props}/>
     }
   return null;
 }

@@ -34,6 +34,7 @@ const Timer = ({isActive}) => {
                         clearInterval(intervalRef.current);
                         setIsRunning(false);
                         setShowTimer(false);
+                        setIsTimer(false);
                         return 0;
                     }
                     setBalanceTime(prev - 1);
