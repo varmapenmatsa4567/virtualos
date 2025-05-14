@@ -1,4 +1,4 @@
-import Finder from '@/apps/Finder/Finder'
+// import Finder from '@/apps/Finder/Finder'
 import Vscode from '@/apps/Vscode'
 import Terminal from '@/apps/Terminal'
 import React from 'react'
@@ -17,6 +17,7 @@ import Screenshot from '@/apps/Screenshot/Screenshot'
 import useGlobalStore from '@/stores/global-store'
 import ImageViewer from '@/apps/Viewers/ImageViewer'
 import Tips from '@/apps/Tips/Tips'
+import Finder from '@/apps/Finder/Finder'
 
 const AppManager = (props) => {
 

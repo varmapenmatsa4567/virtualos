@@ -12,6 +12,7 @@ import WallpaperSettings from "./WallpaperSettings";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import WifiSettings from "./WifiSettings";
 import DockSettings from "./DockSettings";
+import BluetoothSettings from "./BluetoothSettings";
 
 const Settings = ({fileStructure, setFileStructure, toggleMaximize, ...props}) => {
   const [selected, setSelected] = useState(0);
@@ -48,7 +49,7 @@ const Settings = ({fileStructure, setFileStructure, toggleMaximize, ...props}) =
       case 0:
         return <WifiSettings/>;
       case 1:
-        return <div className='p-4 text-white'>Bluetooth Settings Content</div>;
+        return <BluetoothSettings />;
       case 2:
         return <div className='p-4 text-white'>Network Settings Content</div>;
       case 11:
@@ -79,7 +80,7 @@ const Settings = ({fileStructure, setFileStructure, toggleMaximize, ...props}) =
       }
     >
       <div className="flex w-full h-full">
-        <div className="w-1/3 bg-[#28263d] bg-opacity-70 backdrop-filter backdrop-blur-2xl p-2 px-2 flex flex-col">
+        <div className="w-1/3 bg-[#2e292d] overflow-auto h-full bg-opacity-70 backdrop-filter backdrop-blur-2xl p-2 px-2 flex flex-col">
           {settingsItems.map((item, index) => (
             item.type === "spacer" ? (
               <Spacer key={`spacer-${index}`} />

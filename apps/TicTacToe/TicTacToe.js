@@ -73,9 +73,13 @@ const TicTacToe = (props) => {
 
     // Human player's move
     const newBoard = [...board];
-    newBoard[index] = "X";
+    newBoard[index] = isXNext ? "X" : "O";
     setBoard(newBoard);
     checkWinner(newBoard);
+
+    if(nofPlayers === 2) {
+      setIsXNext(!isXNext);
+    }
 
     // AI's move (if single-player mode)
     if (nofPlayers === 1 && !isGameOver) {
@@ -86,6 +90,7 @@ const TicTacToe = (props) => {
         checkWinner(newBoard);
       }
     }
+
   };
 
   // Check for a winner

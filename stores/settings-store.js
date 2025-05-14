@@ -8,6 +8,7 @@ const useSettingsStore = create(
       wifi: false, // Wi-Fi state
       connectedWifi: "", // Wi-Fi connected state
       bluetooth: false, // Bluetooth state
+      connectedBluetooth: "", // Bluetooth connected state
       darkMode: false, // Dark mode state
       isLocked: false, // Lock state
       restart: false, // Restart state
@@ -30,6 +31,7 @@ const useSettingsStore = create(
       toggleWifi: () => set((state) => ({ wifi: !state.wifi })),
       setConnectedWifi: (connected) => set({ connectedWifi: connected }),
       toggleBluetooth: () => set((state) => ({ bluetooth: !state.bluetooth })),
+      setConnectedBluetooth: (connected) => set({ connectedBluetooth: connected }),
       toggleDarkMode: () => set((state) => ({ darkMode: !state.darkMode })),
       toggleAutoDock: () => set((state) => ({ autoDock: !state.autoDock })),
       toggleOpenedAppsDots: () => set((state) => ({ openedAppsDots: !state.openedAppsDots })),

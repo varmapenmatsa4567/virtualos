@@ -18,17 +18,16 @@ import useWindowsStore from "@/stores/windows-store";
 export default function Home() {
 
   const {windows, setWindows, activeWindow, setActiveWindow, openedApps, setOpenedApps} = useWindowsStore();
-  // const [windows, setWindows] = useState([]);
-  // const [activeWindow, setActiveWindow] = useState(null);
   const [openedFile, setOpenedFile] = useState(null); // State to track the opened file
-  // const [openedApps, setOpenedApps] = useState([]); // Track opened apps in order
   const [selectedAppIndex, setSelectedAppIndex] = useState(0); // Track the selected app in the switcher
   const [isAppSwitcherVisible, setIsAppSwitcherVisible] = useState(false); // Control visibility of the app switcher
   const [isShiftKeyPressed, setIsShiftKeyPressed] = useState(false); // Track if Alt key is pressed
   const [isLaunchpadOpen, setIsLaunchpadOpen] = useState(false); // Track if Launchpad is open
   const [db, setDb] = useState(null); // State to hold the IndexedDB instance
+  const [isTriggerKeyPressed, setIsTriggerKeyPressed] = useState(false); // Track if the trigger key is pressed
 
   const {wallpaper, isLocked, hydrated, restart} = useSettingsStore();
+  const userAgent = navigator.userAgent;
 
   const {isFullScreenshot, screenshotUrl, setScreenshotUrl, closeScreenshot, showScreenshot, setShowScreenshot} = useGlobalStore();
 
@@ -37,6 +36,13 @@ export default function Home() {
 
   const toggleLaunchpad = () => {
     setIsLaunchpadOpen(!isLaunchpadOpen);
+  }
+
+  const getOS = () => {
+    if(userAgent.includes("Windows")) {
+      return "Windows";
+    }
+    return "Mac";
   }
 
   useEffect(() => {
@@ -151,14 +157,16 @@ export default function Home() {
   };
 
   useEffect(() => {
+    const os = getOS();
     const handleKeyDown = (event) => {
       console.log(event);
-      if (event.key === 'Shift') {
-        setIsShiftKeyPressed(true); // Set Alt key as pressed
+      event.preventDefault();
+      if( event.altKey && os === "Mac") {
+        setIsTriggerKeyPressed(true); // Set Alt key as pressed
         setIsAppSwitcherVisible(true); // Show the app switcher
       }
 
-      if (event.key === 'Tab' && isShiftKeyPressed) {
+      if (event.key === 'Tab' && isTriggerKeyPressed) {
         event.preventDefault(); // Prevent default Tab behavior
         setSelectedAppIndex((prevIndex) => (prevIndex + 1) % openedApps.length); // Cycle through apps
       }
@@ -175,8 +183,8 @@ export default function Home() {
     };
 
     const handleKeyUp = (event) => {
-      if (event.key === 'Shift') {
-        setIsShiftKeyPressed(false); // Set Alt key as released
+      if (event.altKey && os === "Mac") {
+        setIsTriggerKeyPressed(false); // Set Alt key as released
         setIsAppSwitcherVisible(false); // Hide the app switcher
 
         // Switch to the selected app when Alt is released
@@ -256,6 +264,7 @@ export default function Home() {
           ))}
         </div>
         <ModernDock isVisible={isLaunchpadOpen} toggleLaunchpad={toggleLaunchpad} setWindows={setWindows} openWindow={openWindow} windows={windows}  />
+        {/* <SiriChat /> */}
         {isLaunchpadOpen && <Launchpad openWindow={openWindow} toggleLaunchpad={toggleLaunchpad}/>}
         {isAppSwitcherVisible && (
           <AppSwitcher openedApps={openedApps} selectedAppIndex={selectedAppIndex} />
