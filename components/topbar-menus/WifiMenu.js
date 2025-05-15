@@ -31,7 +31,7 @@ const WifiMenu = ({ref}) => {
             <p className='text-[13px] font-medium'>iPhone</p>
             <FaLock className='ml-auto text-gray-400' size={14}/>
         </div>}
-        <Separator className='bg-[#4d494c] my-1'/>
+        {wifi && <Separator className='bg-[#4d494c] my-1'/>}
         {wifi && <p className='text-xs font-bold text-white text-opacity-65'>Known Network</p>}
         {wifi && <div onClick={() => setConnectedWifi("Virtual_OS")} className='my-1 flex items-center gap-2 hover:bg-white hover:bg-opacity-25 p-1 rounded-md'>
             <div className={`${connectedWifi == "Virtual_OS" ? "bg-blue-500" : "bg-white bg-opacity-20"} rounded-full w-fit p-1`}>

@@ -25,8 +25,8 @@ const TopBar = ({activeWindow, openWindow}) => {
 
   // Bluetooth
   const [isBluetoothOpen, toggleBluetoothOpen] = useToggle(false);
-  const [isBluetoothOn, toggleBluetooth] = useToggle(false);
-  const [isDeviceConnected, toggleBluetoothConnected] = useToggle(false);
+  const {bluetooth, connectedBluetooth} = useSettingsStore();
+  // const [isDeviceConnected, toggleBluetoothConnected] = useToggle(false);
   const bluetoothRef = useRef(null);
   useOutsideClick(bluetoothRef, () => toggleBluetoothOpen(false));
 
@@ -83,16 +83,16 @@ const TopBar = ({activeWindow, openWindow}) => {
           </div>
         </div>}
         <div ref={bluetoothRef} className={`${isBluetoothOpen && 'bg-white'} relative p-1 px-2 rounded-md bg-opacity-20`}>
-          {isBluetoothOn ? <Bluetooth size={17} className={`${isDeviceConnected ? "text-white" : "text-white text-opacity-40"}`} onClick={toggleBluetoothOpen}/> : (
+          {bluetooth ? <Bluetooth size={17} className={`${connectedBluetooth != "" ? "text-white" : "text-white text-opacity-40"}`} onClick={toggleBluetoothOpen}/> : (
             <BluetoothOff size={17} className='text-white text-opacity-40' onClick={toggleBluetoothOpen}/>
           )}
-          {isBluetoothOpen && <BluetoothMenu isDeviceConnected={isDeviceConnected} toggleBluetoothConnected={toggleBluetoothConnected} isBluetoothOn={isBluetoothOn} toggleBluetooth={toggleBluetooth}/>}
+          {isBluetoothOpen && <BluetoothMenu/>}
         </div>
         <div className='flex items-center gap-1'>
           <p className='text-xs font-semibold'>100%</p>
           <IoBatteryFull className='text-white text-2xl'/>
           {/* <BatteryIndicator/> */}
-        </div>
+        </div>  
         <div ref={wifiRef} className={`${isWifiOpen && 'bg-white'} relative p-1 px-2 rounded-md bg-opacity-20`}>
           {wifi ? <MdOutlineWifi onClick={toggleWifiOpen} className={`${connectedWifi != "" ? "text-white" : "text-white text-opacity-40"} text-lg`}/> : (
             <MdOutlineWifiOff onClick={toggleWifiOpen} className='text-lg text-white text-opacity-40'/>
