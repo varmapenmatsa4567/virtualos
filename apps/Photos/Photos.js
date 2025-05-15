@@ -9,7 +9,7 @@ const Photos = ({ fileStructure, setFileStructure, db, ...props }) => {
   const gridRef = useRef(null);
   const cols = ["grid-cols-3", "grid-cols-5", "grid-cols-7", "grid-cols-9"];
   const [colIndex, setColIndex] = useState(1);
-  const [selectedItem, setSelectedItem] = useState(0);
+  const [selectedItems, setSelectedItems] = useState(new Set());
   const [photos, setPhotos] = useState([]);
   const [fullScreenImage, setFullScreenImage] = useState(null);
   const [isDragging, setIsDragging] = useState(false);
@@ -66,6 +66,27 @@ const Photos = ({ fileStructure, setFileStructure, db, ...props }) => {
       }
     };
     reader.readAsDataURL(file); // Read the file as a data URL
+  };
+
+  const deleteSelectedPhotos = () => {
+    if (!db || selectedItems.size === 0) return;
+    
+    const transaction = db.transaction("photos", "readwrite");
+    const store = transaction.objectStore("photos");
+    
+    // Get the actual IDs of the selected items
+    const selectedIds = Array.from(selectedItems).map(index => photos[index].id);
+    
+    selectedIds.forEach(id => {
+      const request = store.delete(id);
+      request.onerror = (e) => console.error("Delete failed", e.target.error);
+    });
+
+    transaction.oncomplete = () => {
+      console.log("All selected photos deleted");
+      setSelectedItems(new Set());
+      getPhotos(db);
+    };
   };
 
   const deletePhoto = (id) => {  // Typically you'll want to use the record's ID, not index
@@ -132,46 +153,72 @@ const Photos = ({ fileStructure, setFileStructure, db, ...props }) => {
 
   // Handle arrow key navigation
   useEffect(() => {
-    const handleKeyDown = (event) => {
-      const totalItems = photos.length;
-      if (totalItems === 0) return;
-      const colsCount = parseInt(cols[colIndex].split("-")[2]);
+  const handleKeyDown = (event) => {
+    const totalItems = photos.length;
+    if (totalItems === 0) return;
+    const colsCount = parseInt(cols[colIndex].split("-")[2]);
 
+    if (event.metaKey || event.ctrlKey) {
+      // Handle Cmd/Ctrl+Arrow key combinations for multi-selection
+      let newIndex;
       switch (event.key) {
         case "ArrowRight":
-          setSelectedItem((prev) => (prev + 1) % totalItems);
-          if(fullScreenImage) setFullScreenImage(photos[selectedItem].imageUrl);
-          setFullScreenImage
+          newIndex = Array.from(selectedItems).pop() + 1;
+          if (newIndex >= totalItems) newIndex = totalItems - 1;
+          setSelectedItems(prev => new Set(prev).add(newIndex));
           break;
         case "ArrowLeft":
-          setSelectedItem((prev) => (prev - 1 + totalItems) % totalItems);
-          if(fullScreenImage) setFullScreenImage(photos[selectedItem].imageUrl);
+          newIndex = Array.from(selectedItems).pop() - 1;
+          if (newIndex < 0) newIndex = 0;
+          setSelectedItems(prev => new Set(prev).add(newIndex));
           break;
         case "ArrowDown":
-          setSelectedItem((prev) => (prev + colsCount) % totalItems);
-          if(fullScreenImage) setFullScreenImage(photos[selectedItem].imageUrl);
+          newIndex = Array.from(selectedItems).pop() + colsCount;
+          if (newIndex >= totalItems) newIndex = totalItems - 1;
+          setSelectedItems(prev => new Set(prev).add(newIndex));
           break;
         case "ArrowUp":
-          setSelectedItem((prev) => (prev - colsCount + totalItems) % totalItems);
-          if(fullScreenImage) setFullScreenImage(photos[selectedItem].imageUrl);
+          newIndex = Array.from(selectedItems).pop() - colsCount;
+          if (newIndex < 0) newIndex = 0;
+          setSelectedItems(prev => new Set(prev).add(newIndex));
+          break;
+      }
+    } else {
+      // Original single-selection behavior
+      switch (event.key) {
+        case "ArrowRight":
+          setSelectedItems(new Set([(Array.from(selectedItems).pop() + 1) % totalItems]));
+          break;
+        case "ArrowLeft":
+          setSelectedItems(new Set([(Array.from(selectedItems).pop() - 1 + totalItems) % totalItems]));
+          break;
+        case "ArrowDown":
+          setSelectedItems(new Set([(Array.from(selectedItems).pop() + colsCount) % totalItems]));
+          break;
+        case "ArrowUp":
+          setSelectedItems(new Set([(Array.from(selectedItems).pop() - colsCount + totalItems) % totalItems]));
           break;
         case " ":
           event.preventDefault();
-          setFullScreenImage(photos[selectedItem].imageUrl);
+          if (selectedItems.size > 0) {
+            setFullScreenImage(photos[Array.from(selectedItems).pop()].imageUrl);
+          }
           break;
         case "Escape":
           setFullScreenImage(null);
+          setSelectedItems(new Set());
           break;
         default:
           break;
       }
-    };
+    }
+  };
 
-    window.addEventListener("keydown", handleKeyDown);
-    return () => {
-      window.removeEventListener("keydown", handleKeyDown);
-    };
-  }, [colIndex, photos.length, selectedItem, photos]);
+  window.addEventListener("keydown", handleKeyDown);
+  return () => {
+    window.removeEventListener("keydown", handleKeyDown);
+  };
+}, [colIndex, photos.length, photos, selectedItems]);
 
   // Handle double-click to show full-screen image
   const handleDoubleClick = (index) => {
@@ -185,10 +232,22 @@ const Photos = ({ fileStructure, setFileStructure, db, ...props }) => {
 
   // Select photo
   const selectPhoto = (e, index) => {
-    console.log("Select Photo:");
-    console.log(e);
-    setSelectedItem(index);
+  if (e.nativeEvent.metaKey || e.nativeEvent.ctrlKey) {
+    // Cmd/Ctrl+Click - toggle selection
+    setSelectedItems(prev => {
+      const newSelection = new Set(prev);
+      if (newSelection.has(index)) {
+        newSelection.delete(index);
+      } else {
+        newSelection.add(index);
+      }
+      return newSelection;
+    });
+  } else {
+    // Regular click - clear selection and select this one
+    setSelectedItems(new Set([index]));
   }
+};
 
   return (
     <Window
@@ -238,7 +297,7 @@ const Photos = ({ fileStructure, setFileStructure, db, ...props }) => {
               <div
                 key={index}
                 className={`cursor-pointer aspect-square ${
-                  selectedItem === index ? "border-[3px] border-[#0158d0]" : ""
+                  selectedItems.has(index) ? "border-[3px] border-[#0158d0]" : ""
                 }`}
                 onClick={(e) => selectPhoto(e, index)}
                 onDoubleClick={() => handleDoubleClick(index)}
@@ -256,7 +315,15 @@ const Photos = ({ fileStructure, setFileStructure, db, ...props }) => {
                       alt="Preview"
                     />
                   </ContextMenuTrigger>
-                  <PhotoContextMenu onDeletePhoto={() => deletePhoto(photo.id)}/>
+                  <PhotoContextMenu 
+                    onDeletePhoto={() => {
+                      if (selectedItems.size > 0) {
+                        deleteSelectedPhotos();
+                      } else {
+                        deletePhoto(photo.id);
+                      }
+                    }}
+                  />
                 </ContextMenu>
               </div>
             ))}
