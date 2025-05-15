@@ -1,8 +1,10 @@
 import { useRef, useState, useEffect } from "react";
 import { BsCameraFill } from "react-icons/bs";
 import Window from "@/components/Window";
+import useGlobalStore from "@/stores/global-store";
 
 const Photobooth = ({ fileStructure, setFileStructure, onClose, db, ...props }) => {
+    const {dbChange, setDbChange} = useGlobalStore();
     const videoRef = useRef(null);
     const canvasRef = useRef(null);
     const [isCameraOn, setIsCameraOn] = useState(false);
@@ -57,7 +59,7 @@ const Photobooth = ({ fileStructure, setFileStructure, onClose, db, ...props }) 
         if (db) {
             const transaction = db.transaction("photos", "readwrite");
             const store = transaction.objectStore("photos");
-            const request = store.add({ imageUrl: photoDataUrl, timestamp: new Date() });
+            const request = store.add({ imageUrl: photoDataUrl, timestamp: new Date(), isCamera: true });
 
             request.onsuccess = () => {
                 console.log("Photo saved to IndexedDB");
@@ -76,6 +78,7 @@ const Photobooth = ({ fileStructure, setFileStructure, onClose, db, ...props }) 
         const audio = new Audio("/audio/Shutter.mp3");
         audio.play();
         setTimeout(() => setIsFlashVisible(false), 200); // Hide flash after 200ms
+        setDbChange(dbChange + 1);
     };
 
     const handleClose = () => {

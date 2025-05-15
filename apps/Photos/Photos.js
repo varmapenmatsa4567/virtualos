@@ -3,7 +3,15 @@ import { useRef, useState, useEffect } from "react";
 import { ChevronLeft, Minus, Plus } from "lucide-react";
 import { ContextMenu, ContextMenuTrigger } from "@/components/ui/context-menu";
 import PhotoContextMenu from "@/components/context-menu/PhotoContextMenu";
-
+import SidebarItem from "./SidebarItem";
+import { BsImages, BsPersonSquare } from "react-icons/bs";
+import { FaHeart, FaRegHeart } from "react-icons/fa";
+import { FiUpload } from "react-icons/fi";
+import { FaRegTrashCan } from "react-icons/fa6";
+import { IoTimeOutline } from "react-icons/io5";
+import { LuGalleryVerticalEnd, LuVideo } from "react-icons/lu";
+import { BiScreenshot } from "react-icons/bi";
+import useGlobalStore from "@/stores/global-store";
 
 const Photos = ({ fileStructure, setFileStructure, db, ...props }) => {
   const gridRef = useRef(null);
@@ -11,8 +19,36 @@ const Photos = ({ fileStructure, setFileStructure, db, ...props }) => {
   const [colIndex, setColIndex] = useState(1);
   const [selectedItems, setSelectedItems] = useState(new Set());
   const [photos, setPhotos] = useState([]);
+  const [displayPhotos, setDisplayPhotos] = useState([]);
   const [fullScreenImage, setFullScreenImage] = useState(null);
   const [isDragging, setIsDragging] = useState(false);
+  const [selectedPhotoAction, setSelectedPhotoAction] = useState(0);
+  const {dbChange, setDbChange} = useGlobalStore();
+
+  const photosFilters = [
+      { id: 0, text: "Library", icon: BsImages },
+      { id: 1, text: "Favourites", icon: FaRegHeart },
+      { id: 2, text: "Recently Uploaded", icon: FiUpload },
+      { id: 3, text: "Recently Deleted", icon: FaRegTrashCan },
+  ];
+
+  const collectionFilters = [
+      { id: 4, text: "Days", icon: IoTimeOutline },
+      { id: 5, text: "Media Types", icon: LuGalleryVerticalEnd, isMenu: true },
+      { id: 6, text: "Albums  ", icon: LuGalleryVerticalEnd, isMenu: true },
+  ]
+
+  const subFilters = {
+    5: [
+      { id: 7, text: "Videos", icon: LuVideo },
+      { id: 8, text: "Selfies", icon: BsPersonSquare },
+      { id: 9, text: "Live Photos", icon: BsImages },
+      { id: 10, text: "Screenshots", icon: BiScreenshot },
+    ],
+    6: [
+      { id: 11, text: "Videos", icon: BsImages },
+    ]
+  }
 
   // Open or create IndexedDB database
   useEffect(() => {
@@ -20,7 +56,31 @@ const Photos = ({ fileStructure, setFileStructure, db, ...props }) => {
       getPhotos(db);
       return;
     }
-  }, [db]);
+  }, [db, dbChange]);
+
+  // Filter Photos
+  useEffect(() => {
+    switch (selectedPhotoAction) {
+      case 0:
+        setDisplayPhotos(photos);
+        break;
+      case 1:
+        setDisplayPhotos(photos.filter((photo) => photo.isFavourite));
+        break;
+      case 2:
+        setDisplayPhotos(photos.filter((photo) => photo.isUpload));
+        break;
+      case 8:
+        setDisplayPhotos(photos.filter((photo) => photo.isCamera));
+        break;
+      case 10:
+        setDisplayPhotos(photos.filter((photo) => photo.isScreenshot));
+        break;
+      default:
+        setDisplayPhotos(photos);
+        break;
+    }
+  }, [selectedPhotoAction, photos])
 
   // Fetch photos from IndexedDB
   const getPhotos = (db) => {
@@ -53,7 +113,7 @@ const Photos = ({ fileStructure, setFileStructure, db, ...props }) => {
       if (db) {
         const transaction = db.transaction("photos", "readwrite");
         const store = transaction.objectStore("photos");
-        const request = store.add({ imageUrl, timestamp: new Date() });
+        const request = store.add({ imageUrl, timestamp: new Date(), isUpload: true });
 
         request.onsuccess = () => {
           console.log("Uploaded image saved to IndexedDB");
@@ -201,7 +261,7 @@ const Photos = ({ fileStructure, setFileStructure, db, ...props }) => {
         case " ":
           event.preventDefault();
           if (selectedItems.size > 0) {
-            setFullScreenImage(photos[Array.from(selectedItems).pop()].imageUrl);
+            setFullScreenImage(displayPhotos[Array.from(selectedItems).pop()]);
           }
           break;
         case "Escape":
@@ -218,11 +278,11 @@ const Photos = ({ fileStructure, setFileStructure, db, ...props }) => {
   return () => {
     window.removeEventListener("keydown", handleKeyDown);
   };
-}, [colIndex, photos.length, photos, selectedItems]);
+}, [colIndex, displayPhotos.length, displayPhotos, selectedItems]);
 
   // Handle double-click to show full-screen image
   const handleDoubleClick = (index) => {
-    setFullScreenImage(photos[index].imageUrl);
+    setFullScreenImage(displayPhotos[index]);
   };
 
   // Close full-screen image
@@ -230,24 +290,85 @@ const Photos = ({ fileStructure, setFileStructure, db, ...props }) => {
     setFullScreenImage(null);
   };
 
+  // Update Photo
+  const updatePhoto = (id, updatedData) => {
+    if (!db) return;
+
+    const transaction = db.transaction("photos", "readwrite");
+    const store = transaction.objectStore("photos");
+    
+    // First get the existing photo
+    const getRequest = store.get(id);
+
+    getRequest.onsuccess = (event) => {
+      const existingPhoto = event.target.result;
+      if (!existingPhoto) {
+        console.error("Photo not found");
+        return;
+      }
+
+      // Merge existing data with updates
+      const updatedPhoto = { ...existingPhoto, ...updatedData };
+      
+      // Update the record
+      const updateRequest = store.put(updatedPhoto);
+
+      updateRequest.onsuccess = () => {
+        console.log("Photo updated successfully");
+        getPhotos(db); // Refresh the photo list
+      };
+
+      updateRequest.onerror = (event) => {
+        console.error("Error updating photo:", event.target.error);
+      };
+    };
+
+    getRequest.onerror = (event) => {
+      console.error("Error finding photo to update:", event.target.error);
+    };
+  };
+
+  const addToFavs = (e, id, photo) => {
+    e.stopPropagation();
+    photo.isFavourite = true;
+    updatePhoto(id, photo);
+  }
+
+  const removeFromFavs = (e, id, photo) => {
+    e.stopPropagation();
+    photo.isFavourite = false;
+    updatePhoto(id, photo);
+  }
+
+  const rotatePhoto = (id, photo) => {
+    if(photo.rotate != null){
+      photo.rotate = photo.rotate + 90;
+      if(photo.rotate == 360) photo.rotate = 0;
+    } 
+    else {
+      photo.rotate = 90;
+    }
+    updatePhoto(id, photo);
+  }
+
   // Select photo
   const selectPhoto = (e, index) => {
-  if (e.nativeEvent.metaKey || e.nativeEvent.ctrlKey) {
-    // Cmd/Ctrl+Click - toggle selection
-    setSelectedItems(prev => {
-      const newSelection = new Set(prev);
-      if (newSelection.has(index)) {
-        newSelection.delete(index);
-      } else {
-        newSelection.add(index);
-      }
-      return newSelection;
-    });
-  } else {
-    // Regular click - clear selection and select this one
-    setSelectedItems(new Set([index]));
-  }
-};
+    if (e.nativeEvent.metaKey || e.nativeEvent.ctrlKey) {
+      // Cmd/Ctrl+Click - toggle selection
+      setSelectedItems(prev => {
+        const newSelection = new Set(prev);
+        if (newSelection.has(index)) {
+          newSelection.delete(index);
+        } else {
+          newSelection.add(index);
+        }
+        return newSelection;
+      });
+    } else {
+      // Regular click - clear selection and select this one
+      setSelectedItems(new Set([index]));
+    }
+  };
 
   return (
     <Window
@@ -281,67 +402,124 @@ const Photos = ({ fileStructure, setFileStructure, db, ...props }) => {
         </div>
       }
     >
-      <div
-        ref={gridRef}
-        className={`w-full relative h-full flex flex-col ${
-          isDragging ? "border-2 border-dashed border-blue-500" : ""
-        }`}
-        onDragEnter={handleDragEnter}
-        onDragOver={handleDragOver}
-        onDragLeave={handleDragLeave}
-        onDrop={handleDrop}
-      >
-        <div className={`grid ${cols[colIndex]} gap-[2px] overflow-y-auto`}>
-          {photos.length > 0 &&
-            photos.map((photo, index) => (
-              <div
-                key={index}
-                className={`cursor-pointer aspect-square ${
-                  selectedItems.has(index) ? "border-[3px] border-[#0158d0]" : ""
-                }`}
-                onClick={(e) => selectPhoto(e, index)}
-                onDoubleClick={() => handleDoubleClick(index)}
-              >
-                {/* <img
-                  className="w-full h-full object-cover"
-                  src={photo.imageUrl}
-                  alt="Preview"
-                /> */}
-                <ContextMenu>
-                  <ContextMenuTrigger>
-                    <img
-                      className="w-full h-full object-cover"
-                      src={photo.imageUrl}
-                      alt="Preview"
-                    />
-                  </ContextMenuTrigger>
-                  <PhotoContextMenu 
-                    onDeletePhoto={() => {
-                      if (selectedItems.size > 0) {
-                        deleteSelectedPhotos();
-                      } else {
-                        deletePhoto(photo.id);
-                      }
-                    }}
-                  />
-                </ContextMenu>
-              </div>
-            ))}
-        </div>
-
-        {/* Full-screen image overlay */}
-        {fullScreenImage && (
-          <div
-            className="absolute inset-0 bg-black flex items-center justify-center z-50"
-            onClick={closeFullScreen}
-          >
-            <img
-              className="w-full h-full object-contain"
-              src={fullScreenImage}
-              alt="Full-screen"
+      <div className="w-full h-full flex gap-1">  
+        <div className="bg-[#2d2d2d] border-r-2 w-64 border-[#575759] p-2 px-3 flex flex-col gap-1">
+          <p className="text-[#727174] text-xs font-bold">Photos</p>
+          {photosFilters.map((filter) => (
+            <SidebarItem
+              key={filter.id}
+              onClick={() => setSelectedPhotoAction(filter.id)}
+              isSelected={selectedPhotoAction === filter.id}
+              Icon={
+                <filter.icon
+                className={`text-[#0093ff]`}
+              />
+              }
+              text={filter.text}
             />
+          ))}
+          <p className="text-[#727174] text-xs font-bold mt-3">Collections</p>
+          {collectionFilters.map((filter) => (
+            <div key={filter.id} className="flex flex-col">
+                <SidebarItem
+                  isMenu={filter.isMenu}
+                  onClick={() => setSelectedPhotoAction(filter.id)}
+                  isSelected={selectedPhotoAction === filter.id}
+                  Icon={
+                    <filter.icon
+                    className={`text-[#0093ff]`}
+                  />
+                  }
+                  text={filter.text}
+                />
+                {filter.isMenu && subFilters[filter.id].map((subFilter) => (
+                  <SidebarItem
+                    key={subFilter.id}
+                    isMenu={subFilter.isMenu}
+                    isSubItem={true}
+                    onClick={() => setSelectedPhotoAction(subFilter.id)}
+                    isSelected={selectedPhotoAction === subFilter.id}
+                    Icon={
+                      <subFilter.icon
+                      className={`text-[#888d8d]`}
+                    />
+                    }
+                    text={subFilter.text}
+                  />
+                ))}
+            </div>
+          ))}
+        </div>
+        <div
+          ref={gridRef}
+          className={`w-full relative h-full flex flex-col ${
+            isDragging ? "border-2 border-dashed border-blue-500" : ""
+          }`}
+          onDragEnter={handleDragEnter}
+          onDragOver={handleDragOver}
+          onDragLeave={handleDragLeave}
+          onDrop={handleDrop}
+        >
+          <div className={`grid ${cols[colIndex]} gap-[2px] overflow-y-auto`}>
+            {displayPhotos.length > 0 &&
+              displayPhotos.map((photo, index) => (
+                <div
+                  key={index}
+                  className={`cursor-pointer relative group aspect-square ${
+                    selectedItems.has(index) ? "border-[3px] border-[#0158d0]" : ""
+                  }`}
+                  onClick={(e) => selectPhoto(e, index)}
+                  onDoubleClick={() => handleDoubleClick(index)}
+                >
+                  <FaRegHeart 
+                    onClick={(e) => addToFavs(e, photo.id, photo)}
+                    className="text-white z-10 hidden group-hover:block absolute left-2 bottom-2"
+                  />
+                  {photo.isFavourite && (
+                    <FaHeart
+                      onClick={(e) => removeFromFavs(e, photo.id, photo)}
+                      className="text-white z-10 absolute left-2 bottom-2"
+                    />
+                  )}
+                  <ContextMenu>
+                    <ContextMenuTrigger>
+                      <img
+                        style={{rotate: `${photo.rotate ? `${photo.rotate}deg` : "0deg"}`}}
+                        className={`w-full h-full object-cover`}
+                        src={photo.imageUrl}
+                        alt="Preview"
+                      />
+                    </ContextMenuTrigger>
+                    <PhotoContextMenu 
+                      onDeletePhoto={() => {
+                        if (selectedItems.size > 0) {
+                          deleteSelectedPhotos();
+                        } else {
+                          deletePhoto(photo.id);
+                        }
+                      }}
+                      onRotatePhoto={() => rotatePhoto(photo.id, photo)}
+                    />
+                  </ContextMenu>
+                </div>
+              ))}
           </div>
-        )}
+
+          {/* Full-screen image overlay */}
+          {fullScreenImage && (
+            <div
+              className="absolute inset-0 bg-black flex items-center justify-center z-50"
+              onClick={closeFullScreen}
+            >
+              <img
+                style={{rotate: `${fullScreenImage.rotate ? `${fullScreenImage.rotate}deg` : "0deg"}`}}
+                className="w-full h-full object-contain"
+                src={fullScreenImage.imageUrl}
+                alt="Full-screen"
+              />
+            </div>
+          )}
+        </div>
       </div>
     </Window>
   );

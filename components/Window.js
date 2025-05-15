@@ -72,7 +72,9 @@ const Window = ({db, isSmall, appName, onClick, isCustomized, isTransparent, isF
         audio.play();
         setScreenshotUrl(link);
         setShowScreenshot(true);
+        console.log("Screenshot taken");
         if (db) {
+          console.log("Saving to IndexedDB");
           const transaction = db.transaction("photos", "readwrite");
           const store = transaction.objectStore("photos");
           const request = store.add({ imageUrl: link, timestamp: new Date() });

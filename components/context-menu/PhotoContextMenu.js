@@ -1,7 +1,7 @@
 import React from 'react';
 import { ContextMenuContent, ContextMenuItem, ContextMenuSeparator, ContextMenuSub, ContextMenuSubContent, ContextMenuSubTrigger } from '@/components/ui/context-menu';
 
-const PhotoContextMenu = ({onCutItem, onCopyItem, onFolderOpen, onDeletePhoto, onFolderDuplicate}) => {
+const PhotoContextMenu = ({onCutItem, onRotatePhoto, onCopyItem, onFolderOpen, onDeletePhoto, onFolderDuplicate}) => {
   return (
     <ContextMenuContent className="bg-[#2f292e] text-white w-36">
         <ContextMenuItem onClick={onFolderOpen}>Get Info</ContextMenuItem>
@@ -14,7 +14,7 @@ const PhotoContextMenu = ({onCutItem, onCopyItem, onFolderOpen, onDeletePhoto, o
                 <ContextMenuItem>Food</ContextMenuItem>
             </ContextMenuSubContent>
         </ContextMenuSub>
-        <ContextMenuItem>Rotate Clockwise</ContextMenuItem>
+        <ContextMenuItem onClick={onRotatePhoto}>Rotate Clockwise</ContextMenuItem>
         <ContextMenuSub className="bg-[#2f292e] text-white">
             <ContextMenuSubTrigger>Add to</ContextMenuSubTrigger>
             <ContextMenuSubContent className="bg-[#2f292e] text-white">

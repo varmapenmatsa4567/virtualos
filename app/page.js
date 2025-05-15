@@ -121,7 +121,7 @@ export default function Home() {
         if (db) {
           const transaction = db.transaction("photos", "readwrite");
           const store = transaction.objectStore("photos");
-          const request = store.add({ imageUrl: link, timestamp: new Date() });
+          const request = store.add({ imageUrl: link, timestamp: new Date(), isScreenshot: true });
 
           request.onsuccess = () => {
               console.log("Photo saved to IndexedDB");
