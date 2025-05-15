@@ -70,6 +70,9 @@ const Photos = ({ fileStructure, setFileStructure, db, ...props }) => {
       case 2:
         setDisplayPhotos(photos.filter((photo) => photo.isUpload));
         break;
+      case 7:
+        setDisplayPhotos(photos.filter((photo) => photo.isVideo));
+        break;
       case 8:
         setDisplayPhotos(photos.filter((photo) => photo.isCamera));
         break;
@@ -100,6 +103,7 @@ const Photos = ({ fileStructure, setFileStructure, db, ...props }) => {
       console.error("Error retrieving photos:", event.target.error);
     };
   };
+  
 
   // Handle image upload from system
   const handleImageUpload = (file) => {
@@ -113,7 +117,12 @@ const Photos = ({ fileStructure, setFileStructure, db, ...props }) => {
       if (db) {
         const transaction = db.transaction("photos", "readwrite");
         const store = transaction.objectStore("photos");
-        const request = store.add({ imageUrl, timestamp: new Date(), isUpload: true });
+        let isVideo = false;
+        if(file.type.includes("video")){
+          isVideo = true;
+          console.log(imageUrl);
+        }
+        const request = store.add({ imageUrl, timestamp: new Date(), isUpload: true, isVideo: isVideo });
 
         request.onsuccess = () => {
           console.log("Uploaded image saved to IndexedDB");
@@ -380,7 +389,7 @@ const Photos = ({ fileStructure, setFileStructure, db, ...props }) => {
           {fullScreenImage && <ChevronLeft onClick={closeFullScreen} className="w-6 h-6 cursor-pointer p-1" />}
           <input
             type="file"
-            accept="image/*"
+            accept="image/*,video/*"
             onChange={(e) => {
               const files = e.target.files;
               if (files.length > 0) {
@@ -511,12 +520,18 @@ const Photos = ({ fileStructure, setFileStructure, db, ...props }) => {
               className="absolute inset-0 bg-black flex items-center justify-center z-50"
               onClick={closeFullScreen}
             >
+              {fullScreenImage.isVideo ? (
+                <video autoPlay controls>
+                  <source src={fullScreenImage.imageUrl} type="video/mp4" />
+                </video>
+              ) : (
               <img
                 style={{rotate: `${fullScreenImage.rotate ? `${fullScreenImage.rotate}deg` : "0deg"}`}}
                 className="w-full h-full object-contain"
                 src={fullScreenImage.imageUrl}
                 alt="Full-screen"
               />
+              )}
             </div>
           )}
         </div>
