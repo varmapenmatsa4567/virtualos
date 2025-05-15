@@ -1,6 +1,9 @@
 import Window from "@/components/Window";
 import { useRef, useState, useEffect } from "react";
 import { ChevronLeft, Minus, Plus } from "lucide-react";
+import { ContextMenu, ContextMenuTrigger } from "@/components/ui/context-menu";
+import PhotoContextMenu from "@/components/context-menu/PhotoContextMenu";
+
 
 const Photos = ({ fileStructure, setFileStructure, db, ...props }) => {
   const gridRef = useRef(null);
@@ -64,6 +67,24 @@ const Photos = ({ fileStructure, setFileStructure, db, ...props }) => {
     };
     reader.readAsDataURL(file); // Read the file as a data URL
   };
+
+  const deletePhoto = (id) => {  // Typically you'll want to use the record's ID, not index
+    if (!db) return;
+    
+    const transaction = db.transaction("photos", "readwrite");
+    const store = transaction.objectStore("photos");
+    const request = store.delete(id);  // Delete by the record's key
+
+    request.onsuccess = () => {
+        console.log("Photo deleted successfully");
+        getPhotos(db);  // Refresh the photo list
+    };
+
+    request.onerror = (event) => {
+        console.error("Error deleting photo:", event.target.error);
+    };
+  };
+
 
   // Handle drag-and-drop events
   const handleDragEnter = (e) => {
@@ -162,11 +183,18 @@ const Photos = ({ fileStructure, setFileStructure, db, ...props }) => {
     setFullScreenImage(null);
   };
 
+  // Select photo
+  const selectPhoto = (e, index) => {
+    console.log("Select Photo:");
+    console.log(e);
+    setSelectedItem(index);
+  }
+
   return (
     <Window
       {...props}
       toolbar={
-        <div className="flex gap-2 text-white py-2 px-2">
+        <div className="flex gap-2 text-white px-2">
           <Minus onClick={increaseCols} className="w-6 h-6 cursor-pointer p-1" />
           <Plus onClick={decreaseCols} className="w-6 h-6 cursor-pointer p-1" />
           {fullScreenImage && <ChevronLeft onClick={closeFullScreen} className="w-6 h-6 cursor-pointer p-1" />}
@@ -196,7 +224,7 @@ const Photos = ({ fileStructure, setFileStructure, db, ...props }) => {
     >
       <div
         ref={gridRef}
-        className={`w-full relative h-full flex flex-col p-2 ${
+        className={`w-full relative h-full flex flex-col ${
           isDragging ? "border-2 border-dashed border-blue-500" : ""
         }`}
         onDragEnter={handleDragEnter}
@@ -212,14 +240,24 @@ const Photos = ({ fileStructure, setFileStructure, db, ...props }) => {
                 className={`cursor-pointer aspect-square ${
                   selectedItem === index ? "border-[3px] border-[#0158d0]" : ""
                 }`}
-                onClick={() => setSelectedItem(index)}
+                onClick={(e) => selectPhoto(e, index)}
                 onDoubleClick={() => handleDoubleClick(index)}
               >
-                <img
+                {/* <img
                   className="w-full h-full object-cover"
                   src={photo.imageUrl}
                   alt="Preview"
-                />
+                /> */}
+                <ContextMenu>
+                  <ContextMenuTrigger>
+                    <img
+                      className="w-full h-full object-cover"
+                      src={photo.imageUrl}
+                      alt="Preview"
+                    />
+                  </ContextMenuTrigger>
+                  <PhotoContextMenu onDeletePhoto={() => deletePhoto(photo.id)}/>
+                </ContextMenu>
               </div>
             ))}
         </div>

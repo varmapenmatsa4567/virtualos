@@ -67,6 +67,7 @@ export const apps = [
   "compiler",
   "appstore",
   "siri",
+  "photobooth",
   "2048",
   "chess",
   "tictactoe",
