@@ -19,6 +19,8 @@ const Window = ({db, isSmall, appName, onClick, isCustomized, isTransparent, isF
 
   const { isWindowScreenshot, setScreenshotUrl, setShowScreenshot} = useGlobalStore();
 
+  const { dbChange, setDbChange } = useGlobalStore();
+
   useEffect(() => {
     if (!(appName in appsState)) {
       const newAppState = {
@@ -86,6 +88,8 @@ const Window = ({db, isSmall, appName, onClick, isCustomized, isTransparent, isF
           request.onerror = (event) => {
               console.error("Error saving photo to IndexedDB:", event.target.error);
           };
+
+          setDbChange(dbChange + 1);
       }
         setTimeout(() => {
           setScreenshotUrl(null);

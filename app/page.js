@@ -31,6 +31,7 @@ export default function Home() {
 
   const {isFullScreenshot, screenshotUrl, setScreenshotUrl, closeScreenshot, showScreenshot, setShowScreenshot} = useGlobalStore();
 
+  const {dbChange, setDbChange} = useGlobalStore();
   const [fileStructure, setFileStructure] = useState(initialStructure);
   const [isMobile, setIsMobile] = useState(false);
 
@@ -130,6 +131,8 @@ export default function Home() {
           request.onerror = (event) => {
               console.error("Error saving photo to IndexedDB:", event.target.error);
           };
+
+          setDbChange(dbChange + 1);
         }
         setTimeout(() => {
           setShowScreenshot(false);
