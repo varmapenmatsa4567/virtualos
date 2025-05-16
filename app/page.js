@@ -13,6 +13,7 @@ import RestartScreen from "@/apps/RestartScreen";
 import useGlobalStore from "@/stores/global-store";
 import html2canvas from "html2canvas";
 import useWindowsStore from "@/stores/windows-store";
+import Splotlight from "@/apps/Spotlight/Splotlight";
 
 
 export default function Home() {
@@ -163,24 +164,24 @@ export default function Home() {
     const os = getOS();
     const handleKeyDown = (event) => {
       console.log(event);
-      event.preventDefault();
+      // event.preventDefault();
       if( event.altKey && os === "Mac") {
         setIsTriggerKeyPressed(true); // Set Alt key as pressed
         setIsAppSwitcherVisible(true); // Show the app switcher
       }
 
       if (event.key === 'Tab' && isTriggerKeyPressed) {
-        event.preventDefault(); // Prevent default Tab behavior
+        // event.preventDefault(); // Prevent default Tab behavior
         setSelectedAppIndex((prevIndex) => (prevIndex + 1) % openedApps.length); // Cycle through apps
       }
 
       if( event.code === 'KeyW' && event.altKey) {
-        event.preventDefault(); // Prevent default behavior
+        // event.preventDefault(); // Prevent default behavior
         closeWindow(activeWindow); // Close the active window
       }
       if( event.code === 'KeyQ' && event.altKey) {
         console.log('Q');
-        event.preventDefault(); // Prevent default behavior
+        // event.preventDefault(); // Prevent default behavior
         closeAllWindows(activeWindow); // Close the active window
       }
     };
@@ -269,10 +270,12 @@ export default function Home() {
         <ModernDock isVisible={isLaunchpadOpen} toggleLaunchpad={toggleLaunchpad} setWindows={setWindows} openWindow={openWindow} windows={windows}  />
         {/* <SiriChat /> */}
         {isLaunchpadOpen && <Launchpad openWindow={openWindow} toggleLaunchpad={toggleLaunchpad}/>}
-        {isAppSwitcherVisible && (
+        <Splotlight/>
+        {/* {isAppSwitcherVisible && (
           <AppSwitcher openedApps={openedApps} selectedAppIndex={selectedAppIndex} />
-        )}
+        )} */}
       </div>
+
       {isFullScreenshot && <div onClick={takeScreenshot} className='hidden group-hover:block z-[65] cursor-camera absolute top-0 left-0 w-full h-full bg-blue-300 rounded-md bg-opacity-35'></div>}
       {showScreenshot && <div onClick={openScreenshot} className="fixed w-40 right-2 bottom-2 border border-gray-100 rounded-md"><img className="rounded-md" src={screenshotUrl}/></div>}
     </div>

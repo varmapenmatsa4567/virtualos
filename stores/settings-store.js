@@ -19,7 +19,16 @@ const useSettingsStore = create(
       dockPosition: "bottom", // Default dock position
       dockMagnification: 5, // Default dock magnification
       dockSize: 5, // Default dock size
-
+      wifiInMenuBar: "show",
+      bluetoothInMenuBar: "show",
+      focusInMenuBar: "show",
+      soundInMenuBar: "show",
+      batteryInMenuBar: true,
+      batteryInCtrlCenter: true,
+      showBatteryPercentage: true,
+      spotlightInMenuBar: "show",
+      siriInMenuBar: "show",
+      weatherInMenuBar: "show",
 
       hydrated: false, // Hydration state
 
@@ -38,6 +47,16 @@ const useSettingsStore = create(
       toggleShowOpenedApps: () => set((state) => ({ showOpenedApps: !state.showOpenedApps })),
       setTitleBarAction: (action) => set({ titleBarAction: action }),
       setDockPosition: (position) => set({ dockPosition: position }),
+      setWifiInMenuBar: (position) => set({ wifiInMenuBar: position }),
+      setBluetoothInMenuBar: (position) => set({ bluetoothInMenuBar: position }),
+      setFocusInMenuBar: (position) => set({ focusInMenuBar: position }),
+      setSoundInMenuBar: (position) => set({ soundInMenuBar: position }),
+      toggleBatteryInMenuBar: () => set((state) => ({ batteryInMenuBar: !state.batteryInMenuBar })),
+      toggleBatteryInCtrlCenter: () => set((state) => ({ batteryInCtrlCenter: !state.batteryInCtrlCenter })),
+      toggleShowBatteryPercentage: () => set((state) => ({ showBatteryPercentage: !state.showBatteryPercentage })),
+      setSpotlightInMenuBar: (position) => set({ spotlightInMenuBar: position }),
+      setSiriInMenuBar: (position) => set({ siriInMenuBar: position }),
+      setWeatherInMenuBar: (position) => set({ weatherInMenuBar: position }),
     }),
     {
       name: 'settings-storage', // Unique name for localStorage key

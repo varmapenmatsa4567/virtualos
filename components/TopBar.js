@@ -13,22 +13,33 @@ import SystemMenu from './topbar-menus/SystemMenu';
 import useSettingsStore from '@/stores/settings-store';
 import useTimerStore from '@/stores/timer-store';
 import Dots from '@/apps/Clock/Dots';
+import { IoIosSwitch } from 'react-icons/io';
 
 const TopBar = ({activeWindow, openWindow}) => {
   const [formattedDate, setFormattedDate] = useState([]);
 
   // Wifi
   const [isWifiOpen, toggleWifiOpen] = useToggle(false);
-  const {wifi, connectedWifi} = useSettingsStore();
+  const {wifi, connectedWifi, wifiInMenuBar} = useSettingsStore();
   const wifiRef = useRef(null);
   useOutsideClick(wifiRef, () => toggleWifiOpen(false));
 
   // Bluetooth
   const [isBluetoothOpen, toggleBluetoothOpen] = useToggle(false);
-  const {bluetooth, connectedBluetooth} = useSettingsStore();
+  const {bluetooth, connectedBluetooth, bluetoothInMenuBar} = useSettingsStore();
   // const [isDeviceConnected, toggleBluetoothConnected] = useToggle(false);
   const bluetoothRef = useRef(null);
   useOutsideClick(bluetoothRef, () => toggleBluetoothOpen(false));
+
+  // Battery
+  const {batteryInMenuBar, showBatteryPercentage} = useSettingsStore();
+
+  // Spotlight
+  const { spotlightInMenuBar } = useSettingsStore();
+
+  // Siri
+  const { siriInMenuBar } = useSettingsStore();
+  
 
   // System Menu
   const [isSystemMenuOpen, toggleSystemMenuOpen] = useToggle(false);
@@ -82,25 +93,26 @@ const TopBar = ({activeWindow, openWindow}) => {
               <p>{String((balanceTime % 60)).padStart(2, '0')}</p>
           </div>
         </div>}
-        <div ref={bluetoothRef} className={`${isBluetoothOpen && 'bg-white'} relative p-1 px-2 rounded-md bg-opacity-20`}>
+        {bluetoothInMenuBar == "show" && <div ref={bluetoothRef} className={`${isBluetoothOpen && 'bg-white'} relative p-1 px-2 rounded-md bg-opacity-20`}>
           {bluetooth ? <Bluetooth size={17} className={`${connectedBluetooth != "" ? "text-white" : "text-white text-opacity-40"}`} onClick={toggleBluetoothOpen}/> : (
             <BluetoothOff size={17} className='text-white text-opacity-40' onClick={toggleBluetoothOpen}/>
           )}
           {isBluetoothOpen && <BluetoothMenu/>}
-        </div>
-        <div className='flex items-center gap-1'>
-          <p className='text-xs font-semibold'>100%</p>
+        </div>}
+        {batteryInMenuBar && <div className='flex items-center gap-1'>
+          {showBatteryPercentage &&<p className='text-xs font-semibold'>100%</p>}
           <IoBatteryFull className='text-white text-2xl'/>
           {/* <BatteryIndicator/> */}
-        </div>  
-        <div ref={wifiRef} className={`${isWifiOpen && 'bg-white'} relative p-1 px-2 rounded-md bg-opacity-20`}>
+        </div>}  
+        {spotlightInMenuBar == "show" && <IoSearch className="text-white" />}
+        {wifiInMenuBar == "show" && <div ref={wifiRef} className={`${isWifiOpen && 'bg-white'} relative p-1 px-2 rounded-md bg-opacity-20`}>
           {wifi ? <MdOutlineWifi onClick={toggleWifiOpen} className={`${connectedWifi != "" ? "text-white" : "text-white text-opacity-40"} text-lg`}/> : (
             <MdOutlineWifiOff onClick={toggleWifiOpen} className='text-lg text-white text-opacity-40'/>
           )}
           {isWifiOpen && <WifiMenu />}
-        </div>
-        <IoSearch className="text-white" />
-        <img src='/siri.png' alt='siri' className='w-5 h-5'/>
+        </div>}
+        <IoIosSwitch className="text-white" />
+        {siriInMenuBar == "show" && <img src='/siri.png' alt='siri' className='w-5 h-5'/>}
         <div className='flex items-center gap-2'>
             <p className='text-sm'>{formattedDate[0]}</p>
             <p className='text-sm'>{formattedDate[1]}</p>

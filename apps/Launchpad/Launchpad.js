@@ -12,7 +12,7 @@ const Launchpad = ({toggleLaunchpad, openWindow}) => {
   const { wallpaper } = useSettingsStore();
 
   const handleInputClick = (e) => {
-    e.stopPropagation(); // Stop event propagation
+    // e.stopPropagation(); // Stop event propagation
     input.current.focus();
   };
   return (

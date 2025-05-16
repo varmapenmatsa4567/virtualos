@@ -7,7 +7,7 @@ const SystemMenu = ({ref, openWindow}) => {
   const {toggleLock, toggleRestart} = useSettingsStore();
 
   return (
-    <div ref={ref} className='bg-[#252427] z-[55] backdrop-filter backdrop-blur-lg bg-opacity-90 gap-1 flex-col p-1 px-2 flex w-64 absolute top-[28px] left-0 border border-[#4d494c] rounded-md'>
+    <div ref={ref} className='bg-[#252427] z-[55] backdrop-filter backdrop-blur-lg bg-opacity-60 shadow-lg gap-1 flex-col p-1 px-2 flex w-64 absolute top-[28px] left-0 border border-[#4d494c] rounded-md'>
         <p className='text-[13px] hover:bg-blue-600 px-2 rounded-sm py-0.5'>About This Mac</p>
         <Separator className='bg-[#4d494c]'/>
         <p onClick={() => openWindow("settings")} className='text-[13px] hover:bg-blue-600 px-2 rounded-sm py-0.5'>System Settings</p>

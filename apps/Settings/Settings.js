@@ -13,6 +13,8 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import WifiSettings from "./WifiSettings";
 import DockSettings from "./DockSettings";
 import BluetoothSettings from "./BluetoothSettings";
+import NetworkSettings from "./NetworkSettings";
+import ControlCentreSettings from "./ControlCentreSettings";
 
 const Settings = ({fileStructure, setFileStructure, toggleMaximize, ...props}) => {
   const [selected, setSelected] = useState(0);
@@ -51,7 +53,9 @@ const Settings = ({fileStructure, setFileStructure, toggleMaximize, ...props}) =
       case 1:
         return <BluetoothSettings />;
       case 2:
-        return <div className='p-4 text-white'>Network Settings Content</div>;
+        return <NetworkSettings onWifiClick={() => setSelected(0)} onBluetoothClick={() => setSelected(1)}/>;
+      case 9:
+        return <ControlCentreSettings />;
       case 11:
         return <DockSettings />;
       case 13:

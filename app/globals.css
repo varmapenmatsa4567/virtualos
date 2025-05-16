@@ -8,9 +8,14 @@ body {
   font-family: 'Inter', Arial, Helvetica, sans-serif;
 }
 
+:root {
+  filter: brightness(100%);
+}
+
 :root,
 body {
   overflow: hidden;
+
 }
 
 ::-webkit-scrollbar {

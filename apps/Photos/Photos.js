@@ -268,7 +268,7 @@ const Photos = ({ fileStructure, setFileStructure, db, ...props }) => {
           setSelectedItems(new Set([(Array.from(selectedItems).pop() - colsCount + totalItems) % totalItems]));
           break;
         case " ":
-          event.preventDefault();
+          // event.preventDefault();
           if (selectedItems.size > 0) {
             setFullScreenImage(displayPhotos[Array.from(selectedItems).pop()]);
           }
