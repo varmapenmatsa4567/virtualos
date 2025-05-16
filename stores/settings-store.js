@@ -29,6 +29,19 @@ const useSettingsStore = create(
       spotlightInMenuBar: "show",
       siriInMenuBar: "show",
       weatherInMenuBar: "show",
+      spotlightOptions: {
+        "Applications": true,
+        "Calculator": true,
+        "Conversion": true,
+        "Definition": true,
+        "Folders": true,
+        "Images": true,
+        "Movies": true,
+        "Music": true,
+        "Siri Suggestions": true,
+        "System Settings": true,
+        "Websites": true
+      },
 
       hydrated: false, // Hydration state
 
@@ -57,6 +70,7 @@ const useSettingsStore = create(
       setSpotlightInMenuBar: (position) => set({ spotlightInMenuBar: position }),
       setSiriInMenuBar: (position) => set({ siriInMenuBar: position }),
       setWeatherInMenuBar: (position) => set({ weatherInMenuBar: position }),
+      setSpotlightOptions: (options) => set({ spotlightOptions: options }),
     }),
     {
       name: 'settings-storage', // Unique name for localStorage key

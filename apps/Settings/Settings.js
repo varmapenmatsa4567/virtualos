@@ -11,6 +11,7 @@ import ControlCentreSettings from "./ControlCentreSettings";
 import useAppsStore from "@/stores/apps-store";
 import { settingsItems } from "@/utils/data";
 import { useEffect } from "react";
+import SpotlightSettings from "./SpotlightSettings";
 
 const Settings = ({fileStructure, setFileStructure, toggleMaximize, extraProps, ...props}) => {
 
@@ -36,6 +37,8 @@ const Settings = ({fileStructure, setFileStructure, toggleMaximize, extraProps, 
         return <ControlCentreSettings />;
       case 11:
         return <DockSettings />;
+      case 12:
+        return <SpotlightSettings />;
       case 13:
         return <WallpaperSettings />;
       default:

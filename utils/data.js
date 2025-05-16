@@ -102,7 +102,7 @@ export const settingsItems = [
     { id: 10, text: "Displays", icon: IoSunny, bgColor: "bg-blue-500" },
     { id: 11, text: "Desktop & Dock", icon: LuDock, bgColor: "bg-black" },
     { id: 12, text: "Spotlight", icon: IoSearch, bgColor: "bg-gray-500" },
-    { id: 13, text: "Wallpaper", icon: MdWallpaper, bgColor: "bg-cyan-500" },
+    { id: 13, text: "Wallpaper", icon: MdWallpaper, bgColor: "bg-teal-500" },
     { type: "spacer" },
     { id: 15, text: "Notifications", icon: IoIosNotifications, bgColor: "bg-red-500" },
     { id: 16, text: "Sound", icon: IoVolumeHigh, bgColor: "bg-red-500" },
