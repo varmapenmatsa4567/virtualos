@@ -6,6 +6,7 @@ const useGlobalStore = create((set) => ({
     screenshotUrl: null,
     showScreenshot: false,
     dbChange: 0,
+    spotlightVisible: false,
 
     setShowScreenshot: (showScreenshot) => set({ showScreenshot }),
     setIsWindowScreenshot: (isWindowScreenshot) => set({ isWindowScreenshot }),
@@ -13,6 +14,7 @@ const useGlobalStore = create((set) => ({
     closeScreenshot: () => set({ isWindowScreenshot: false, isFullScreenshot: false }),
     setScreenshotUrl: (screenshotUrl) => set({ screenshotUrl }),
     setDbChange: (dbChange) => set({ dbChange }),
+    toggleSpotlightVisible: () => set((state) => ({ spotlightVisible: !state.spotlightVisible })),
 }));
 
 export default useGlobalStore;

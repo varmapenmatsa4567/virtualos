@@ -18,6 +18,8 @@ import Splotlight from "@/apps/Spotlight/Splotlight";
 
 export default function Home() {
 
+  const { spotlightVisible, toggleSpotlightVisible } = useGlobalStore();
+
   const {windows, setWindows, activeWindow, setActiveWindow, openedApps, setOpenedApps} = useWindowsStore();
   const [openedFile, setOpenedFile] = useState(null); // State to track the opened file
   const [selectedAppIndex, setSelectedAppIndex] = useState(0); // Track the selected app in the switcher
@@ -270,7 +272,7 @@ export default function Home() {
         <ModernDock isVisible={isLaunchpadOpen} toggleLaunchpad={toggleLaunchpad} setWindows={setWindows} openWindow={openWindow} windows={windows}  />
         {/* <SiriChat /> */}
         {isLaunchpadOpen && <Launchpad openWindow={openWindow} toggleLaunchpad={toggleLaunchpad}/>}
-        <Splotlight/>
+        {spotlightVisible && <Splotlight openWindow={openWindow}/>}
         {/* {isAppSwitcherVisible && (
           <AppSwitcher openedApps={openedApps} selectedAppIndex={selectedAppIndex} />
         )} */}

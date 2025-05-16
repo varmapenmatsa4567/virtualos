@@ -14,6 +14,7 @@ import useSettingsStore from '@/stores/settings-store';
 import useTimerStore from '@/stores/timer-store';
 import Dots from '@/apps/Clock/Dots';
 import { IoIosSwitch } from 'react-icons/io';
+import useGlobalStore from '@/stores/global-store';
 
 const TopBar = ({activeWindow, openWindow}) => {
   const [formattedDate, setFormattedDate] = useState([]);
@@ -36,6 +37,7 @@ const TopBar = ({activeWindow, openWindow}) => {
 
   // Spotlight
   const { spotlightInMenuBar } = useSettingsStore();
+  const { toggleSpotlightVisible } = useGlobalStore();
 
   // Siri
   const { siriInMenuBar } = useSettingsStore();
@@ -104,7 +106,7 @@ const TopBar = ({activeWindow, openWindow}) => {
           <IoBatteryFull className='text-white text-2xl'/>
           {/* <BatteryIndicator/> */}
         </div>}  
-        {spotlightInMenuBar == "show" && <IoSearch className="text-white" />}
+        {spotlightInMenuBar == "show" && <IoSearch onClick={toggleSpotlightVisible} className="text-white" />}
         {wifiInMenuBar == "show" && <div ref={wifiRef} className={`${isWifiOpen && 'bg-white'} relative p-1 px-2 rounded-md bg-opacity-20`}>
           {wifi ? <MdOutlineWifi onClick={toggleWifiOpen} className={`${connectedWifi != "" ? "text-white" : "text-white text-opacity-40"} text-lg`}/> : (
             <MdOutlineWifiOff onClick={toggleWifiOpen} className='text-lg text-white text-opacity-40'/>
