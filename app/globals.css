@@ -103,3 +103,67 @@ body {
     @apply bg-background text-foreground;
   }
 }
+
+.bg-shortcut1 {
+  background-color: #ee5f64;
+}
+
+.bg-shortcut2 {
+  background-color: #fc7e5f;
+}
+
+.bg-shortcut3 {
+  background-color: #f39f45;
+}
+
+.bg-shortcut4 {
+  background-color: #e7c112;
+}
+
+.bg-shortcut5 {
+  background-color: #37c051;
+}
+
+.bg-shortcut6 {
+  background-color: #00c4a5;
+}
+
+.bg-shortcut7 {
+  background-color: #66c4eb;
+}
+
+.bg-shortcut8 {
+  background-color: #1687ff;
+}
+
+.bg-shortcut9 {
+  background-color: #4565c2;
+}
+
+.bg-shortcut10 {
+  background-color: #4060c0;
+}
+
+.bg-shortcut11 {
+  background-color: #7544af;
+}
+
+.bg-shortcut12 {
+  background-color: #af70d9;
+}
+
+.bg-shortcut13 {
+  background-color: #ea7dc9;
+}
+
+.bg-shortcut14 {
+  background-color: #7b8690;
+}
+
+.bg-shortcut15 {
+  background-color: #90a996;
+}
+
+.bg-shortcut16 {
+  background-color: #b79e7f;
+}

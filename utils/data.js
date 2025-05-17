@@ -114,3 +114,22 @@ export const settingsItems = [
     { id: 22, text: "Touch ID & Password", icon: IoIosFingerPrint, bgColor: "bg-white", iconColor: "text-red-500" },
     { id: 23, text: "Users & Groups", icon: FaUsers, bgColor: "bg-blue-500" },
   ];
+
+// export const shortcutColors = [
+//   "bg-[#ee5f64]",
+//   "bg-[#fc7e5f]",
+//   "bg-[#f39f45]",
+//   "bg-[#e7c112]",
+//   "bg-[#37c051]",
+//   "bg-[#00c4a5]",
+//   "bg-[#66c4eb]",
+//   "bg-[#1687ff]",
+//   "bg-[#4565c2]",
+//   "bg-[#4060c0]",
+//   "bg-[#7544af]",
+//   "bg-[#af70d9]",
+//   "bg-[#ea7dc9]",
+//   "bg-[#7b8690]",
+//   "bg-[#90a996]",
+//   "bg-[#b79e7f]"
+// ]

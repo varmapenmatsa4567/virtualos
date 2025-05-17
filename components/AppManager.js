@@ -18,6 +18,7 @@ import useGlobalStore from '@/stores/global-store'
 import ImageViewer from '@/apps/Viewers/ImageViewer'
 import Tips from '@/apps/Tips/Tips'
 import Finder from '@/apps/Finder/Finder'
+import Shortcuts from '@/apps/Shortcuts/Shortcuts'
 
 const AppManager = (props) => {
 
@@ -71,6 +72,9 @@ const AppManager = (props) => {
     }
     else if(props.appName === 'tips') {
         return <Tips {...props}/>
+    }
+    else if(props.appName === 'shortcuts'){
+        return <Shortcuts {...props}/>
     }
   return null;
 }
