@@ -1,9 +1,8 @@
 "use client";
 import AppManager from "@/components/AppManager";
 import TopBar from "@/components/TopBar";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { initialStructure } from "@/utils/data";
-import AppSwitcher from "@/components/AppSwitcher";
 import Launchpad from "@/apps/Launchpad/Launchpad";
 import { ModernDock } from "@/components/ModernDock";
 import Iphone from "@/mobile/Iphone";
@@ -14,6 +13,7 @@ import useGlobalStore from "@/stores/global-store";
 import html2canvas from "html2canvas";
 import useWindowsStore from "@/stores/windows-store";
 import Splotlight from "@/apps/Spotlight/Splotlight";
+import { useOutsideClick } from "@/hooks/useOutsideClick";
 
 
 export default function Home() {
@@ -37,6 +37,12 @@ export default function Home() {
   const {dbChange, setDbChange} = useGlobalStore();
   const [fileStructure, setFileStructure] = useState(initialStructure);
   const [isMobile, setIsMobile] = useState(false);
+
+  // Spotlight
+  const spotlightRef = useRef(null);
+  useOutsideClick(spotlightRef, () => toggleSpotlightVisible(false));
+
+  // Launchpad
 
   const toggleLaunchpad = () => {
     setIsLaunchpadOpen(!isLaunchpadOpen);
@@ -272,7 +278,7 @@ export default function Home() {
         <ModernDock isVisible={isLaunchpadOpen} toggleLaunchpad={toggleLaunchpad} setWindows={setWindows} openWindow={openWindow} windows={windows}  />
         {/* <SiriChat /> */}
         {isLaunchpadOpen && <Launchpad openWindow={openWindow} toggleLaunchpad={toggleLaunchpad}/>}
-        {spotlightVisible && <Splotlight openWindow={openWindow}/>}
+        {spotlightVisible && <Splotlight ref={spotlightRef} openWindow={openWindow}/>}
         {/* {isAppSwitcherVisible && (
           <AppSwitcher openedApps={openedApps} selectedAppIndex={selectedAppIndex} />
         )} */}
