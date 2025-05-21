@@ -8,7 +8,7 @@ import { TbFolderPlus } from "react-icons/tb";
 import { IoSearch } from "react-icons/io5";
 import { FiGrid } from "react-icons/fi";
 import Folder from "./Folder";
-import { createFolder, deleteItem, pasteItem } from "@/utils/fs-utils";
+import { createFolder, deleteItem, getSortedItems, pasteItem } from "@/utils/fs-utils";
 import FinderContextMenu from "@/components/context-menu/FinderContextMenu";
 import { ContextMenu, ContextMenuTrigger } from "@/components/ui/context-menu";
 
@@ -21,6 +21,7 @@ const Finder = (props) => {
   const [history, setHistory] = useState([finderItems.filter(item => item.parentId === null)[0].id]);
   const [selectedItem, setSelectedItem] = useState(null);
   const [clipboard, setClipboard] = useState(null);
+  const [isCut, setIsCut] = useState(false);
 
   if(favourites.length === 0) {
     const rootId = finderItems.filter(item => item.parentId === null)[0].id;
@@ -34,6 +35,7 @@ const Finder = (props) => {
   }
 
   const currentFileStructure = finderItems.filter(item => item.parentId === currentFinderItem);
+  const currentFolder = finderItems.find(item => item.id === currentFinderItem);
 
   const openFolder = (id) => {
     const newHistory = history.slice(0, historyIndex + 1);
@@ -52,16 +54,24 @@ const Finder = (props) => {
   }
 
   const duplicateFolder = (id) => {
-
+    copyItem(id);
+    pasteAnything();
   }
 
   const pasteAnything = () => {
-    pasteItem(clipboard.id, currentFinderItem, finderItems, setFinderItems, true);
+    pasteItem(clipboard.id, currentFinderItem, finderItems, setFinderItems, isCut);
   }
 
   const copyItem = (id) => {
     const item = finderItems.find(item => item.id === id);
     setClipboard(item);
+    setIsCut(false);
+  }
+
+  const cutItem = (id) => {
+    const item = finderItems.find(item => item.id === id);
+    setClipboard(item);
+    setIsCut(true);
   }
 
   const goBack = () => {
@@ -80,6 +90,16 @@ const Finder = (props) => {
     }
   }
 
+  const setSort = (sort) => {
+    const updatedFinderItems = finderItems.map(item => {
+      if (item.id === currentFinderItem) {
+        return { ...item, sort: sort };
+      }
+      return item;
+    });
+    setFinderItems(updatedFinderItems);
+  }
+
   return (
     <Window  isTransparent={true} {...props} 
       toolbar={
@@ -92,7 +112,7 @@ const Finder = (props) => {
               <ChevronRight className={`${historyIndex == history.length-1 ? 'text-[#5d5b5d]' : 'text-white'}`} />
             </button>
             <p className='text-white text-sm font-semibold'>
-              Home
+              {currentFolder ? currentFolder.name : "Finder"}
             </p>
           </div>
           <div className="flex items-center gap-4 mx-4 text-[#c6c2c2]">
@@ -132,7 +152,7 @@ const Finder = (props) => {
             <ContextMenuTrigger>
               <div className='h-full w-full'>
                 <div className='w-full p-3 px-6 flex gap-x-4 gap-y-2 flex-wrap'>
-                  {currentFileStructure && currentFileStructure.map((item, index) => {
+                  {currentFileStructure && getSortedItems(currentFileStructure, currentFolder?.sort || "none").map((item, index) => {
                     if(item.isDir) {
                       return (
                         <Folder 
@@ -143,6 +163,8 @@ const Finder = (props) => {
                           folderName={item.name} 
                           key={index}
                           onCopyItem={() => copyItem(item.id)}
+                          onCutItem={() => cutItem(item.id)}
+                          onFolderDuplicate={() => duplicateFolder(item.id)}
                         />
                       )
                     }
@@ -155,8 +177,8 @@ const Finder = (props) => {
                 onDuplicateFolder={duplicateFolder}
                 onPasteItem={pasteAnything}
                 canPaste={!!clipboard}
-                // onAddFile={() => document.getElementById('file-upload').click()}
-                // onCreateFile={createFile}
+                sort={currentFolder?.sort || "none"}
+                setSort={setSort}
             />
         </ContextMenu>
         </div>

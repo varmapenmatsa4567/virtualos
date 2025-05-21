@@ -1,7 +1,7 @@
 import React from 'react';
 import { ContextMenuContent, ContextMenuItem, ContextMenuSeparator, ContextMenuSub, ContextMenuSubContent, ContextMenuSubTrigger, ContextMenuCheckboxItem } from '@/components/ui/context-menu';
 
-const FinderContextMenu = ({onCreateFolder, onPasteItem, canPaste, onAddFile, onCreateFile}) => {
+const FinderContextMenu = ({onCreateFolder, onPasteItem, canPaste, onAddFile, onCreateFile, sort, setSort}) => {
   return (
     <ContextMenuContent className="bg-[#2f292e] text-white">
         <ContextMenuItem onClick={onCreateFolder}>New Folder</ContextMenuItem>
@@ -18,6 +18,18 @@ const FinderContextMenu = ({onCreateFolder, onPasteItem, canPaste, onAddFile, on
                 <ContextMenuCheckboxItem>as List</ContextMenuCheckboxItem>
                 <ContextMenuCheckboxItem>as Column</ContextMenuCheckboxItem>
                 <ContextMenuCheckboxItem>as Gallery</ContextMenuCheckboxItem>
+            </ContextMenuSubContent>
+        </ContextMenuSub>
+        <ContextMenuSub className="bg-[#2f292e] text-white">
+            <ContextMenuSubTrigger>Sort By</ContextMenuSubTrigger>
+            <ContextMenuSubContent className="bg-[#2f292e] text-white">
+                <ContextMenuCheckboxItem onClick={() => setSort('none')} checked={sort === 'none'}>None</ContextMenuCheckboxItem>
+                <ContextMenuSeparator />
+                <ContextMenuCheckboxItem onClick={() => setSort('name')} checked={sort === 'name'}>Name</ContextMenuCheckboxItem>
+                <ContextMenuCheckboxItem onClick={() => setSort('kind')} checked={sort === 'kind'}>Kind</ContextMenuCheckboxItem>
+                <ContextMenuCheckboxItem onClick={() => setSort('dateModified')} checked={sort === 'dateModified'}>Date Modified</ContextMenuCheckboxItem>
+                <ContextMenuCheckboxItem onClick={() => setSort('dateCreated')} checked={sort === 'dateCreated'}>Date Created</ContextMenuCheckboxItem>
+                <ContextMenuCheckboxItem onClick={() => setSort('size')} checked={sort === 'size'}>Size</ContextMenuCheckboxItem>
             </ContextMenuSubContent>
         </ContextMenuSub>
         <ContextMenuItem>Use Groups</ContextMenuItem>
