@@ -17,7 +17,7 @@ import Screenshot from '@/apps/Screenshot/Screenshot'
 import useGlobalStore from '@/stores/global-store'
 import ImageViewer from '@/apps/Viewers/ImageViewer'
 import Tips from '@/apps/Tips/Tips'
-import Finder from '@/apps/Finder/Finder'
+import Finder from '@/apps/ModernFinder/Finder'
 import Shortcuts from '@/apps/Shortcuts/Shortcuts'
 
 const AppManager = (props) => {

@@ -4,7 +4,7 @@ import { persist } from 'zustand/middleware';
 const useSettingsStore = create(
   persist(
     (set) => ({
-      wallpaper: 'wallpaper0', // Default wallpaper
+      wallpaper: 'wallpaper1', // Default wallpaper
       wifi: false, // Wi-Fi state
       connectedWifi: "", // Wi-Fi connected state
       bluetooth: false, // Bluetooth state
