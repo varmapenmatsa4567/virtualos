@@ -5,7 +5,7 @@ import { useState } from "react";
 import useFinderStore from "@/stores/finder-store";
 import { ChevronLeft, ChevronRight, CircleEllipsis, Tag } from "lucide-react";
 import { TbFolderPlus } from "react-icons/tb";
-import { IoPricetagOutline, IoSearch } from "react-icons/io5";
+import { IoPricetagOutline, IoSearch, IoShareOutline } from "react-icons/io5";
 import { FiGrid } from "react-icons/fi";
 import Folder from "./Folder";
 import { createFolder, deleteItem, getSortedItems, pasteItem } from "@/utils/fs-utils";
@@ -136,6 +136,9 @@ const Finder = (props) => {
               <LuChevronsUpDown size={18} className="ml-0.5" />
             </button>
             <button className='p-1 px-2 hover:bg-[#242227] rounded-md'>
+              <IoShareOutline className="" size={20} />
+            </button>
+            <button className='p-1 px-2 hover:bg-[#242227] rounded-md'>
               <Tag className="rotate-90" size={18} />
             </button>
             <button className='p-1 px-2 hover:bg-[#242227] rounded-md flex items-center'>
@@ -151,6 +154,7 @@ const Finder = (props) => {
     >
       <div className="flex w-full h-full">
         <div className="w-48 bg-[#2e292d] text-white text-sm overflow-auto h-full bg-opacity-70 backdrop-filter backdrop-blur-2xl p-2 px-2 flex flex-col">
+          <p className="text-[#6d6c6c] text-[11px] m-1 font-semibold">Favourites</p>
           {favourites.map((item, index) => {
             return (
               <SidebarItem 
