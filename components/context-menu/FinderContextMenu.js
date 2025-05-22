@@ -1,7 +1,7 @@
 import React from 'react';
 import { ContextMenuContent, ContextMenuItem, ContextMenuSeparator, ContextMenuSub, ContextMenuSubContent, ContextMenuSubTrigger, ContextMenuCheckboxItem } from '@/components/ui/context-menu';
 
-const FinderContextMenu = ({onCreateFolder, onPasteItem, canPaste, onAddFile, onCreateFile, sort, setSort}) => {
+const FinderContextMenu = ({onCreateFolder, onPasteItem, canPaste, onAddFile, onCreateFile, sort, setSort, view, setView}) => {
   return (
     <ContextMenuContent className="bg-[#2f292e] text-white">
         <ContextMenuItem onClick={onCreateFolder}>New Folder</ContextMenuItem>
@@ -14,10 +14,10 @@ const FinderContextMenu = ({onCreateFolder, onPasteItem, canPaste, onAddFile, on
         <ContextMenuSub className="bg-[#2f292e] text-white">
             <ContextMenuSubTrigger>View</ContextMenuSubTrigger>
             <ContextMenuSubContent className="bg-[#2f292e] text-white">
-                <ContextMenuCheckboxItem checked>as Icons</ContextMenuCheckboxItem>
-                <ContextMenuCheckboxItem>as List</ContextMenuCheckboxItem>
-                <ContextMenuCheckboxItem>as Column</ContextMenuCheckboxItem>
-                <ContextMenuCheckboxItem>as Gallery</ContextMenuCheckboxItem>
+                <ContextMenuCheckboxItem checked={view === 'icons'} onClick={() => setView('icons')}>as Icons</ContextMenuCheckboxItem>
+                <ContextMenuCheckboxItem checked={view === 'list'} onClick={() => setView('list')}>as List</ContextMenuCheckboxItem>
+                <ContextMenuCheckboxItem checked={view === 'column'} onClick={() => setView('column')}>as Column</ContextMenuCheckboxItem>
+                <ContextMenuCheckboxItem checked={view === 'gallery'} onClick={() => setView('gallery')}>as Gallery</ContextMenuCheckboxItem>
             </ContextMenuSubContent>
         </ContextMenuSub>
         <ContextMenuSub className="bg-[#2f292e] text-white">

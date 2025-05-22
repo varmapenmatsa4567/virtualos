@@ -249,7 +249,6 @@ export default function Home() {
   if(isLocked) {
     return <LockScreen/>
   }
-
   return (
     <div className={`relative ${isFullScreenshot && "group"}`}>
       <div id='screen' className="w-screen h-screen flex flex-col items-center">

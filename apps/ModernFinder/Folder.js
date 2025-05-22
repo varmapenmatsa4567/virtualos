@@ -6,8 +6,8 @@ const Folder = ({folderName, openFolder, onFolderDelete, onFolderDuplicate, onCo
   return (
     <ContextMenu>
         <ContextMenuTrigger onContextMenu={onSelect}>
-          <div onClick={onSelect} onDoubleClick={openFolder} className={`flex flex-col items-center gap-1`}>
-              <img src='folder.png' className={`w-18 h-16 ${isSelected ? "bg-[#3b373a] rounded-md px-2" : null}`}/>
+          <div draggable onClick={onSelect} onDoubleClick={openFolder} className={`flex flex-col items-center gap-1 draggable-element`}>
+              <img draggable={false} src='folder.png' className={`w-18 h-16 ${isSelected ? "bg-[#3b373a] rounded-md px-2" : null}`}/>
               <p className={`${isSelected ? "bg-[#0059d0] rounded-sm w-fit px-1" : null} text-white text-[12px] font-medium text-clip w-20 text-center`}>{folderName}</p>
           </div>
         </ContextMenuTrigger>
