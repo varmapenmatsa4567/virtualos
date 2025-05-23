@@ -1,4 +1,4 @@
-import { getDefaultFinderItems } from '@/utils/fs-utils';
+import { favourites, getDefaultFinderItems } from '@/utils/fs-utils';
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
@@ -6,7 +6,7 @@ const useFinderStore = create(
   persist(
     (set) => ({
       finderItems: getDefaultFinderItems(), // List of finder items
-      favourites: [], // List of favourite items
+      favourites: favourites, // List of favourite items
       currentFinderItem: null, // Currently selected finder item
 
       hydrated: false, // Hydration state

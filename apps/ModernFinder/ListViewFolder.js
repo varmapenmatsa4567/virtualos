@@ -8,7 +8,7 @@ const ListViewFolder = ({folderName, openFolder, onFolderDelete, onFolderDuplica
   return (
     <ContextMenu>
         <ContextMenuTrigger onContextMenu={onSelect}>
-          <div  onClick={onSelect} onDoubleClick={openFolder} className={`${isSelected ? "bg-[#0059d0]" : bgColor} rounded-md flex items-center px-2 p-0.5`}>
+          <div  onClick={onSelect} onDoubleClick={openFolder} className={`${isSelected ? "bg-[#0059d0]" : bgColor} rounded-sm flex items-center px-2 p-0.5`}>
             <div className={`flex items-center gap-1 w-5/12 truncate`}>
                 <img src={item.isSpecial ? `./folders/${item.name.toLowerCase()}-folder.png` : 'folder.png'} className={`w-4 h-4`}/>
                 <p className={`text-white text-[12px] font-medium text-clip w-20 text-start`}>{folderName}</p>
@@ -16,10 +16,10 @@ const ListViewFolder = ({folderName, openFolder, onFolderDelete, onFolderDuplica
             <div className='w-3/12 text-[#c3c0c0] text-[12px] font-medium'>
                 {formatDateTimeforFinder(item.dateModified)}
             </div>
-            <div className='w-1/12 text-[#c3c0c0] text-[12px] font-medium pl-1'>
+            <div className='w-2/12 text-[#c3c0c0] text-[12px] font-medium pl-1'>
                 ---
             </div>
-            <div className='w-3/12 text-[#c3c0c0] text-[12px] font-medium'>
+            <div className='w-2/12 text-[#c3c0c0] text-[12px] font-medium'>
                 Folder
             </div>
           </div>

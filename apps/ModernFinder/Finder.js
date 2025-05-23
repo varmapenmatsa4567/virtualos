@@ -1,22 +1,23 @@
-
 import Window from "@/components/Window";
 import SidebarItem from "./SidebarItem";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import useFinderStore from "@/stores/finder-store";
 import { ChevronLeft, ChevronRight, CircleEllipsis, Tag } from "lucide-react";
 import { TbFolderPlus } from "react-icons/tb";
-import { IoPricetagOutline, IoSearch, IoShareOutline } from "react-icons/io5";
+import { IoSearch, IoShareOutline } from "react-icons/io5";
 import { FiGrid } from "react-icons/fi";
 import Folder from "./Folder";
-import { createFolder, deleteItem, getSortedItems, pasteItem } from "@/utils/fs-utils";
+import { createFolder, deleteItem, getSortedItems, moveItemToTrash, pasteItem } from "@/utils/fs-utils";
 import FinderContextMenu from "@/components/context-menu/FinderContextMenu";
 import { ContextMenu, ContextMenuTrigger } from "@/components/ui/context-menu";
 import ListViewFolder from "./ListViewFolder";
 import { LuChevronsUpDown } from "react-icons/lu";
 import { FaAngleDown } from "react-icons/fa6";
 import { getId } from "@/utils/utils";
+import File from "./File";
+import ListFile from "./ListFile";
 
-const Finder = (props) => {
+const Finder = ({extraProps, ...props}) => {
 
   const {favourites, setFavourites, finderItems, setFinderItems} = useFinderStore();
   const [historyIndex, setHistoryIndex] = useState(0);
@@ -27,27 +28,35 @@ const Finder = (props) => {
   const [isCut, setIsCut] = useState(false);
   const [isDraggingOver, setIsDraggingOver] = useState(false);
 
+  const {requiredItemId, isTrash} = extraProps;
 
-  if(favourites.length === 0) {
-    const rootId = finderItems.filter(item => item.parentId === null)[0].id;
-    const favouriteItems = finderItems.filter(item => item.parentId === rootId);
-    setFavourites(favouriteItems);
-  }
+  useEffect(() => {
+    if(requiredItemId) {
+      setCurrentFinderItem(requiredItemId);
+    }
+  }, [requiredItemId, isTrash]);
+
+
+  // if(favourites.length === 0) {
+  //   const rootId = finderItems.filter(item => item.parentId === null)[0].id;
+  //   const favouriteItems = finderItems.filter(item => item.parentId === rootId);
+  //   setFavourites(favouriteItems);
+  // }
 
   if(currentFinderItem === null) {
-    const rootId = finderItems.filter(item => item.parentId === null)[0].id;
-    setCurrentFinderItem(rootId);
+    setCurrentFinderItem('macos');
   }
 
-  const currentFileStructure = finderItems.filter(item => item.parentId === currentFinderItem);
   const currentFolder = finderItems.find(item => item.id === currentFinderItem);
-
+  const currentFileStructure = finderItems.filter(item => item.parentId === currentFinderItem);
+  
   const openFolder = (id) => {
     const newHistory = history.slice(0, historyIndex + 1);
     newHistory.push(id);
     setHistory(newHistory);
     setHistoryIndex(newHistory.length - 1);
     setCurrentFinderItem(id);
+    setSelectedItem(null);
   }
 
   const newFolder = () => {
@@ -58,7 +67,11 @@ const Finder = (props) => {
     deleteItem(id, finderItems, setFinderItems);
   }
 
-  const duplicateFolder = (id) => {
+  const moveToTrash = (id) => {
+    moveItemToTrash(id, finderItems, setFinderItems);
+  }
+
+  const duplicateItem = (id) => {
     copyItem(id);
     pasteAnything();
   }
@@ -70,6 +83,7 @@ const Finder = (props) => {
   const copyItem = (id) => {
     const item = finderItems.find(item => item.id === id);
     setClipboard(item);
+    console.log("Clipboard", item);
     setIsCut(false);
   }
 
@@ -84,6 +98,7 @@ const Finder = (props) => {
       const newHistoryIndex = historyIndex - 1;
       setHistoryIndex(newHistoryIndex);
       setCurrentFinderItem(history[newHistoryIndex]);
+      setSelectedItem(null);
     }
   }
 
@@ -92,6 +107,7 @@ const Finder = (props) => {
       const newHistoryIndex = historyIndex + 1;
       setHistoryIndex(newHistoryIndex);
       setCurrentFinderItem(history[newHistoryIndex]);
+      setSelectedItem(null);
     }
   }
 
@@ -136,9 +152,14 @@ const Finder = (props) => {
       if(isItemPresent) {
         return;
       }
-      setFavourites([...favourites, item]);
+      setFavourites([...favourites, item.id]);
     }
   };
+
+  const showInEnclosingFolder = (item) => {
+    openFolder(item.parentId);
+    setSelectedItem(item.id);
+  }
 
   const handleFileUpload = (event) => {
       const file = event.target.files[0];
@@ -146,36 +167,46 @@ const Finder = (props) => {
     
       // Read the file as a blob
       const reader = new FileReader();
-      var content= "";
       reader.onload = (e) => {
-        const blob = new Blob([e.target.result], { type: file.type });
-  
-        const reader = new FileReader();
-        reader.onload = () => {
-          content = reader.result; // Set the file content as a string
-          const newFile = {
-            id: getId(),
-            name: file.name,
-            isDir: false,
-            content: content,
-            parentId: currentFinderItem,
-            dateCreated: new Date(),
-            dateModified: new Date(),
-          };
-      
-          // Update the file structure
-          setFinderItems([...finderItems, newFile]);
-          console.log(newFile);
-
+        const imageUrl = e.target.result;
+        const newFile = {
+          id: getId(),
+          name: file.name,
+          isDir: false,
+          content: imageUrl,
+          parentId: currentFinderItem,
+          dateCreated: new Date(),
+          dateModified: new Date(),
+          type: file.type,
+          size: file.size
         };
-        reader.readAsText(blob);
-        console.log(blob);
-        // Create a new file object
-        
+        setFinderItems([...finderItems, newFile]);
+      };
+      reader.readAsDataURL(file); // Read the file as a data URL
+    };
+
+  useEffect(() => {
+      const handleKeyDown = (e) => {
+        if (e.ctrlKey || e.metaKey) {
+          if (e.key === 'c' && selectedItem) {
+            copyItem(selectedItem);
+          }
+          if (e.key === 'v' && clipboard) {
+            pasteItem();
+          }
+          if (e.key === 'x' && selectedItem) {
+            cutItem(selectedItem);
+          }
+          if (e.key == 'Backspace' && selectedItem) {
+            console.log("Deleting", selectedItem);
+            moveToTrash(selectedItem);
+          }
+        }
       };
     
-      reader.readAsArrayBuffer(file);
-    };
+      window.addEventListener('keydown', handleKeyDown);
+      return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [selectedItem, clipboard, currentFinderItem]);
 
   return (
     <Window  isTransparent={true} {...props} 
@@ -224,10 +255,13 @@ const Finder = (props) => {
           onDrop={handleDrop}
           className="w-48 bg-[#2e292d] text-white text-sm overflow-auto h-full bg-opacity-70 backdrop-filter backdrop-blur-2xl p-2 px-2 flex flex-col">
           <p className="text-[#6d6c6c] text-[11px] m-1 font-semibold">Favourites</p>
-          {favourites.map((item, index) => {
+          {favourites.map((fav, index) => {
+            const item = finderItems.find(item => item.id === fav);
             return (
               <SidebarItem 
                 key={index} 
+                removeItem={() => setFavourites(favourites.filter(fav => fav !== item.id))}
+                showInFolder={() => showInEnclosingFolder(item)}
                 name={item.name} 
                 isSelected={item.id === currentFinderItem} 
                 onClick={() => openFolder(item.id)} 
@@ -245,26 +279,38 @@ const Finder = (props) => {
           />
           <ContextMenu>
             <ContextMenuTrigger>
-              <div className='h-full w-full'>
+              <div className='h-full w-full overflow-auto'>
                 {(currentFolder?.view || "icons") === "icons" ? (
                   <div className='w-full p-3 px-6 flex gap-x-4 gap-y-2 flex-wrap'>
                     {currentFileStructure && getSortedItems(currentFileStructure, currentFolder?.sort || "none").map((item, index) => {
                       if(item.isDir) {
                         return (
                           <Folder 
-                            onFolderDelete={() => deleteAnything(item.id)}
-                            isSelected={selectedItem === index}
-                            onSelect={() => setSelectedItem(index)}
+                            onFolderDelete={() => moveToTrash(item.id)}
+                            isSelected={selectedItem === item.id}
+                            onSelect={() => setSelectedItem(item.id)}
                             openFolder={() => openFolder(item.id)} 
                             folderName={item.name} 
                             key={index}
                             item={item}
                             onCopyItem={() => copyItem(item.id)}
                             onCutItem={() => cutItem(item.id)}
-                            onFolderDuplicate={() => duplicateFolder(item.id)}
+                            onFolderDuplicate={() => duplicateItem(item.id)}
                           />
                         )
                       }
+                      return (
+                        <File
+                          onSelect={() => setSelectedItem(item.id)}
+                          isSelected={selectedItem === item.id}
+                          item={item}
+                          key={index}
+                          deleteItem={() => moveToTrash(item.id)}
+                          copyItem={() => copyItem(item.id)}
+                          cutItem={() => cutItem(item.id)}
+                          duplicateItem={() => duplicateFolder(item.id)}
+                        />
+                      )
                     })}
                   </div>
                 ) : (
@@ -272,16 +318,16 @@ const Finder = (props) => {
                     <div className="flex items-center text-[#a09e9e] text-[11px] py-1">
                       <div className="w-5/12 px-8">Name</div>
                       <div className="w-3/12">Date Modified</div>
-                      <div className="w-1/12">Size</div>
-                      <div className="w-3/12">Kind</div>
+                      <div className="w-2/12">Size</div>
+                      <div className="w-2/12">Kind</div>
                     </div>
                     {currentFileStructure && getSortedItems(currentFileStructure, currentFolder?.sort || "none").map((item, index) => {
                       if(item.isDir) {
                         return (
                           <ListViewFolder 
-                            onFolderDelete={() => deleteAnything(item.id)}
-                            isSelected={selectedItem === index}
-                            onSelect={() => setSelectedItem(index)}
+                            onFolderDelete={() => moveToTrash(item.id)}
+                            isSelected={selectedItem === item.id}
+                            onSelect={() => setSelectedItem(item.id)}
                             openFolder={() => openFolder(item.id)} 
                             folderName={item.name} 
                             key={index}
@@ -289,10 +335,23 @@ const Finder = (props) => {
                             item={item}
                             onCopyItem={() => copyItem(item.id)}
                             onCutItem={() => cutItem(item.id)}
-                            onFolderDuplicate={() => duplicateFolder(item.id)}
+                            onFolderDuplicate={() => duplicateItem(item.id)}
                           />
                         )
                       }
+                      return (
+                        <ListFile
+                          item={item}
+                          key={index}
+                          index={index}
+                          isSelected={selectedItem === item.id}
+                          onSelect={() => setSelectedItem(item.id)}
+                          deleteItem={() => moveToTrash(item.id)}
+                          copyItem={() => copyItem(item.id)}
+                          cutItem={() => cutItem(item.id)}
+                          duplicateItem={() => duplicateItem(item.id)}
+                        />
+                      )
                     })}
                   </div>
                 )}
@@ -300,7 +359,6 @@ const Finder = (props) => {
             </ContextMenuTrigger>
             <FinderContextMenu
                 onCreateFolder={() => newFolder()}
-                onDuplicateFolder={duplicateFolder}
                 onPasteItem={pasteAnything}
                 canPaste={!!clipboard}
                 sort={currentFolder?.sort || "none"}

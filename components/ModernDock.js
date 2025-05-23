@@ -4,12 +4,17 @@ import { Separator } from './ui/separator';
 import DockAppIcon from './DockAppIcon';
 import useSettingsStore from '@/stores/settings-store';
 import useDockStore from '@/stores/dock-store';
+import useFinderStore from '@/stores/finder-store';
   
 export function ModernDock({ isVisible, toggleLaunchpad, setWindows, openWindow, windows }) {
 
   const minimizedWindows = windows.filter((window) => window.isMinimized);
 
   const { autoDock, openedAppsDots, showOpenedApps, dockSize, dockMagnification } = useSettingsStore();
+
+  const { finderItems } = useFinderStore();
+
+  const isTrashEmpty = finderItems.filter((item) => item.parentId === "trash").length === 0;
 
   const { apps, addApp } = useDockStore();
 
@@ -53,7 +58,8 @@ export function ModernDock({ isVisible, toggleLaunchpad, setWindows, openWindow,
         ))}
         <Separator orientation='vertical' className='h-10 mb-1 bg-gray-200' />
         <DockAppIcon 
-          appName={'trash-full'}
+          onClick={() => openWindow('finder', { requiredItemId: 'trash', isTrash: true })}
+          appName={isTrashEmpty ? 'trash-empty' : 'trash-full'}
         />
       </Dock>
     </div>

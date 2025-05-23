@@ -13,7 +13,7 @@ const Folder = ({folderName, openFolder, onFolderDelete, onFolderDuplicate, onCo
         <ContextMenuTrigger onContextMenu={onSelect}>
           <div onDragStart={onDragStart} draggable onClick={onSelect} onDoubleClick={openFolder} className={`flex flex-col items-center gap-1 draggable-element`}>
               <img draggable={false} src={item.isSpecial ? `./folders/${item.name.toLowerCase()}-folder.png` : 'folder.png'} className={`w-18 h-16 ${isSelected ? "bg-[#3b373a] rounded-md px-2" : null}`}/>
-              <p className={`${isSelected ? "bg-[#0059d0] rounded-sm w-fit px-1" : null} text-white text-[12px] font-medium text-clip w-20 text-center`}>{folderName}</p>
+              <p className={`${isSelected ? "bg-[#0059d0] rounded-sm w-fit" : null} px-1 text-white text-[12px] font-medium text-clip w-20 text-center`}>{folderName}</p>
           </div>
         </ContextMenuTrigger>
         <FolderContextMenu isSpecial={item.isSpecial} onCutItem={onCutItem} onCopyItem={onCopyItem} onFolderOpen={openFolder} onFolderDelete={onFolderDelete} onFolderDuplicate={onFolderDuplicate}/>

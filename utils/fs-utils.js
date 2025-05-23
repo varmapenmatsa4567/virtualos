@@ -1,18 +1,29 @@
 import { getId } from "./utils";
 
 export const getDefaultFinderItems = () => {
-  const rootId = getId();
+  const rootId = 'macos';
   return [
+    {id: 'trash', name: 'Trash', isDir: true, parentId: null, dateCreated: new Date(), dateModified: new Date()},
     {id: rootId, name: 'Macintosh HD', isDir: true, parentId: null, dateCreated: new Date(), dateModified: new Date()},
-    {id: getId(), name: 'Applications', isDir: true, parentId: rootId, dateCreated: new Date(), dateModified: new Date(), isSpecial: true},
-    {id: getId(), name: 'Desktop', isDir: true, parentId: rootId, dateCreated: new Date(), dateModified: new Date(), isSpecial: true},
-    {id: getId(), name: 'Documents', isDir: true, parentId: rootId, dateCreated: new Date(), dateModified: new Date(), isSpecial: true},
-    {id: getId(), name: 'Downloads', isDir: true, parentId: rootId, dateCreated: new Date(), dateModified: new Date(), isSpecial: true},
-    {id: getId(), name: 'Movies', isDir: true, parentId: rootId, dateCreated: new Date(), dateModified: new Date(), isSpecial: true},
-    {id: getId(), name: 'Music', isDir: true, parentId: rootId, dateCreated: new Date(), dateModified: new Date(), isSpecial: true},
-    {id: getId(), name: 'Pictures', isDir: true, parentId: rootId, dateCreated: new Date(), dateModified: new Date(), isSpecial: true},
+    {id: "applications", name: 'Applications', isDir: true, parentId: rootId, dateCreated: new Date(), dateModified: new Date(), isSpecial: true},
+    {id: "desktop", name: 'Desktop', isDir: true, parentId: rootId, dateCreated: new Date(), dateModified: new Date(), isSpecial: true},
+    {id: "documents", name: 'Documents', isDir: true, parentId: rootId, dateCreated: new Date(), dateModified: new Date(), isSpecial: true},
+    {id: "downloads", name: 'Downloads', isDir: true, parentId: rootId, dateCreated: new Date(), dateModified: new Date(), isSpecial: true},
+    {id: "movies", name: 'Movies', isDir: true, parentId: rootId, dateCreated: new Date(), dateModified: new Date(), isSpecial: true},
+    {id: "music", name: 'Music', isDir: true, parentId: rootId, dateCreated: new Date(), dateModified: new Date(), isSpecial: true},
+    {id: "pictures", name: 'Pictures', isDir: true, parentId: rootId, dateCreated: new Date(), dateModified: new Date(), isSpecial: true},
   ]
 }
+
+export const favourites = [
+  "applications",
+  "desktop",
+  "documents",
+  "downloads",
+  "movies",
+  "music",
+  "pictures",
+]
 
 export const getUniqueName = (name, finderItems, currentFinderItem) => {
     let counter = 1;
@@ -56,6 +67,21 @@ export const deleteItem = (itemId, finderItems, setFinderItems) => {
     const updatedFinderItems = finderItems.filter(item => !itemsToDelete.includes(item.id));;
     setFinderItems(updatedFinderItems);
 };
+
+export const moveItemToTrash = (itemId, finderItems, setFinderItems) => {
+    const updatedFinderItems = finderItems.map(item => {
+        if (item.id === itemId) {
+            return {
+                ...item,
+                deletedId: item.parentId,
+                parentId: 'trash',
+            };
+        }
+        return item;
+    })
+    // const updatedFinderItems = finderItems.filter(item => !itemsToDelete.includes(item.id));
+    setFinderItems(updatedFinderItems);
+}
 
 /**
  * Helper function to check if a target directory is an ancestor of a potential ancestor.

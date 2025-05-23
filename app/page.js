@@ -265,6 +265,7 @@ export default function Home() {
               if(item.isDir) {
                 return (
                   <Folder
+                    openFolder={() => openWindow("finder", { requiredItemId: item.id })}
                     folderName={item.name} 
                     key={index}
                     item={item}
