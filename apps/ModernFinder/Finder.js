@@ -14,6 +14,7 @@ import { ContextMenu, ContextMenuTrigger } from "@/components/ui/context-menu";
 import ListViewFolder from "./ListViewFolder";
 import { LuChevronsUpDown } from "react-icons/lu";
 import { FaAngleDown } from "react-icons/fa6";
+import { getId } from "@/utils/utils";
 
 const Finder = (props) => {
 
@@ -139,6 +140,43 @@ const Finder = (props) => {
     }
   };
 
+  const handleFileUpload = (event) => {
+      const file = event.target.files[0];
+      if (!file) return;
+    
+      // Read the file as a blob
+      const reader = new FileReader();
+      var content= "";
+      reader.onload = (e) => {
+        const blob = new Blob([e.target.result], { type: file.type });
+  
+        const reader = new FileReader();
+        reader.onload = () => {
+          content = reader.result; // Set the file content as a string
+          const newFile = {
+            id: getId(),
+            name: file.name,
+            isDir: false,
+            content: content,
+            parentId: currentFinderItem,
+            dateCreated: new Date(),
+            dateModified: new Date(),
+          };
+      
+          // Update the file structure
+          setFinderItems([...finderItems, newFile]);
+          console.log(newFile);
+
+        };
+        reader.readAsText(blob);
+        console.log(blob);
+        // Create a new file object
+        
+      };
+    
+      reader.readAsArrayBuffer(file);
+    };
+
   return (
     <Window  isTransparent={true} {...props} 
       toolbar={
@@ -199,6 +237,12 @@ const Finder = (props) => {
         </div>
         <div className="h-full w-[1.5px] bg-black"></div>
         <div className="flex-1 bg-[#312c30]">
+          <input
+              type="file"
+              id="file-upload"
+              className='hidden'
+              onChange={handleFileUpload}
+          />
           <ContextMenu>
             <ContextMenuTrigger>
               <div className='h-full w-full'>
@@ -263,6 +307,7 @@ const Finder = (props) => {
                 setSort={setSort}
                 view={currentFolder?.view || "icons"}
                 setView={setView}
+                onAddFile={() => document.getElementById('file-upload').click()}
             />
         </ContextMenu>
         </div>
