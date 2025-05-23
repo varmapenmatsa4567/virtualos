@@ -4,12 +4,13 @@ export const getDefaultFinderItems = () => {
   const rootId = getId();
   return [
     {id: rootId, name: 'Macintosh HD', isDir: true, parentId: null, dateCreated: new Date(), dateModified: new Date()},
-    {id: getId(), name: 'Applications', isDir: true, parentId: rootId, dateCreated: new Date(), dateModified: new Date()},
-    {id: getId(), name: 'Desktop', isDir: true, parentId: rootId, dateCreated: new Date(), dateModified: new Date()},
-    {id: getId(), name: 'Documents', isDir: true, parentId: rootId, dateCreated: new Date(), dateModified: new Date()},
-    {id: getId(), name: 'Downloads', isDir: true, parentId: rootId, dateCreated: new Date(), dateModified: new Date()},
-    {id: getId(), name: 'Movies', isDir: true, parentId: rootId, dateCreated: new Date(), dateModified: new Date()},
-    {id: getId(), name: 'Music', isDir: true, parentId: rootId, dateCreated: new Date(), dateModified: new Date()},
+    {id: getId(), name: 'Applications', isDir: true, parentId: rootId, dateCreated: new Date(), dateModified: new Date(), isSpecial: true},
+    {id: getId(), name: 'Desktop', isDir: true, parentId: rootId, dateCreated: new Date(), dateModified: new Date(), isSpecial: true},
+    {id: getId(), name: 'Documents', isDir: true, parentId: rootId, dateCreated: new Date(), dateModified: new Date(), isSpecial: true},
+    {id: getId(), name: 'Downloads', isDir: true, parentId: rootId, dateCreated: new Date(), dateModified: new Date(), isSpecial: true},
+    {id: getId(), name: 'Movies', isDir: true, parentId: rootId, dateCreated: new Date(), dateModified: new Date(), isSpecial: true},
+    {id: getId(), name: 'Music', isDir: true, parentId: rootId, dateCreated: new Date(), dateModified: new Date(), isSpecial: true},
+    {id: getId(), name: 'Pictures', isDir: true, parentId: rootId, dateCreated: new Date(), dateModified: new Date(), isSpecial: true},
   ]
 }
 

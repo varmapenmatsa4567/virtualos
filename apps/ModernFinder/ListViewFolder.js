@@ -10,7 +10,7 @@ const ListViewFolder = ({folderName, openFolder, onFolderDelete, onFolderDuplica
         <ContextMenuTrigger onContextMenu={onSelect}>
           <div  onClick={onSelect} onDoubleClick={openFolder} className={`${isSelected ? "bg-[#0059d0]" : bgColor} rounded-md flex items-center px-2 p-0.5`}>
             <div className={`flex items-center gap-1 w-5/12 truncate`}>
-                <img src='folder.png' className={`w-4 h-4`}/>
+                <img src={item.isSpecial ? `./folders/${item.name.toLowerCase()}-folder.png` : 'folder.png'} className={`w-4 h-4`}/>
                 <p className={`text-white text-[12px] font-medium text-clip w-20 text-start`}>{folderName}</p>
             </div>
             <div className='w-3/12 text-[#c3c0c0] text-[12px] font-medium'>

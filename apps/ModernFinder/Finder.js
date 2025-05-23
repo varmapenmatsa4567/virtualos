@@ -24,6 +24,8 @@ const Finder = (props) => {
   const [selectedItem, setSelectedItem] = useState(null);
   const [clipboard, setClipboard] = useState(null);
   const [isCut, setIsCut] = useState(false);
+  const [isDraggingOver, setIsDraggingOver] = useState(false);
+
 
   if(favourites.length === 0) {
     const rootId = finderItems.filter(item => item.parentId === null)[0].id;
@@ -112,6 +114,31 @@ const Finder = (props) => {
     setFinderItems(updatedFinderItems);
   }
 
+  const handleDragOver = (e) => {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = 'copy';
+    setIsDraggingOver(true);
+  };
+
+  const handleDragLeave = (e) => {
+    setIsDraggingOver(false);
+  }
+
+  const handleDrop = (e) => {
+    e.preventDefault();
+    setIsDraggingOver(false);
+    
+    const itemData = e.dataTransfer.getData('item');
+    if (itemData) {
+      const item = JSON.parse(itemData);
+      const isItemPresent = favourites.some(favourite => favourite.id === item.id);
+      if(isItemPresent) {
+        return;
+      }
+      setFavourites([...favourites, item]);
+    }
+  };
+
   return (
     <Window  isTransparent={true} {...props} 
       toolbar={
@@ -153,7 +180,11 @@ const Finder = (props) => {
       }
     >
       <div className="flex w-full h-full">
-        <div className="w-48 bg-[#2e292d] text-white text-sm overflow-auto h-full bg-opacity-70 backdrop-filter backdrop-blur-2xl p-2 px-2 flex flex-col">
+        <div 
+          onDragOver={handleDragOver}
+          onDragLeave={handleDragLeave}
+          onDrop={handleDrop}
+          className="w-48 bg-[#2e292d] text-white text-sm overflow-auto h-full bg-opacity-70 backdrop-filter backdrop-blur-2xl p-2 px-2 flex flex-col">
           <p className="text-[#6d6c6c] text-[11px] m-1 font-semibold">Favourites</p>
           {favourites.map((item, index) => {
             return (
@@ -183,6 +214,7 @@ const Finder = (props) => {
                             openFolder={() => openFolder(item.id)} 
                             folderName={item.name} 
                             key={index}
+                            item={item}
                             onCopyItem={() => copyItem(item.id)}
                             onCutItem={() => cutItem(item.id)}
                             onFolderDuplicate={() => duplicateFolder(item.id)}

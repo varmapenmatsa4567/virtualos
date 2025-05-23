@@ -3,7 +3,7 @@ import { ContextMenuContent, ContextMenuItem, ContextMenuSeparator, ContextMenuS
 
 const FinderContextMenu = ({onCreateFolder, onPasteItem, canPaste, onAddFile, onCreateFile, sort, setSort, view, setView}) => {
   return (
-    <ContextMenuContent className="bg-[#2f292e] text-white">
+    <ContextMenuContent className="bg-[#2f292e] text-white w-[170px]">
         <ContextMenuItem onClick={onCreateFolder}>New Folder</ContextMenuItem>
         <ContextMenuItem onClick={onCreateFile}>New File</ContextMenuItem>
         {canPaste && <ContextMenuItem onClick={onPasteItem}>Paste Item</ContextMenuItem>}
