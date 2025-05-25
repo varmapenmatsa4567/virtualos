@@ -1,13 +1,15 @@
 
 import Window from "@/components/Window";
 
-const Safari = ({fileStructure, setFileStructure, ...props}) => {
+const Safari = ({...props}) => {
 
 
   return (
     <Window {...props} 
     >
-      <iframe src="https://web.whatsapp.com/" title="Browser" referrerPolicy="no-referrer" sandbox="allow-downloads allow-forms allow-modals allow-pointer-lock allow-popups allow-presentation allow-same-origin allow-scripts" style={{"pointerEvents": "initial"}}></iframe>
+      <div className="w-full h-full flex items-center justify-center">
+        <p className="text-white text-2xl">Currently Unavailable</p>
+      </div>
     </Window>
   )
 }

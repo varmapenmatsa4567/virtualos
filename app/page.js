@@ -16,6 +16,8 @@ import Splotlight from "@/apps/Spotlight/Splotlight";
 import { useOutsideClick } from "@/hooks/useOutsideClick";
 import useFinderStore from "@/stores/finder-store";
 import Folder from "@/apps/ModernFinder/Folder";
+import { ContextMenu, ContextMenuTrigger } from "@/components/ui/context-menu";
+import DesktopContextMenu from "@/components/context-menu/DesktopContextMenu";
 
 
 export default function Home() {
@@ -259,40 +261,45 @@ export default function Home() {
     <div className={`relative ${isFullScreenshot && "group"}`}>
       <div id='screen' className="w-screen h-screen flex flex-col items-center">
         {!isLaunchpadOpen && <TopBar openWindow={openWindow} activeWindow={windows.filter((window) => window.id == activeWindow)}/>}
-        <div className={`main flex-1 w-screen bg-${wallpaper} bg-cover`}>
-          <div className='w-full h-full p-3 px-6 flex gap-x-4 gap-y-2 flex-wrap'>
-            {desktopItems && desktopItems.map((item, index) => {
-              if(item.isDir) {
-                return (
-                  <Folder
-                    openFolder={() => openWindow("finder", { requiredItemId: item.id })}
-                    folderName={item.name} 
-                    key={index}
-                    item={item}
-                  />
-                )
-              }
-            })}
-          </div>
-          {windows.map((window) => (
-            <AppManager
-              db={db}
-              openedFile={openedFile}
-              fileStructure={fileStructure}
-              setFileStructure={setFileStructure}
-              handleFileClick={handleFileClick}
-              appName={window.appName}
-              key={window.id}
-              extraProps={window.extraProps}
-              onClick={() => setActiveWindow(window.id)}
-              isActive={activeWindow === window.id}
-              isMinimized={window.isMinimized}
-              isMaximized={window.isMaximized}
-              onClose={() => closeWindow(window.id)}
-              toggleMinimize={() => setWindows(windows.map((w) => w.id === window.id ? { ...w, isMinimized: !w.isMinimized } : w))}
-              toggleMaximize={() => setWindows(windows.map((w) => w.id === window.id ? { ...w, isMaximized: !w.isMaximized } : w))}
-            />
-          ))}
+            <div className={`main flex-1 w-screen bg-${wallpaper} bg-cover`}>
+        <ContextMenu>
+          <ContextMenuTrigger>
+              <div className='w-full h-full p-3 px-6 flex gap-x-4 gap-y-2 flex-wrap'>
+                {desktopItems && desktopItems.map((item, index) => {
+                  if(item.isDir) {
+                    return (
+                      <Folder
+                        openFolder={() => openWindow("finder", { requiredItemId: item.id })}
+                        folderName={item.name} 
+                        key={index}
+                        item={item}
+                      />
+                    )
+                  }
+                })}
+              </div>
+              {windows.map((window) => (
+                <AppManager
+                  db={db}
+                  openedFile={openedFile}
+                  fileStructure={fileStructure}
+                  setFileStructure={setFileStructure}
+                  handleFileClick={handleFileClick}
+                  appName={window.appName}
+                  key={window.id}
+                  extraProps={window.extraProps}
+                  onClick={() => setActiveWindow(window.id)}
+                  isActive={activeWindow === window.id}
+                  isMinimized={window.isMinimized}
+                  isMaximized={window.isMaximized}
+                  onClose={() => closeWindow(window.id)}
+                  toggleMinimize={() => setWindows(windows.map((w) => w.id === window.id ? { ...w, isMinimized: !w.isMinimized } : w))}
+                  toggleMaximize={() => setWindows(windows.map((w) => w.id === window.id ? { ...w, isMaximized: !w.isMaximized } : w))}
+                />
+              ))}
+          </ContextMenuTrigger>
+          <DesktopContextMenu/>
+        </ContextMenu>
         </div>
         <ModernDock isVisible={isLaunchpadOpen} toggleLaunchpad={toggleLaunchpad} setWindows={setWindows} openWindow={openWindow} windows={windows}  />
         {/* <SiriChat /> */}

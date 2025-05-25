@@ -1,7 +1,7 @@
 
 import Window from "@/components/Window";
 
-const Terminal = ({...props}) => {
+const News = ({...props}) => {
 
 
   return (
@@ -14,4 +14,4 @@ const Terminal = ({...props}) => {
   )
 }
 
-export default Terminal
+export default News;

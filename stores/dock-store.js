@@ -1,3 +1,4 @@
+import { add } from 'mathjs';
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
@@ -14,14 +15,14 @@ const useDockStore = create(
             { appName: 'photos'},
             { appName: 'safari'},
             { appName: 'settings'},
-            // { appName: 'vscode'},
-            // { appName: 'compiler'},
             { appName: 'calendar'},
-            // { appName: 'sudoko'},
-            // { appName: 'vlcplayer'},
           ],
+        folders: ['downloads'],
         
         addApp: (appName) => set((state) => ({ apps: [...state.apps, { appName }] })),
+        addFolder: (folderId) => set((state) => ({
+          folders: [...state.folders,  folderId ]
+        })),
 
         removeApp: (appName) => set((state) => ({
           apps: state.apps.filter(app => app.appName !== appName)

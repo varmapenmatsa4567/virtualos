@@ -16,10 +16,12 @@ import { FaAngleDown } from "react-icons/fa6";
 import { getId } from "@/utils/utils";
 import File from "./File";
 import ListFile from "./ListFile";
+import useDockStore from "@/stores/dock-store";
 
 const Finder = ({extraProps, ...props}) => {
 
   const {favourites, setFavourites, finderItems, setFinderItems} = useFinderStore();
+  const { folders, addFolder } = useDockStore();
   const [historyIndex, setHistoryIndex] = useState(0);
   const [currentFinderItem, setCurrentFinderItem] = useState(null);
   const [history, setHistory] = useState([finderItems.filter(item => item.parentId === null)[0].id]);
@@ -161,6 +163,12 @@ const Finder = ({extraProps, ...props}) => {
     setSelectedItem(item.id);
   }
 
+  const addToDock = (item) => {
+    const isItemAlreadyInDock = folders.some(folder => folder === item.id);
+    if (isItemAlreadyInDock) return;
+    addFolder(item.id);
+  }
+
   const handleFileUpload = (event) => {
       const file = event.target.files[0];
       if (!file) return;
@@ -265,6 +273,7 @@ const Finder = ({extraProps, ...props}) => {
                 name={item.name} 
                 isSelected={item.id === currentFinderItem} 
                 onClick={() => openFolder(item.id)} 
+                addToDock={() => addToDock(item)}
               />
             )
           })}

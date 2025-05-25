@@ -4,6 +4,10 @@ import { DockItem, DockLabel, DockIcon } from './ui/dock'
 const DockAppIcon = ({onClick, appName, isAppOpen}) => {
   let appLabel = appName;
   if(appName.startsWith("trash")) appLabel = "trash";
+  if(appName.startsWith("folder")) {
+    appLabel = appName.substring(7);
+    appName = "folder";
+  }
   return (
     <DockItem
         className='aspect-square'

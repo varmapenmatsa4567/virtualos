@@ -1,7 +1,7 @@
 import React from 'react';
 import { ContextMenuContent, ContextMenuItem, ContextMenuSeparator, ContextMenuSub, ContextMenuSubContent, ContextMenuSubTrigger, ContextMenuCheckboxItem } from '@/components/ui/context-menu';
 
-const FinderSidebarItemContextMenu = ({removeItem, showInFolder, openItem}) => {
+const FinderSidebarItemContextMenu = ({removeItem, showInFolder, openItem, addToDock}) => {
   return (
     <ContextMenuContent className="bg-[#2f292e] text-white w-[200px]">
         <ContextMenuItem onClick={openItem}>Open</ContextMenuItem>
@@ -10,7 +10,7 @@ const FinderSidebarItemContextMenu = ({removeItem, showInFolder, openItem}) => {
         <ContextMenuItem onClick={removeItem}>Remove from Sidebar</ContextMenuItem>        
         <ContextMenuSeparator />
         <ContextMenuItem>Get Info</ContextMenuItem>
-        <ContextMenuItem>Add to Dock</ContextMenuItem>
+        <ContextMenuItem onClick={addToDock}>Add to Dock</ContextMenuItem>
     </ContextMenuContent>
   )
 }

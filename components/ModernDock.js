@@ -16,7 +16,7 @@ export function ModernDock({ isVisible, toggleLaunchpad, setWindows, openWindow,
 
   const isTrashEmpty = finderItems.filter((item) => item.parentId === "trash").length === 0;
 
-  const { apps, addApp } = useDockStore();
+  const { apps, addApp, folders } = useDockStore();
 
   const isAppOpen = (appName) => {
     return windows.some((window) => window.appName === appName);
@@ -57,6 +57,15 @@ export function ModernDock({ isVisible, toggleLaunchpad, setWindows, openWindow,
             />
         ))}
         <Separator orientation='vertical' className='h-10 mb-1 bg-gray-200' />
+        {folders.map((folder, idx) => {
+          console.log(folder);
+          const folderName = finderItems.find((item) => item.id === folder)?.name || 'Unknown Folder';
+          return <DockAppIcon 
+            onClick={() => openWindow('finder', { requiredItemId: folder })}
+            appName={`folder-${folderName}`}
+            key={idx}
+          />
+      })}
         <DockAppIcon 
           onClick={() => openWindow('finder', { requiredItemId: 'trash', isTrash: true })}
           appName={isTrashEmpty ? 'trash-empty' : 'trash-full'}

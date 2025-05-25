@@ -3,7 +3,7 @@ import { ContextMenu, ContextMenuTrigger } from '@/components/ui/context-menu'
 import React from 'react'
 import { IoFolderOutline } from 'react-icons/io5'
 
-const SidebarItem = ({name, isSelected, onClick, removeItem, showInFolder}) => {
+const SidebarItem = ({name, isSelected, onClick, removeItem, showInFolder, addToDock}) => {
 
   return (
     <ContextMenu>
@@ -13,7 +13,7 @@ const SidebarItem = ({name, isSelected, onClick, removeItem, showInFolder}) => {
             <p>{name}</p>
         </div>
       </ContextMenuTrigger>
-      <FinderSidebarItemContextMenu openItem={onClick} removeItem={removeItem} showInFolder={showInFolder}/>
+      <FinderSidebarItemContextMenu addToDock={addToDock} openItem={onClick} removeItem={removeItem} showInFolder={showInFolder}/>
     </ContextMenu>
   )
 }
