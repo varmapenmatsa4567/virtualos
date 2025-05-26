@@ -9,7 +9,7 @@ import useWindowsStore from '@/stores/windows-store';
 import { useEffect, useState } from 'react';
 import { stopPropagation } from '@/utils/utils';
 
-const Window = ({db, isSmall, appName, onClick, isCustomized, isTransparent, isFixed, customSize, isActive, isMinimized, isMaximized, onClose, toggleMinimize, toggleMaximize, toolbar, children }) => {
+const Window = ({db, isSmall, appName, onClick, isCustomized, isTransparent, isFixed, customSize, isActive, isMinimized, isMaximized, onClose, toggleMinimize, toggleMaximize, toolbar, toolbarColor, children }) => {
   
   const height = window.innerHeight - 28;
 
@@ -119,7 +119,7 @@ const Window = ({db, isSmall, appName, onClick, isCustomized, isTransparent, isF
       }}
     >
       <div id={appName} onClick={onClick} className={`${!isTransparent && "bg-[#242227]"} ${isSmall && "scale-[0.1]"} overflow-hidden flex flex-col shadow-2xl cursor-default h-full rounded-lg border-[0.5px] border-[#7f7e7f]`}>
-        <div onDoubleClick={titleBarAction == "maximize" ? toggleMaximize : titleBarAction == "minimize" ? toggleMinimize : null} className="bg-[#3c3639] rounded-t-lg w-full h-10 flex items-center toolbar">
+        <div onDoubleClick={titleBarAction == "maximize" ? toggleMaximize : titleBarAction == "minimize" ? toggleMinimize : null} className={`${toolbarColor != null ? toolbarColor : "bg-[#3c3639]"} rounded-t-lg w-full h-10 flex items-center toolbar border-b border-black`}>
           <WnManager
             onClose={onClose}
             toggleMinimize={toggleMinimize}
