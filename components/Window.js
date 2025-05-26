@@ -130,7 +130,7 @@ const Window = ({db, isSmall, appName, onClick, isCustomized, isTransparent, isF
             {toolbar}
           </div>
         </div>
-        <div className='h-[calc(100%-40px)] w-full'>
+        <div onContextMenu={stopPropagation} className='h-[calc(100%-40px)] w-full'>
           {children}
         </div>
       </div>

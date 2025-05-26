@@ -55,6 +55,10 @@ export const appMenus = {
   "vscode": ["File", "Edit", "Selection", "View", "Go", "Run", "Terminal", "Window", "Help"],
   "sudoko": ["File", "Edit", "Format", "View", "Window", "Help"],
   "vlcplayer": ["File", "Playback", "Audio", "Video", "Subtitle", "Tools", "View", "Help"],
+  "dictionary": ["File", "Edit", "Go", "Search", "Window", "Help"],
+  "settings": ["Edit", "View", "Window", "Help"],
+  "shortcuts": ["File", "Edit", "View", "Shortcut", "Window", "Help"],
+  "tips": ["File", "Edit", "View", "Window", "Help"],
 }
 
 export const apps = [

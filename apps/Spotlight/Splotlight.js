@@ -8,6 +8,8 @@ import SettingsBox from './SettingsBox';
 import useSettingsStore from '@/stores/settings-store';
 import RelatedSearch from './RelatedSearch';
 import CalculationBox from './CalculationBox';
+import useShortcutsStore from '@/stores/shortcuts-store';
+import ShortcutsBox from './ShortcutsBox';
 
 const Splotlight = ({openWindow, ref}) => {
 
@@ -15,6 +17,7 @@ const Splotlight = ({openWindow, ref}) => {
 
     const { setSplotlightVisible } = useGlobalStore();
     const { spotlightOptions } = useSettingsStore();
+    const { shortcuts } = useShortcutsStore();
 
     const closeSpotlight = () => {
         setSplotlightVisible(false);
@@ -40,7 +43,8 @@ const Splotlight = ({openWindow, ref}) => {
             {searchText.length > 0 && <div className='w-full h-96 overflow-auto'>
                 {spotlightOptions["Calculator"] && <CalculationBox searchText={searchText}/>}
                 {spotlightOptions["Applications"] && <AppsBox closeSpotlight={closeSpotlight} openWindow={openWindow} apps={apps.filter((app) => app.toLowerCase().startsWith(searchText.toLowerCase()))}/>}
-                {spotlightOptions["System Settings"] &&<SettingsBox closeSpotlight={closeSpotlight} openWindow={openWindow} searchText={searchText}/>}
+                {spotlightOptions["Shortcuts"] && <ShortcutsBox closeSpotlight={closeSpotlight} shortcuts={shortcuts.filter((shortcut) => shortcut.name.toLowerCase().startsWith(searchText.toLowerCase()))}/>}
+                {spotlightOptions["System Settings"] && <SettingsBox closeSpotlight={closeSpotlight} openWindow={openWindow} searchText={searchText}/>}
                 <RelatedSearch closeSpotlight={closeSpotlight} searchText={searchText}/>
             </div>}
         </div>

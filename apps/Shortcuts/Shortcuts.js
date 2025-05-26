@@ -7,20 +7,24 @@ import { useState } from "react";
 import { addWifi, getDefaultAction, shortActions } from "./ShortcutUtils";
 import { RxCross2 } from "react-icons/rx";
 import WifiShortcut from "./ui/WifiShortcut";
-import { FaSave } from "react-icons/fa";
+import { FaPlay, FaSave } from "react-icons/fa";
 import BluetoothShortcut from "./ui/BluetoothShortcut";
 import ShutdownShortcut from "./ui/ShutdownShortcut";
 import OpenAppShortcut from "./ui/OpenAppShortcut";
 import CloseAppShortcut from "./ui/CloseAppShortcut";
+import useShortcutsStore from "@/stores/shortcuts-store";
 
 const Shortcuts = ({fileStructure, setFileStructure, ...props}) => {
 
     const [isOpen, setIsOpen] = useState(false);
+    const {shortcuts, addShortcut, setShortcuts} = useShortcutsStore();
 
     const [shortcutItems, setShortcutItems] = useState([]);
     const [isDraggingOver, setIsDraggingOver] = useState(false);
+    const [shortcutName, setShortcutName] = useState("");
+    const [openedShortcut, setOpenedShortcut] = useState(null);
 
-    const handleDragStart = (e, action) => {
+  const handleDragStart = (e, action) => {
     e.dataTransfer.setData('action', JSON.stringify(action));
   };
 
@@ -64,14 +68,20 @@ const Shortcuts = ({fileStructure, setFileStructure, ...props}) => {
         "clock": "clock.png"
     }
 
-    const openShortcut = () => {
+    const openShortcut = (index) => {
+        const shortcut = shortcuts[index];
+        setShortcutName(shortcut.name);
+        setShortcutItems(shortcut.items);
         setIsOpen(true);
+        setOpenedShortcut(index);
     }
 
     const closeShortcut = () => {
         console.log("close shortcut");
         setShortcutItems([]);
+        setShortcutName("");
         setIsOpen(false);
+        setOpenedShortcut(null);
     }
 
     const createShortcut = () => {
@@ -81,20 +91,49 @@ const Shortcuts = ({fileStructure, setFileStructure, ...props}) => {
     const saveShortcut = () => {
         console.log("save shortcut");
         console.log(shortcutItems);
+        if(shortcutItems.length > 0 && shortcutName.trim() !== "") {
+            if(openedShortcut !== null) {
+                const updatedShortcuts = [...shortcuts];
+                updatedShortcuts[openedShortcut] = {
+                    name: shortcutName,
+                    items: shortcutItems,
+                    image: images[shortcutItems[0].category] || "default.png"
+                };
+                setShortcuts(updatedShortcuts);
+            }
+            else {
+                const newShortcut = {
+                    name: shortcutName,
+                    items: shortcutItems,
+                    image: images[shortcutItems[0].category] || "default.png"
+                };
+                addShortcut(newShortcut);
+            }
+            setShortcutItems([]);
+            setShortcutName("");
+            setIsOpen(false);
+        } else {
+            alert("Please add items and provide a name for the shortcut.");
+        }
     }
 
 
 
   return (
     <Window {...props} 
-        isFixed={true}
+        // isFixed={true}
         customSize={{width: 500, height: 500}}
         toolbar={
-            <div className="flex justify-between items-center px-5">
-                <button onClick={closeShortcut} disabled={!isOpen} className='p-0.5 hover:bg-[#242227] rounded-md'>
-                    <ChevronLeft className={`${!isOpen ? 'text-[#5d5b5d]' : 'text-white'}`} />
-                </button>
-                <div className="flex gap-2 items-center">
+            <div className="flex justify-between items-center pl-2 pr-4">
+                <div className="flex items-center gap-1">
+                    <button onClick={closeShortcut} disabled={!isOpen} className='p-0.5 hover:bg-[#242227] rounded-md'>
+                        <ChevronLeft className={`${!isOpen ? 'text-[#5d5b5d]' : 'text-white'}`} />
+                    </button>
+                    {isOpen && shortcutItems && shortcutItems.length > 0 && <img src={images[shortcutItems[0].category]} className="w-5 h-5" />}
+                    {isOpen && <input value={shortcutName} onChange={(e) => setShortcutName(e.target.value)} className="outline-none bg-transparent text-sm font-semibold text-white" type="text" placeholder="Title"/>}
+                </div>
+                <div className="flex gap-4 items-center">
+                    <FaPlay className="text-[#9f9d9d]"/>
                     <FaSave onClick={saveShortcut} className="text-[#9f9d9d]"/>
                     <FaPlus onClick={createShortcut} className="text-[#9f9d9d]"/>
                 </div>
@@ -128,7 +167,7 @@ const Shortcuts = ({fileStructure, setFileStructure, ...props}) => {
                     })}
                 </div>
                 
-                <div className="bg-[#323233] w-1/4 border-l border-[#000] p-2 text-white">
+                <div className="bg-[#323233] w-1/4 border-l border-[#000] p-2 text-white overflow-auto">
                     {shortActions.map((action) => (
                     <div 
                         onDoubleClick={() => addShortcutAction(action)}
@@ -145,7 +184,10 @@ const Shortcuts = ({fileStructure, setFileStructure, ...props}) => {
             </div>
         ) : (
             <div className="w-full p-4 h-fit flex gap-4 gap-y-4 flex-wrap">
-                <ShortcutItem openShortcut={openShortcut} color={1}/>
+                {shortcuts && shortcuts.map((shortcut, index) => (
+                    <ShortcutItem shortcut={shortcut} openShortcut={() => openShortcut(index)} key={index} color={(index+1)%16}/>
+                ))}
+                {/* <ShortcutItem openShortcut={openShortcut} color={1}/>
                 <ShortcutItem openShortcut={openShortcut} color={2}/>
                 <ShortcutItem openShortcut={openShortcut} color={3}/>
                 <ShortcutItem openShortcut={openShortcut} color={4}/>
@@ -154,7 +196,7 @@ const Shortcuts = ({fileStructure, setFileStructure, ...props}) => {
                 <ShortcutItem openShortcut={openShortcut} color={7}/>
                 <ShortcutItem openShortcut={openShortcut} color={8}/>
                 <ShortcutItem openShortcut={openShortcut} color={9}/>
-                <ShortcutItem openShortcut={openShortcut} color={10}/>
+                <ShortcutItem openShortcut={openShortcut} color={10}/> */}
             </div>
         )}
     </Window>

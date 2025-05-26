@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
-const useWindowsStore = create(
+const useShortcutsStore = create(
   persist(
     (set) => ({
         shortcuts: [], // Array to hold opened windows
@@ -20,4 +20,4 @@ const useWindowsStore = create(
   )
 );
 
-export default useWindowsStore;
+export default useShortcutsStore;

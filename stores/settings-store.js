@@ -40,6 +40,7 @@ const useSettingsStore = create(
         "Music": true,
         "Siri Suggestions": true,
         "System Settings": true,
+        "Shortcuts": true,
         "Websites": true
       },
 
