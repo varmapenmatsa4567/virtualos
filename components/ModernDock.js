@@ -58,7 +58,6 @@ export function ModernDock({ isVisible, toggleLaunchpad, setWindows, openWindow,
         ))}
         <Separator orientation='vertical' className='h-10 mb-1 bg-gray-200' />
         {folders.map((folder, idx) => {
-          console.log(folder);
           const folderName = finderItems.find((item) => item.id === folder)?.name || 'Unknown Folder';
           return <DockAppIcon 
             onClick={() => openWindow('finder', { requiredItemId: folder })}

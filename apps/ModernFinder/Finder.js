@@ -85,7 +85,6 @@ const Finder = ({extraProps, ...props}) => {
   const copyItem = (id) => {
     const item = finderItems.find(item => item.id === id);
     setClipboard(item);
-    console.log("Clipboard", item);
     setIsCut(false);
   }
 
@@ -206,7 +205,6 @@ const Finder = ({extraProps, ...props}) => {
             cutItem(selectedItem);
           }
           if (e.key == 'Backspace' && selectedItem) {
-            console.log("Deleting", selectedItem);
             moveToTrash(selectedItem);
           }
         }

@@ -17,7 +17,6 @@ const Vscode = ({fileStructure, setFileStructure, ...props}) => {
     if(openedFile === null) return;
     // console.log("hello");
     const updateStructure = (items) => {
-      console.log(items);
       return items.map(item => {
         if (item.id === openedFile.id) {
           return { ...item, content: content };

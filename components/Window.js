@@ -7,6 +7,7 @@ import html2canvas from 'html2canvas';
 import useGlobalStore from '@/stores/global-store';
 import useWindowsStore from '@/stores/windows-store';
 import { useEffect, useState } from 'react';
+import { stopPropagation } from '@/utils/utils';
 
 const Window = ({db, isSmall, appName, onClick, isCustomized, isTransparent, isFixed, customSize, isActive, isMinimized, isMaximized, onClose, toggleMinimize, toggleMaximize, toolbar, children }) => {
   

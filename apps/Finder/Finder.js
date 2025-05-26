@@ -105,9 +105,7 @@ const Finder = ({fileStructure, setFileStructure, ...props}) => {
           setFileStructure(updatedStructure);
           setCurrentId(prev => prev + 1);
         };
-        reader.readAsText(blob);
-        console.log(blob);
-        // Create a new file object
+        reader.readAsText(blob);        // Create a new file object
         
       };
     

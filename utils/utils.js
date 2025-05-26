@@ -99,5 +99,9 @@ export const getId = () => {
     return uuidv4();
 }
 
+export const stopPropagation = (e) => {
+    e.stopPropagation();
+}
+
 
 

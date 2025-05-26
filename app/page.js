@@ -179,7 +179,6 @@ export default function Home() {
   useEffect(() => {
     const os = getOS();
     const handleKeyDown = (event) => {
-      console.log(event);
       // event.preventDefault();
       if( event.altKey && os === "Mac") {
         setIsTriggerKeyPressed(true); // Set Alt key as pressed
@@ -196,7 +195,6 @@ export default function Home() {
         closeWindow(activeWindow); // Close the active window
       }
       if( event.code === 'KeyQ' && event.altKey) {
-        console.log('Q');
         // event.preventDefault(); // Prevent default behavior
         closeAllWindows(activeWindow); // Close the active window
       }

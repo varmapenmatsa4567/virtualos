@@ -13,7 +13,6 @@ const Calculator = ({ fileStructure, setFileStructure, isMaximized, toggleMaximi
     if (value === "=") {
       try {
         const evalResult = parseFloat(eval(expression).toFixed(8));
-        console.log(evalResult);
         setResult(evalResult.toString());
         setDisplay(evalResult.toString());
         setExpression(expression);

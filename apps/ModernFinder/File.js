@@ -6,7 +6,6 @@ const File = ({item, onSelect, isSelected, deleteItem, copyItem, cutItem, duplic
   const filename = item.name;
   const fileExtension = filename.split('.').pop();
   const fileNameWithoutExtension = filename.slice(0, filename.lastIndexOf('.'));
-  console.log(item);
 
   return (
     <ContextMenu>
