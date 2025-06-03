@@ -7,8 +7,8 @@ const useDockStore = create(
     (set) => ({
         apps: [
             { appName: 'finder'},
-            { appName: 'clock'},
             { appName: 'launchpad'},
+            { appName: 'clock'},
             { appName: 'calculator'},
             { appName: 'notes'},
             { appName: 'photobooth'},

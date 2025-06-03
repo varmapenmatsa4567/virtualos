@@ -30,6 +30,8 @@ import Reminders from '@/apps/Reminders/Reminders'
 import Facetime from '@/apps/Facetime/Facetime'
 import Weather from '@/apps/Weather/Weather'
 import Dictionary from '@/apps/Dictionary/Dictionary'
+import Preview from '@/apps/Preview/Preview'
+import Stickies from '@/apps/Stickies/Stickies'
 
 const AppManager = (props) => {
 
@@ -119,6 +121,12 @@ const AppManager = (props) => {
     }
     else if(props.appName === 'dictionary') {
         return <Dictionary {...props}/>
+    }
+    else if(props.appName === 'preview') {
+        return <Preview {...props}/>
+    }
+    else if(props.appName === "stickies") {
+        return <Stickies {...props}/>
     }
 
   return null;

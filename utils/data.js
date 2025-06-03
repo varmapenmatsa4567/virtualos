@@ -61,6 +61,32 @@ export const appMenus = {
   "tips": ["File", "Edit", "View", "Window", "Help"],
 }
 
+export const appLabels = {
+  "vlcplayer": "VLC",
+  "appstore": "App Store",
+  "photobooth": "Photo Booth",
+  "voicememos": "Voice Memos",
+  "vscode": "Visual Studio Code",
+  "colormeter": "Digital Color Meter",
+  "calculator": "Calculator"
+}
+
+export const unavailableApps = [
+  "terminal",
+  "safari",
+  "preview",
+  "calendar",
+  "appstore",
+  "siri",
+  "voicememos",
+  "colormeter",
+  "news",
+  "music",
+  "reminders",
+  "weather",
+  "facetime"
+]
+
 export const apps = [
   "finder",
   "terminal",
@@ -71,12 +97,16 @@ export const apps = [
   "safari",
   "settings",
   "vscode",
+  "preview",
   "vlcplayer",
   "calendar",
   "sudoko",
   "compiler",
   "appstore",
   "siri",
+  "voicememos",
+  "colormeter",
+  "stickies",
   "photobooth",
   "2048",
   "chess",
