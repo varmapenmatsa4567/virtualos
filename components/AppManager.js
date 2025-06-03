@@ -1,6 +1,6 @@
 // import Finder from '@/apps/Finder/Finder'
 import Vscode from '@/apps/Vscode'
-import Terminal from '@/apps/Terminal'
+import Terminal from '@/apps/Terminal/Terminal'
 import React from 'react'
 import Safari from '@/apps/Safari'
 import Sudoko from '@/apps/Sudoko/Sudoko'

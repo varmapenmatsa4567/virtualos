@@ -8,6 +8,10 @@ body {
   font-family: 'Inter', Arial, Helvetica, sans-serif;
 }
 
+* {
+  user-select: none;
+}
+
 :root {
   filter: brightness(100%);
 }

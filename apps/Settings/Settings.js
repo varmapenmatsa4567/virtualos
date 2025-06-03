@@ -20,7 +20,7 @@ const Settings = ({fileStructure, setFileStructure, toggleMaximize, extraProps, 
   const {requiredSettings} = extraProps;
 
   useEffect(() => {
-    if(requiredSettings) {
+    if(requiredSettings != null) {
       setSelectedSettings(requiredSettings);
     }
   }, [])

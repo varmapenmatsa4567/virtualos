@@ -5,7 +5,7 @@ import { IoIosWifi } from 'react-icons/io'
 import { FaLock } from 'react-icons/fa';
 import useSettingsStore from '@/stores/settings-store'
 
-const WifiMenu = ({ref}) => {
+const WifiMenu = ({ref, openWindow, toggleWifiOpen}) => {
 
     const {wifi, toggleWifi, connectedWifi, setConnectedWifi} = useSettingsStore();
 
@@ -14,6 +14,11 @@ const WifiMenu = ({ref}) => {
         if(!wifi) {
             setConnectedWifi("");
         }
+    }
+
+    const openWifiSettings = () => {
+        toggleWifiOpen();
+        openWindow("settings", {requiredSettings: 0});
     }
 
   return (
@@ -41,7 +46,7 @@ const WifiMenu = ({ref}) => {
             <FaLock className='ml-auto text-gray-400' size={14}/>
         </div>}
         {wifi && <Separator className='bg-[#4d494c] mt-1 mb-2'/>}
-        <p className='text-[13px]'>Wifi Settings...</p>
+        <p onClick={openWifiSettings} className='text-[13px]'>Wifi Settings...</p>
     </div>
   )
 }

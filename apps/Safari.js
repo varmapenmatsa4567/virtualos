@@ -8,7 +8,7 @@ const Safari = ({...props}) => {
     <Window {...props} 
     >
       <div className="w-full h-full flex items-center justify-center">
-        <p className="text-white text-2xl">Currently Unavailable</p>
+        <iframe className="w-full h-full" src="https://chatgpt.com/"></iframe>
       </div>
     </Window>
   )

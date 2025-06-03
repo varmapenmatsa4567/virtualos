@@ -71,7 +71,7 @@ const TopBar = ({activeWindow, openWindow}) => {
       <div className='flex items-center gap-2'>
         <div ref={systemMenuRef} className={`${isSystemMenuOpen && 'bg-white'} relative p-1 px-2 rounded-md bg-opacity-20`}>
           <FaApple className='text-white text-lg' onClick={toggleSystemMenuOpen}/>
-          {isSystemMenuOpen && <SystemMenu openWindow={openWindow}/>}
+          {isSystemMenuOpen && <SystemMenu toggleSystemMenuOpen={toggleSystemMenuOpen} openWindow={openWindow}/>}
         </div>
         <p className='text-[13px] font-extrabold capitalize'>{activeWindow && activeWindow.length > 0 && activeWindow[0].appName}</p>
         {activeWindow && activeWindow.length > 0 && <div className='flex ml-3 gap-5'>
@@ -99,7 +99,7 @@ const TopBar = ({activeWindow, openWindow}) => {
           {bluetooth ? <Bluetooth size={17} className={`${connectedBluetooth != "" ? "text-white" : "text-white text-opacity-40"}`} onClick={toggleBluetoothOpen}/> : (
             <BluetoothOff size={17} className='text-white text-opacity-40' onClick={toggleBluetoothOpen}/>
           )}
-          {isBluetoothOpen && <BluetoothMenu/>}
+          {isBluetoothOpen && <BluetoothMenu toggleBluetoothOpen={toggleBluetoothOpen} openWindow={openWindow}/>}
         </div>}
         {batteryInMenuBar && <div className='flex items-center gap-1'>
           {showBatteryPercentage &&<p className='text-xs font-semibold'>100%</p>}
@@ -111,7 +111,7 @@ const TopBar = ({activeWindow, openWindow}) => {
           {wifi ? <MdOutlineWifi onClick={toggleWifiOpen} className={`${connectedWifi != "" ? "text-white" : "text-white text-opacity-40"} text-lg`}/> : (
             <MdOutlineWifiOff onClick={toggleWifiOpen} className='text-lg text-white text-opacity-40'/>
           )}
-          {isWifiOpen && <WifiMenu />}
+          {isWifiOpen && <WifiMenu toggleWifiOpen={toggleWifiOpen} openWindow={openWindow} />}
         </div>}
         <IoIosSwitch className="text-white" />
         {siriInMenuBar == "show" && <img src='/siri.png' alt='siri' className='w-5 h-5'/>}

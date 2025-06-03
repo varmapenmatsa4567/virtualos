@@ -5,7 +5,7 @@ import { PiHeadphonesFill } from "react-icons/pi";
 import { FaLock } from 'react-icons/fa'
 import useSettingsStore from '@/stores/settings-store';
 
-const BluetoothMenu = ({ref}) => {
+const BluetoothMenu = ({ref, openWindow, toggleBluetoothOpen}) => {
 
     const {bluetooth, toggleBluetooth, connectedBluetooth, setConnectedBluetooth} = useSettingsStore();
 
@@ -14,6 +14,11 @@ const BluetoothMenu = ({ref}) => {
         if(!bluetooth) {
             setConnectedBluetooth("");
         }
+    }
+
+    const openBluetoothSettings = () => {
+        toggleBluetoothOpen();
+        openWindow("settings", {requiredSettings: 1});
     }
 
 
@@ -33,7 +38,7 @@ const BluetoothMenu = ({ref}) => {
             <FaLock className='ml-auto text-gray-400' size={14}/>
         </div>}
         {bluetooth && <Separator className='bg-[#4d494c] mt-1 mb-2'/>}
-        <p className='text-[13px]'>Bluetooth Settings...</p>
+        <p onClick={openBluetoothSettings} className='text-[13px]'>Bluetooth Settings...</p>
     </div>
   )
 }

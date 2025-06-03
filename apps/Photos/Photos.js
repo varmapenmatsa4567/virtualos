@@ -62,25 +62,28 @@ const Photos = ({ fileStructure, setFileStructure, db, ...props }) => {
   useEffect(() => {
     switch (selectedPhotoAction) {
       case 0:
-        setDisplayPhotos(photos);
+        setDisplayPhotos(photos.filter((photo) => !photo.isDelete));
         break;
       case 1:
-        setDisplayPhotos(photos.filter((photo) => photo.isFavourite));
+        setDisplayPhotos(photos.filter((photo) => photo.isFavourite && !photo.isDelete));
         break;
       case 2:
-        setDisplayPhotos(photos.filter((photo) => photo.isUpload));
+        setDisplayPhotos(photos.filter((photo) => photo.isUpload && !photo.isDelete));
+        break;
+      case 3:
+        setDisplayPhotos(photos.filter((photo) => photo.isDelete));
         break;
       case 7:
-        setDisplayPhotos(photos.filter((photo) => photo.isVideo));
+        setDisplayPhotos(photos.filter((photo) => photo.isVideo && !photo.isDelete));
         break;
       case 8:
-        setDisplayPhotos(photos.filter((photo) => photo.isCamera));
+        setDisplayPhotos(photos.filter((photo) => photo.isCamera && !photo.isDelete));
         break;
       case 10:
-        setDisplayPhotos(photos.filter((photo) => photo.isScreenshot));
+        setDisplayPhotos(photos.filter((photo) => photo.isScreenshot && !photo.isDelete));
         break;
       default:
-        setDisplayPhotos(photos);
+        setDisplayPhotos(photos.filter((photo) => !photo.isDelete));
         break;
     }
   }, [selectedPhotoAction, photos])
@@ -139,40 +142,19 @@ const Photos = ({ fileStructure, setFileStructure, db, ...props }) => {
 
   const deleteSelectedPhotos = () => {
     if (!db || selectedItems.size === 0) return;
+  
+    const selectedPhotos = Array.from(selectedItems).map(index => photos[index]);
     
-    const transaction = db.transaction("photos", "readwrite");
-    const store = transaction.objectStore("photos");
-    
-    // Get the actual IDs of the selected items
-    const selectedIds = Array.from(selectedItems).map(index => photos[index].id);
-    
-    selectedIds.forEach(id => {
-      const request = store.delete(id);
-      request.onerror = (e) => console.error("Delete failed", e.target.error);
+    selectedPhotos.forEach(photo => {
+      photo.isDelete = true;
+      updatePhoto(photo.id, photo);
     });
-
-    transaction.oncomplete = () => {
-      console.log("All selected photos deleted");
-      setSelectedItems(new Set());
-      getPhotos(db);
-    };
   };
 
-  const deletePhoto = (id) => {  // Typically you'll want to use the record's ID, not index
+  const deletePhoto = (photo) => {  // Typically you'll want to use the record's ID, not index
     if (!db) return;
-    
-    const transaction = db.transaction("photos", "readwrite");
-    const store = transaction.objectStore("photos");
-    const request = store.delete(id);  // Delete by the record's key
-
-    request.onsuccess = () => {
-        console.log("Photo deleted successfully");
-        getPhotos(db);  // Refresh the photo list
-    };
-
-    request.onerror = (event) => {
-        console.error("Error deleting photo:", event.target.error);
-    };
+    photo.isDelete = true;
+    updatePhoto(photo.id, photo);
   };
 
 
@@ -500,11 +482,12 @@ const Photos = ({ fileStructure, setFileStructure, db, ...props }) => {
                       />
                     </ContextMenuTrigger>
                     <PhotoContextMenu 
+                      isDeleted={photo.isDelete}
                       onDeletePhoto={() => {
                         if (selectedItems.size > 0) {
                           deleteSelectedPhotos();
                         } else {
-                          deletePhoto(photo.id);
+                          deletePhoto(photo);
                         }
                       }}
                       onRotatePhoto={() => rotatePhoto(photo.id, photo)}

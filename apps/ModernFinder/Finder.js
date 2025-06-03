@@ -215,7 +215,10 @@ const Finder = ({extraProps, ...props}) => {
   }, [selectedItem, clipboard, currentFinderItem]);
 
   return (
-    <Window  isTransparent={true} {...props} 
+    <Window 
+      isCustomized={true}
+      customSize={{width: 600, height: 300}}
+    isTransparent={true} {...props} 
       toolbar={
         <div className="flex items-center gap-2 justify-between">
           <div className="flex items-center gap-2">
@@ -259,7 +262,7 @@ const Finder = ({extraProps, ...props}) => {
           onDragOver={handleDragOver}
           onDragLeave={handleDragLeave}
           onDrop={handleDrop}
-          className="w-48 bg-[#2e292d] text-white text-sm overflow-auto h-full bg-opacity-70 backdrop-filter backdrop-blur-2xl p-2 px-2 flex flex-col">
+          className="w-40 bg-[#2e292d] text-white text-sm overflow-auto h-full bg-opacity-70 backdrop-filter backdrop-blur-2xl p-2 px-2 flex flex-col">
           <p className="text-[#6d6c6c] text-[11px] m-1 font-semibold">Favourites</p>
           {favourites.map((fav, index) => {
             const item = finderItems.find(item => item.id === fav);

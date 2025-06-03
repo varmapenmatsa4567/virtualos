@@ -1,9 +1,9 @@
 import React, { useRef, useState } from 'react'
 import AppIcon from '@/components/AppIcon'
-import { TooltipProvider } from '@/components/ui/tooltip'
 import { Input } from '@/components/ui/input'
 import useSettingsStore from '@/stores/settings-store'
 import { apps as defaultApps } from '@/utils/data'
+import { filter } from 'mathjs'
 
 const Launchpad = ({ toggleLaunchpad, openWindow }) => {
   const input = useRef(null);
@@ -11,8 +11,10 @@ const Launchpad = ({ toggleLaunchpad, openWindow }) => {
   const [apps, setApps] = useState([...defaultApps]);
   const [draggedItem, setDraggedItem] = useState(null);
   const [draggedOverItem, setDraggedOverItem] = useState(null);
+  const [searchQuery, setSearchQuery] = useState('');
 
   const handleInputClick = (e) => {
+    e.stopPropagation();
     input.current.focus();
   };
 
@@ -47,6 +49,14 @@ const Launchpad = ({ toggleLaunchpad, openWindow }) => {
     setDraggedOverItem(null);
   };
 
+  const getFilteredApps = () => {
+    if (!searchQuery) return apps;
+    const query = searchQuery.toLowerCase();
+    return apps.filter(app => app.toLowerCase().includes(query));
+  }
+
+  const filteredApps = getFilteredApps();
+
   return (
     <div 
       onClick={toggleLaunchpad} 
@@ -55,6 +65,9 @@ const Launchpad = ({ toggleLaunchpad, openWindow }) => {
       <div className='w-full h-full px-32 pb-40 backdrop-filter backdrop-blur-lg'>
         <div className='mb-10'>
           <Input 
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            autoFocus
             ref={input} 
             onClick={handleInputClick} 
             type='text' 
@@ -62,30 +75,34 @@ const Launchpad = ({ toggleLaunchpad, openWindow }) => {
             className='w-1/6 placeholder:text-center text-center mx-auto mt-8 text-white' 
           />
         </div>
-        <div className='grid grid-cols-9 gap-x-4 gap-y-7'>
-          {apps.map((app, idx) => (
-            <div
-              key={idx}
-              draggable
-              onDragStart={(e) => handleDragStart(e, idx)}
-              onDragOver={(e) => handleDragOver(e, idx)}
-              onDrop={(e) => handleDrop(e, idx)}
-              onDragEnd={handleDragEnd}
-              className={`transition-transform duration-200 ${
-                draggedItem === idx ? 'opacity-50' : ''
-              } ${
-                draggedOverItem === idx ? 'scale-110' : ''
-              }`}
-            >
-              <AppIcon
-                titleRequired={true}
-                isAppSwitcher={true}
-                appName={app}
-                onClick={() => openWindow(app)}
-              />
-            </div>
-          ))}
-        </div>
+        { filteredApps.length !== 0 ? (
+          <div className='grid grid-cols-9 gap-x-4 gap-y-7'>
+            {filteredApps.map((app, idx) => (
+              <div
+                key={idx}
+                draggable
+                onDragStart={(e) => handleDragStart(e, idx)}
+                onDragOver={(e) => handleDragOver(e, idx)}
+                onDrop={(e) => handleDrop(e, idx)}
+                onDragEnd={handleDragEnd}
+                className={`transition-transform duration-200 ${
+                  draggedItem === idx ? 'opacity-50' : ''
+                } ${
+                  draggedOverItem === idx ? 'scale-110' : ''
+                }`}
+              >
+                <AppIcon
+                  titleRequired={true}
+                  isAppSwitcher={true}
+                  appName={app}
+                  onClick={() => openWindow(app)}
+                />
+              </div>
+            ))}
+          </div>
+        ) : (
+          <div className='text-white w-full h-full flex items-center justify-center font-light text-4xl'>No Results</div>
+        )}
       </div>
     </div>
   )
