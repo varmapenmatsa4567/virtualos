@@ -73,11 +73,11 @@ export const appLabels = {
 
 export const unavailableApps = [
   "terminal",
-  "safari",
   "preview",
   "calendar",
   "appstore",
   "siri",
+  "chess",
   "voicememos",
   "colormeter",
   "news",
