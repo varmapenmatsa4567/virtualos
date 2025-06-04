@@ -72,19 +72,19 @@ export const appLabels = {
 }
 
 export const unavailableApps = [
-  "terminal",
-  "preview",
-  "calendar",
-  "appstore",
-  "siri",
-  "chess",
-  "voicememos",
-  "colormeter",
-  "news",
-  "music",
-  "reminders",
-  "weather",
-  "facetime"
+  // "terminal",
+  // "preview",
+  // "calendar",
+  // "appstore",
+  // "siri",
+  // "chess",
+  // "voicememos",
+  // "colormeter",
+  // "news",
+  // "music",
+  // "reminders",
+  // "weather",
+  // "facetime"
 ]
 
 export const apps = [
@@ -96,21 +96,21 @@ export const apps = [
   "photos",
   "safari",
   "settings",
-  "vscode",
+  // "vscode",
   "preview",
-  "vlcplayer",
+  // "vlcplayer",
   "calendar",
-  "sudoku",
-  "compiler",
+  // "sudoku",
+  // "compiler",
   "appstore",
   "siri",
   "voicememos",
   "colormeter",
   "stickies",
   "photobooth",
-  "2048",
-  "chess",
-  "tictactoe",
+  // "2048",
+  // "chess",
+  // "tictactoe",
   "news",
   "music",
   "reminders",
@@ -121,6 +121,16 @@ export const apps = [
   "dictionary",
   "tips",
 ];
+
+export const appStoreApps = [
+  {appName: "vscode", category: "Developer Tools"},
+  {appName: "vlcplayer", category: "Video Player"},
+  {appName: "compiler", category: "Developer Tools"},
+  {appName: "sudoku", category: "Challenge the classic puzzle"},
+  {appName: "2048", category: "Sliding Block Puzzle Game"},
+  // {appName: "chess", category: "Games, Puzzles & Friends"},
+  {appName: "tictactoe", category: "Board Games"},
+]
 
 export const settingsItems = [
     { id: 0, text: "Wi-Fi", icon: IoIosWifi, bgColor: "bg-blue-500" },

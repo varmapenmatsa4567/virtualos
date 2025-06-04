@@ -8,14 +8,14 @@ import DockSettings from "./DockSettings";
 import BluetoothSettings from "./BluetoothSettings";
 import NetworkSettings from "./NetworkSettings";
 import ControlCentreSettings from "./ControlCentreSettings";
-import useAppsStore from "@/stores/apps-store";
 import { settingsItems } from "@/utils/data";
 import { useEffect } from "react";
 import SpotlightSettings from "./SpotlightSettings";
+import useAppSettingsStore from "@/stores/appsettings-store";
 
 const Settings = ({fileStructure, setFileStructure, toggleMaximize, extraProps, ...props}) => {
 
-  const { selectedSettings, setSelectedSettings } = useAppsStore();
+  const { selectedSettings, setSelectedSettings } = useAppSettingsStore();
 
   const {requiredSettings} = extraProps;
 

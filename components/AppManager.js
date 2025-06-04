@@ -47,7 +47,7 @@ const AppManager = (props) => {
     else if(props.appName === 'safari') {
         return <Safari {...props}/>
     }
-    else if(props.appName === 'sudoko') {
+    else if(props.appName === 'sudoku') {
         return <Sudoko {...props}/>
     }
     else if(props.appName === 'notes') {

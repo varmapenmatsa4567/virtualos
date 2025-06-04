@@ -291,6 +291,7 @@ export default function Home() {
                   isMinimized={window.isMinimized}
                   isMaximized={window.isMaximized}
                   onClose={() => closeWindow(window.id)}
+                  openWindow={openWindow}
                   toggleMinimize={() => setWindows(windows.map((w) => w.id === window.id ? { ...w, isMinimized: !w.isMinimized } : w))}
                   toggleMaximize={() => setWindows(windows.map((w) => w.id === window.id ? { ...w, isMaximized: !w.isMaximized } : w))}
                 />

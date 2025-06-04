@@ -2,13 +2,12 @@ import React, { useRef, useState } from 'react'
 import AppIcon from '@/components/AppIcon'
 import { Input } from '@/components/ui/input'
 import useSettingsStore from '@/stores/settings-store'
-import { apps as defaultApps } from '@/utils/data'
-import { filter } from 'mathjs'
+import useAppsStore from '@/stores/apps-store'
 
 const Launchpad = ({ toggleLaunchpad, openWindow }) => {
   const input = useRef(null);
   const { wallpaper } = useSettingsStore();
-  const [apps, setApps] = useState([...defaultApps]);
+  const { apps } = useAppsStore();
   const [draggedItem, setDraggedItem] = useState(null);
   const [draggedOverItem, setDraggedOverItem] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');

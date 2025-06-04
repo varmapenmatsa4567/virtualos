@@ -1,9 +1,20 @@
 
 import Window from "@/components/Window";
 import App from "./App";
+import { appLabels, appStoreApps } from "@/utils/data";
+import useAppsStore from "@/stores/apps-store";
 
-const AppStore = ({...props}) => {
+const AppStore = ({openWindow, ...props}) => {
 
+  const {apps, addApp} = useAppsStore();
+
+  const onClick = (appName) => {
+    if(apps.includes(appName)) {
+      openWindow(appName);
+      return;
+    }
+    addApp(appName)
+  }
 
   return (
     <Window {...props} 
@@ -12,26 +23,21 @@ const AppStore = ({...props}) => {
     >
       <div className="w-full h-full overflow-auto">
         <div className="grid grid-cols-2 overflow-y-scroll p-5 gap-x-8 gap-y-4">
-          <App
-            appName="VLC" 
-            icon="vlcplayer"
-            subtitle="Media Player"
-          />
-          <App
-            appName="2048"
-            icon="2048"
-            subtitle="Media Player"
-          />
-          <App
-            appName="Tic Tac Toe"
-            icon="tictactoe"
-            subtitle="Game"
-          />
-          <App
-            appName="Sudoku"
-            icon="sudoku"
-            subtitle="Game"
-          />
+          {appStoreApps.map((app, index) => {
+            const appName = app["appName"];
+            let appLabel = appName;
+            if(appName in appLabels) {
+              appLabel = appLabels[appName];
+            }
+            return <App
+              key={index}
+              appName={appLabel} 
+              icon={appName}
+              isInstalled={apps.includes(appName)}
+              onClick={() => onClick(appName)}
+              subtitle={app["category"]}
+            />
+          })}
         </div>
       </div>
     </Window>
