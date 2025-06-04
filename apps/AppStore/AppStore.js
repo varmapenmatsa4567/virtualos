@@ -13,7 +13,7 @@ const AppStore = ({...props}) => {
       <div className="w-full h-full overflow-auto">
         <div className="grid grid-cols-2 overflow-y-scroll p-5 gap-x-8 gap-y-4">
           <App
-            appName="VLC"
+            appName="VLC" 
             icon="vlcplayer"
             subtitle="Media Player"
           />
