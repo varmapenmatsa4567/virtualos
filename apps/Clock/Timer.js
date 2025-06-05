@@ -36,7 +36,7 @@ const Timer = ({isActive}) => {
                         console.log(alarmText);
                         addNotification({
                             title: "Clock",
-                            message: alarmText,
+                            message: alarmText || "Timer",
                             icon: "clock",
                             audio: "TimerComplete"
                         });
