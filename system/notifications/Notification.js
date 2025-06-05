@@ -11,16 +11,15 @@ const Notification = ({ notification }) => {
 
   useEffect(() => {
     // Create and play audio when component mounts
-    const originalAudio = new Audio(`/audio/${notification.audio}.mp3`);
-    const clonedAudio = originalAudio.cloneNode();
-    clonedAudio.loop = true;
-    clonedAudio.play();
-    audioRef.current = clonedAudio;
+    const audio = new Audio(`/audio/${notification.audio}.mp3`);
+    audio.loop = true;
+    audio.play();
+    audioRef.current = audio;
 
     // Stop audio when component unmounts
     return () => {
-      clonedAudio.pause();
-      clonedAudio.currentTime = 0;
+      audio.pause();
+      audio.currentTime = 0;
     };
   }, []);
 
