@@ -17,14 +17,14 @@ const Lap = ({lapNo, split, total, isSlowest, isFastest}) => {
         <p className='w-1/5'>{"Lap "+lapNo}</p>
         <div className='flex w-2/5 justify-end'>
             <p>{splitMins}</p>
-            <Dots color={isFastest ? "bg-[#32d74b]" : isSlowest ? "bg-[#ff453a]" : "bg-white"} height="h-5" gap="gap-[3px]" size='[2px]' px='px-0.5'/>
+            <Dots color={isFastest ? "bg-[#32d74b]" : isSlowest ? "bg-[#ff453a]" : "bg-white"} height="h-5" gap="gap-[3px]" size='w-[2px] h-[2px]' px='px-0.5'/>
             <p>{splitSecs}</p>
             <span className=''>.</span>
             <p>{splitMs}</p>
         </div>
         <div className='flex w-2/5 justify-end'>
             <p>{totalMins}</p>
-            <Dots color={isFastest ? "bg-[#32d74b]" : isSlowest ? "bg-[#ff453a]" : "bg-white"} height="h-5" gap="gap-[3px]" size='[2px]' px='px-0.5'/>
+            <Dots color={isFastest ? "bg-[#32d74b]" : isSlowest ? "bg-[#ff453a]" : "bg-white"} height="h-5" gap="gap-[3px]" size='w-[2px] h-[2px]' px='px-0.5'/>
             <p>{totalSecs}</p>
             <span className=''>.</span>
             <p>{totalMs}</p>

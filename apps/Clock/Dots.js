@@ -4,7 +4,7 @@ const Dots = ({height = "h-24", gap = "gap-8", size = "2", px = "px-2", color = 
 
     var dim = "w-2 h-2";
     if(size !== "2"){
-        dim = "w-[2px] h-[2px]";
+        dim = size;
     }
 
   return (

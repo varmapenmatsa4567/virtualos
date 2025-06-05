@@ -11,6 +11,13 @@ export const formatDate = (date) => {
     return [`${weekday} ${month} ${day}`,`${hour}:${minute} ${period}`];
   };
 
+export const isBothTimeSame = (time1, time2) => {
+    const dt1 = new Date(time1);
+    const dt2 = new Date(time2);
+    console.log(dt1.getHours(), dt2.getHours(), dt1.getMinutes(), dt2.getMinutes(), dt1.getSeconds(), dt2.getSeconds());
+    return dt1.getHours() === dt2.getHours() && dt1.getMinutes() === dt2.getMinutes() && dt1.getSeconds() === dt2.getSeconds();
+}
+
 export const formatDateTimeforFinder = (date) => {
     console.log(date);
     const dt = new Date(date);

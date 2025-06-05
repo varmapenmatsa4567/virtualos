@@ -7,6 +7,8 @@ import Dots from './Dots';
 import { FaBell } from "react-icons/fa6";
 import useTimerStore from '@/stores/timer-store';
 import useNotificationsStore from '@/stores/notifications-store';
+import RecentTimer from './RecentTimer';
+import useSmallStore from '@/stores/small-store';
 
 const Timer = ({isActive}) => {
     const [selectedItem, setSelectedItem] = useState(-1);
@@ -16,10 +18,18 @@ const Timer = ({isActive}) => {
     const intervalRef = useRef(null);
     const {addNotification} = useNotificationsStore();
     const {setBalanceTime, setIsTimer} = useTimerStore();
+    const {recentTimers, addRecentTimer} = useSmallStore();
 
     const [showTimer, setShowTimer] = useState(false);
 
     const startTimer = () => {
+        if(!showTimer){
+            addRecentTimer({
+                time: totalSeconds,
+                label: alarmText
+            });
+        }
+
         setShowTimer(true);
         setIsTimer(true);
 
@@ -177,10 +187,21 @@ const Timer = ({isActive}) => {
         )}
         <div className='flex items-center justify-center gap-4 mb-10 text-white'>
             <button onClick={resetTimer} className={`bg-[#3a3a3a] shadow-md py-1 rounded-md w-36 text-[13px] font-normal`}>Cancel</button>
-            <button onClick={isRunning ? pauseTimer : startTimer} className={`${isRunning ? "bg-[#d19a1a]" : "bg-[#26a444]"} py-1 rounded-md shadow-md w-36 text-[13px] font-normal`}>
+            <button disabled={totalSeconds === 0} onClick={isRunning ? pauseTimer : startTimer} className={`${isRunning ? "bg-[#d19a1a]" : "bg-[#26a444]"} py-1 rounded-md shadow-md w-36 text-[13px] font-normal`}>
                 {showTimer ? isRunning ? "Pause" : "Resume" : "Start"}
             </button>
         </div>
+
+        {!showTimer && (
+            <div className='flex w-full p-4 gap-4 mb-10 text-white flex-col'>
+                <p className='font-semibold text-lg'>Recent</p>
+                <div className='flex flex-wrap gap-4'>
+                    {[...recentTimers].reverse().map((timer, index) => (
+                        <RecentTimer key={index} timer={timer} />
+                    ))}
+                </div>
+            </div>
+        )}
     </div>
   )
 }

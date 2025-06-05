@@ -11,7 +11,7 @@ const NotificationContainer = () => {
 
   return (
     <div className='fixed top-10 right-0 z-50 px-4 flex flex-col gap-3'>
-      {notifications.length > 0 && notifications.map((notification, index) => (
+      {notifications.length > 0 && [...notifications].reverse().map((notification, index) => (
         <Notification key={index} notification={notification} />
       ))}
     </div>

@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { FaApple } from 'react-icons/fa';
-import { formatDate } from '../utils/utils';
+import { formatDate, isBothTimeSame } from '../utils/utils';
 import { IoBatteryFull, IoSearch, IoTimerOutline } from 'react-icons/io5';
 import WifiMenu from './topbar-menus/WifiMenu';
 import BluetoothMenu from './topbar-menus/BluetoothMenu';
@@ -15,9 +15,13 @@ import useTimerStore from '@/stores/timer-store';
 import Dots from '@/apps/Clock/Dots';
 import { IoIosSwitch } from 'react-icons/io';
 import useGlobalStore from '@/stores/global-store';
+import useNotificationsStore from '@/stores/notifications-store';
 
 const TopBar = ({activeWindow, openWindow}) => {
   const [formattedDate, setFormattedDate] = useState([]);
+
+  const {addNotification} = useNotificationsStore();
+
 
   // Wifi
   const [isWifiOpen, toggleWifiOpen] = useToggle(false);
@@ -58,6 +62,18 @@ const TopBar = ({activeWindow, openWindow}) => {
     const updateDate = () => {
       const currentDate = new Date();
       setFormattedDate(formatDate(currentDate));
+      const newDate = new Date();
+      newDate.setHours(0);
+      newDate.setMinutes(39);
+      newDate.setSeconds(0);
+      if(isBothTimeSame(currentDate, newDate)){
+        addNotification({
+          title: "Clock",
+          message: "Alarm",
+          icon: "clock",
+          audio: "TimerComplete"
+      });
+      }
     };
 
     updateDate(); // Initial call
