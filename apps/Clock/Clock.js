@@ -15,13 +15,13 @@ const Clock = ({fileStructure, setFileStructure, ...props}) => {
     }
 
   return (
-    <Window {...props} isCustomized={true} customSize={{ width: "600px", height: "550px" }}
+    <Window {...props} isCustomized={true} customSize={{ width: "600px", height: "630px" }}
         toolbar={
             <div className="flex items-center gap-2 justify-between w-full  ">
                 <div className="border-[1.5px] border-[#464244] flex mx-auto rounded-md text-sm text-[#bab6b7]">
-                    <p onClick={() => handleOptionChange("World Clock")} className={`${option == "World Clock" && "bg-[#464243] text-white font-medium"} px-3 border-r-[1.5px] border-[#464244] rounded-md`}>World Clock</p>
-                    <p onClick={() => handleOptionChange("Alarms")} className={`${option == "Alarms" && "bg-[#464243] text-white font-medium"} px-3 border-r-[1.5px] border-[#464244] rounded-md`}>Alarms</p>
-                    <p onClick={() => handleOptionChange("Stopwatch")} className={`${option == "Stopwatch" && "bg-[#464243] text-white font-medium"} px-3 border-r-[1.5px] border-[#464244] rounded-md`}>Stopwatch</p>
+                    <p onClick={() => handleOptionChange("World Clock")} className={`${option == "World Clock" && "bg-[#464243] text-white font-medium"} px-3 border-r-[1.5px] border-[#464244] rounded-r-md`}>World Clock</p>
+                    <p onClick={() => handleOptionChange("Alarms")} className={`${option == "Alarms" && "bg-[#464243] text-white font-medium"} px-3 border-r-[1.5px] border-[#464244] rounded-r-md`}>Alarms</p>
+                    <p onClick={() => handleOptionChange("Stopwatch")} className={`${option == "Stopwatch" && "bg-[#464243] text-white font-medium"} px-3 border-r-[1.5px] border-[#464244] rounded-r-md`}>Stopwatch</p>
                     <p onClick={() => handleOptionChange("Timer")} className={` ${option == "Timer" && "bg-[#464243] text-white font-medium"} px-3 rounded-md`}>Timer</p>
                 </div>
                 <Plus size={20} className="text-[#bab6b7] mx-3 cursor-pointer"/>

@@ -11,6 +11,18 @@ const Stopwatch = ({isActive}) => {
     const [isStarted, setIsStarted] = useState(false);
     const [laps, setLaps] = useState([]);
 
+    const getFastestLap = () => {
+        return laps.reduce((fastest, lap) => {
+            return lap.split < fastest.split ? lap : fastest;
+        }, laps[0]);
+    }
+
+    const getSlowestLap = () => {
+        return laps.reduce((slowest, lap) => {
+            return lap.split > slowest.split ? lap : slowest;
+        }, laps[0]);
+    }
+
     const handleReset = () => {
         setIsRunning(false);
         clearInterval(intervalId);
@@ -61,14 +73,14 @@ const Stopwatch = ({isActive}) => {
             <p>{String(milliseconds).padStart(2, '0')}</p>
         </div>
         <div className='w-72 mx-auto flex flex-col my-6 flex-1 h-3/6'>
-            <div className='text-[#565656] border-b py-1 my-2 text-sm border-[#565656] w-full justify-between flex'>
-                <p>Lap No</p>
-                <p>Split</p>
-                <p>Total</p>
+            <div className='text-[#565656] border-b py-1 my-2 text-sm border-[#565656] w-full flex'>
+                <p className='w-1/5'>Lap No</p>
+                <p className='w-2/5 text-right'>Split</p>
+                <p className='w-2/5 text-right'>Total</p>
             </div>
             <div className='overflow-y-auto scrollbar-hide'>
                 {laps.length > 0 && [...laps].reverse().map((lap, index) => (
-                    <Lap key={index} lapNo={laps.length - index} split={lap.split} total={lap.total} />
+                    <Lap isSlowest={lap.split == getSlowestLap().split} isFastest={lap.split == getFastestLap().split} key={index} lapNo={laps.length - index} split={lap.split} total={lap.total} />
                 ))}
             </div>
         </div>

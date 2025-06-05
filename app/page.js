@@ -18,6 +18,7 @@ import useFinderStore from "@/stores/finder-store";
 import Folder from "@/apps/ModernFinder/Folder";
 import { ContextMenu, ContextMenuTrigger } from "@/components/ui/context-menu";
 import DesktopContextMenu from "@/components/context-menu/DesktopContextMenu";
+import NotificationContainer from "@/system/notifications/NotificationContainer";
 
 
 export default function Home() {
@@ -302,6 +303,7 @@ export default function Home() {
         </div>
         <ModernDock isVisible={isLaunchpadOpen} toggleLaunchpad={toggleLaunchpad} setWindows={setWindows} openWindow={openWindow} windows={windows}  />
         {/* <SiriChat /> */}
+        <NotificationContainer/>
         {isLaunchpadOpen && <Launchpad openWindow={openWindow} toggleLaunchpad={toggleLaunchpad}/>}
         {spotlightVisible && <Splotlight ref={spotlightRef} openWindow={openWindow}/>}
         {/* {isAppSwitcherVisible && (

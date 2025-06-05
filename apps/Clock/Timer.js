@@ -6,14 +6,15 @@ import {buildStyles} from "react-circular-progressbar";
 import Dots from './Dots';
 import { FaBell } from "react-icons/fa6";
 import useTimerStore from '@/stores/timer-store';
-
+import useNotificationsStore from '@/stores/notifications-store';
 
 const Timer = ({isActive}) => {
     const [selectedItem, setSelectedItem] = useState(-1);
     const [remainingTime, setRemainingTime] = useState(0);
     const [isRunning, setIsRunning] = useState(false);
+    const [alarmText, setAlarmText] = useState("");
     const intervalRef = useRef(null);
-
+    const {addNotification} = useNotificationsStore();
     const {setBalanceTime, setIsTimer} = useTimerStore();
 
     const [showTimer, setShowTimer] = useState(false);
@@ -32,6 +33,13 @@ const Timer = ({isActive}) => {
                 setRemainingTime(prev => {
                     if (prev <= 1) {
                         clearInterval(intervalRef.current);
+                        console.log(alarmText);
+                        addNotification({
+                            title: "Clock",
+                            message: alarmText,
+                            icon: "clock",
+                            audio: "TimerComplete"
+                        });
                         setIsRunning(false);
                         setShowTimer(false);
                         setIsTimer(false);
@@ -144,6 +152,7 @@ const Timer = ({isActive}) => {
                             <Dots gap="gap-5"/>
                             <p>{String((remainingTime % 60)).padStart(2, '0')}</p>
                         </div>
+                        <Input onFocus={() => setSelectedItem(-1)} value={alarmText} onChange={(e) => setAlarmText(e.target.value)} type="text" placeholder='Timer' className='bg-[#292929] text-xs mx-auto border-0 focus:border-4 rounded-lg w-48 focus:border-[#8f5f20]' />
                     </div>
                 </CircularProgressbarWithChildren>
             </div>
@@ -162,7 +171,7 @@ const Timer = ({isActive}) => {
                     <p className={`${selectedItem === 2 && 'bg-[#ce841f]'} rounded-md`} onClick={() => handleItemClick(2)}>{time[2].toString().padStart(2, '0')}</p>
                 </div>
                 <div className='my-2'>
-                    <Input type="text" placeholder='Timer' className='bg-[#292929] text-xs mx-auto border-2 w-48 border-[#8f5f20]' />
+                    <Input value={alarmText} onChange={(e) => setAlarmText(e.target.value)} onFocus={() => setSelectedItem(-1)} type="text" placeholder='Timer' className='bg-[#292929] text-xs mx-auto border-0 focus:border-4 rounded-lg w-48 focus:border-[#8f5f20]' />
                 </div>
             </div>
         )}

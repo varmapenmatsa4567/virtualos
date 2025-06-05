@@ -8,6 +8,18 @@ body {
   font-family: 'Inter', Arial, Helvetica, sans-serif;
 }
 
+.bg-notification {
+  background-color: #37373b;
+  width: 300px;
+}
+
+.notification {
+  position: absolute;
+  top: -10px;
+  left: -10px;
+  width: fit-content;
+}
+
 * {
   user-select: none;
 }
