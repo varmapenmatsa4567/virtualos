@@ -8,7 +8,13 @@ const useSmallStore = create(
         recentTimers: [],
         selectedClock: "World Clock",
         alarms: [],
+        clocks: [],
 
+        setClocks: (clocks) => set({ clocks }),
+        addClock: (clock) => set((state) => ({ clocks: [...state.clocks, clock] })),
+        removeClock: (offset) => set((state) => ({
+          clocks: state.clocks.filter(clock => clock.offset !== offset)
+        })),
         setAlarms: (alarms) => set({ alarms }),
         addAlarm: (alarm) => set((state) => ({ alarms: [...state.alarms, alarm] })),
         setSelectedClock: (clock) => set({ selectedClock: clock }), // Set the selected clock

@@ -3,7 +3,6 @@ import { initialNotes } from "@/utils/data";
 import { useState, useEffect } from "react";
 import Folder from "./Folder";
 import Note from "./Note";
-import { SquarePen } from "lucide-react";
 import { getId, noteDate } from "@/utils/utils";
 import { ContextMenu, ContextMenuTrigger } from "@/components/ui/context-menu";
 import NoteContextMenu from "@/components/context-menu/NoteContextMenu";

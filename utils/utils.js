@@ -11,10 +11,16 @@ export const formatDate = (date) => {
     return [`${weekday} ${month} ${day}`,`${hour}:${minute} ${period}`];
   };
 
+export const getTimeByGMTOffset = (offset, date) => {
+    const utc = date.getTime() + (date.getTimezoneOffset() * 60000);
+    const newDate = new Date(utc + (3600000*offset));
+    return newDate;
+}
+
 export const isBothTimeSame = (time1, time2) => {
     const dt1 = new Date(time1);
     const dt2 = new Date(time2);
-    console.log(dt1.getHours(), dt2.getHours(), dt1.getMinutes(), dt2.getMinutes(), dt1.getSeconds(), dt2.getSeconds());
+    // console.log(dt1.getHours(), dt2.getHours(), dt1.getMinutes(), dt2.getMinutes(), dt1.getSeconds(), dt2.getSeconds());
     return dt1.getHours() === dt2.getHours() && dt1.getMinutes() === dt2.getMinutes() && dt1.getSeconds() === dt2.getSeconds();
 }
 

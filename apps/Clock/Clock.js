@@ -9,6 +9,7 @@ import WorldClock from "./WorldClock";
 const Clock = ({fileStructure, setFileStructure, ...props}) => {
 
     const [option, setOption] = useState("World Clock");
+    const [isPlusClick, setIsPlusClick] = useState(false);
 
     const handleOptionChange = (newOption) => {
         setOption(newOption);
@@ -24,11 +25,11 @@ const Clock = ({fileStructure, setFileStructure, ...props}) => {
                     <p onClick={() => handleOptionChange("Stopwatch")} className={`${option == "Stopwatch" && "bg-[#464243] text-white font-medium"} px-3 border-r-[1.5px] border-[#464244] rounded-r-md`}>Stopwatch</p>
                     <p onClick={() => handleOptionChange("Timer")} className={` ${option == "Timer" && "bg-[#464243] text-white font-medium"} px-3 rounded-md`}>Timer</p>
                 </div>
-                <Plus size={20} className="text-[#bab6b7] mx-3 cursor-pointer"/>
+                <Plus onClick={() => setIsPlusClick(true)} size={20} className="text-[#bab6b7] mx-3 cursor-pointer"/>
             </div>
         }
     >
-        <WorldClock isActive={option == "World Clock"}/>
+        <WorldClock isPlusClick={isPlusClick} setIsPlusClick={setIsPlusClick} isActive={option == "World Clock"}/>
         {option == "Alarms" && <div className="flex flex-col gap-2 p-4">
             <p className="text-center text-sm text-[#bab6b7]">No alarms added</p>
         </div>}
