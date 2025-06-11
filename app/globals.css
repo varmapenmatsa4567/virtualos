@@ -184,3 +184,29 @@ body {
   background-color: #b79e7f;
 }
 
+.tiptap h2,
+.tiptap h3,
+.tiptap h4 {
+    all: revert;
+    margin: 0px;
+}
+
+.tiptap {
+  color: white;
+}
+
+.tiptap blockquote {
+    all: revert;
+    margin: 5px;
+    border-left-color: white;
+}
+
+.tiptap p {
+    all: revert;
+    margin: 0px;
+    font-size: 15px;
+}
+
+.tiptap ul, ol {
+    all: revert;
+}

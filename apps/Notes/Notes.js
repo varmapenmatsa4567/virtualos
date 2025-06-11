@@ -9,7 +9,15 @@ import NoteContextMenu from "@/components/context-menu/NoteContextMenu";
 import NoteFolderContextMenu from "@/components/context-menu/NoteFolderContextMenu";
 import { sortNotes } from "./utils";
 import NoteFolderDialog from "@/components/dialogs/NoteFolderDialog";
-import NewNoteDialog from "@/components/dialogs/NewNoteDialog";
+import { EditorContent, useEditor } from "@tiptap/react";
+import StarterKit from "@tiptap/starter-kit";
+import Toolbar from "./toolbar/Toolbar";
+import Underline from "@tiptap/extension-underline";
+import Table from "@tiptap/extension-table";
+import TableCell from "@tiptap/extension-table-cell";
+import TableHeader from "@tiptap/extension-table-header";
+import TableRow from "@tiptap/extension-table-row";
+
 
 const Notes = ({ fileStructure, setFileStructure, ...props }) => {
     // Load notes from local storage or use initialNotes if local storage is empty
@@ -17,6 +25,27 @@ const Notes = ({ fileStructure, setFileStructure, ...props }) => {
         const savedNotes = localStorage.getItem('notes');
         return savedNotes ? JSON.parse(savedNotes) : initialNotes;
     });
+
+    const editor = useEditor({
+        extensions: [
+         StarterKit.configure({
+            underline: true,
+            heading: {
+                levels: [2, 3, 4], // Only allow h2, h3, h4
+            },
+         }),
+        Table,
+        TableCell,
+        TableHeader,
+        TableRow,
+        Underline],
+        content: '<p>Hello World! 🌎️</p>',
+        editorProps: {
+            attributes: {
+                class: "bg-transparent outline-none overflow-auto cursor-text"
+            }
+        }
+    })
 
     const [selectedFolder, setSelectedFolder] = useState(notes[0]?.id || null); // Set to the first folder's ID by default
     const [selectedNote, setSelectedNote] = useState(null); // No note selected initially
@@ -200,11 +229,12 @@ const Notes = ({ fileStructure, setFileStructure, ...props }) => {
             isCustomized={true}
             customSize={{ width: "1000px", height: "600px" }}
             toolbar={
-                <div className="flex justify-end px-5">
-                    <NewNoteDialog
+                <div className="pl-[330px] justify-between">
+                    <Toolbar 
                         noteTitle={noteTitle}
                         setNoteTitle={setNoteTitle}
                         createNewNote={createNewNote}
+                        editor={editor}
                     />
                 </div>
             }
@@ -261,12 +291,13 @@ const Notes = ({ fileStructure, setFileStructure, ...props }) => {
                         <p className="text-[#5b5759] text-2xl font-semibold text-center">No Notes</p>
                     )}
                 </div>
-                <div className="flex-1 h-full bg-[#1e1e1e]">
-                    <textarea
+                <div className="flex-1 h-full bg-[#1e1e1e] text-white p-4 overflow-auto cursor-text">
+                    {/* <textarea
                         value={noteContent}
                         onChange={handleContentChange}
                         className="w-full outline-none h-full bg-transparent text-white p-4"
-                    />
+                    /> */}
+                    <EditorContent editor={editor}/>
                 </div>
             </div>
         </Window>

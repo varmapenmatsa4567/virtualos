@@ -53,7 +53,10 @@ const WorldClock = ({isActive, isPlusClick, setIsPlusClick}) => {
           </div>
         ))}
       </div>
-      {isPlusClick && <motion.div className='absolute flex gap-2 flex-col text-white p-2 items-center max-w-[500px] w-3/4 h-3/4 left-1/2 top-1/2 border border-[#4b4b4b] rounded-xl shadow-2xl -translate-x-1/2 -translate-y-1/2 bg-[#1e1e1e]'>
+      {isPlusClick && <motion.div
+      initial={{ opacity: 0}}
+      animate={{ opacity: 1}} 
+      className='absolute flex gap-2 flex-col text-white p-2 items-center max-w-[500px] w-3/4 h-3/4 left-1/2 top-1/2 border border-[#4b4b4b] rounded-xl shadow-2xl -translate-x-1/2 -translate-y-1/2 bg-[#1e1e1e]'>
         <p className='text-xs'>Choose a Timezone</p>
         <div className='flex w-full gap-2'>
           <input className='flex-1 bg-transparent text-xs px-2 p-1 text-white outline-none border-[#8f5f20] rounded-lg focus:border-4' placeholder='Search' type='text'/>
