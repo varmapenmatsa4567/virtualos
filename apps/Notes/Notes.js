@@ -39,13 +39,14 @@ const Notes = ({ fileStructure, setFileStructure, ...props }) => {
         TableHeader,
         TableRow,
         Underline],
-        content: '',
+        content: '<h2></h2>',
         editorProps: {
             attributes: {
                 class: "bg-transparent outline-none overflow-auto cursor-text"
             }
         },
         onUpdate: ({ editor }) => {
+            enforceFirstLineHeading(editor);
             // Save content whenever the editor is updated
             if (selectedFolder && selectedNote) {
                 const newContent = editor.getHTML();
@@ -314,5 +315,27 @@ const Notes = ({ fileStructure, setFileStructure, ...props }) => {
         </Window>
     );
 };
+
+const enforceFirstLineHeading = (editor) => {
+    const { state } = editor;
+    const { doc } = state;
+    
+    // Get first node
+    const firstNode = doc.firstChild;
+    
+    // If document is empty, ensure h2
+    if (doc.childCount === 0) {
+      editor.commands.setContent('<h2></h2>');
+      return;
+    }
+    
+    // If first node isn't h2, convert it
+    if (firstNode.type.name !== 'heading' || firstNode.attrs.level !== 2) {
+      editor.chain()
+        .focus()
+        .setNode('heading', { level: 2 })
+        .run();
+    }
+  };
 
 export default Notes;

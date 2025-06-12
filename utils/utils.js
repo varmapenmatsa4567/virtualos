@@ -81,15 +81,44 @@ export const isYesterday = (someDate) => {
 }
 
 // utils.js
-export const stripHtml = (html) => {
+export const stripHtml = (html, nodeIndex = 1) => {
     if (!html) return '';
-    
-    // Create a temporary div element
+  
+  const temp = document.createElement('div');
+  temp.innerHTML = html;
+  
+  // Get all direct child nodes
+  const nodes = temp.childNodes;
+  
+  // Return empty string if no nodes exist at requested index
+  if (nodes.length <= nodeIndex) return '';
+  
+  // Get text content of the requested node
+  return nodes[nodeIndex].textContent || nodes[nodeIndex].innerText || '';
+};
+
+export const getNonEmptyNodeIndexes = (html) => {
+    if (!html) return { first: -1, second: -1 };
+
     const temp = document.createElement('div');
     temp.innerHTML = html;
-    
-    // Return the text content
-    return temp.textContent || temp.innerText || '';
+
+    const nodes = temp.childNodes;
+    const result = { first: -1, second: -1 };
+
+    for (let i = 0; i < nodes.length; i++) {
+        const text = nodes[i].textContent?.trim();
+        if (text) {
+        if (result.first === -1) {
+            result.first = i;
+        } else if (result.second === -1) {
+            result.second = i;
+            break; // We found both indexes
+        }
+        }
+    }
+
+    return result;
 };
 
 export const noteDate = (date) => {
