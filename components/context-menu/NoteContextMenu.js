@@ -3,25 +3,29 @@ import { ContextMenuContent, ContextMenuItem, ContextMenuSeparator, ContextMenuS
 
 const NoteContextMenu = ({deleteNote, duplicateNote}) => {
   return (
-    <ContextMenuContent className="bg-[#2f292e] text-white">
-        <ContextMenuItem>New Note</ContextMenuItem>
-        <ContextMenuItem onClick={duplicateNote}>Duplicate Note</ContextMenuItem>
+    <ContextMenuContent className="bg-[#2f292e] text-white w-[200px]">
+        <ContextMenuItem className="focus:bg-[#a0812b]">Open Note in New Window</ContextMenuItem>
         <ContextMenuSeparator />
-        <ContextMenuItem>Rename</ContextMenuItem>
-        <ContextMenuItem>Pin Note</ContextMenuItem>
+        <ContextMenuItem className="focus:bg-[#a0812b]">Pin Note</ContextMenuItem>
+        <ContextMenuItem className="focus:bg-[#a0812b]">Lock Note</ContextMenuItem>
+        <ContextMenuSeparator />
+        <ContextMenuItem className="focus:bg-[#a0812b]">New Note</ContextMenuItem>
+        <ContextMenuItem className="focus:bg-[#a0812b]" onClick={duplicateNote}>Duplicate Note</ContextMenuItem>
+        <ContextMenuItem className="focus:bg-[#a0812b]">Rename</ContextMenuItem>
+        <ContextMenuSeparator />
+        <ContextMenuItem className="focus:bg-[#a0812b]">Share Note</ContextMenuItem>
         <ContextMenuSeparator />
         <ContextMenuSub className="bg-[#2f292e] text-white">
-            <ContextMenuSubTrigger>Move to</ContextMenuSubTrigger>
+            <ContextMenuSubTrigger className="focus:bg-[#a0812b] data-[state=open]:bg-[#a0812b]">Move to</ContextMenuSubTrigger>
             <ContextMenuSubContent className="bg-[#2f292e] text-white">
-                <ContextMenuItem>Personal</ContextMenuItem>
-                <ContextMenuItem>Work</ContextMenuItem>
-                <ContextMenuItem>News</ContextMenuItem>
-                <ContextMenuItem>Food</ContextMenuItem>
+                <ContextMenuItem className="focus:bg-[#a0812b]">Personal</ContextMenuItem>
+                <ContextMenuItem className="focus:bg-[#a0812b]">Work</ContextMenuItem>
+                <ContextMenuItem className="focus:bg-[#a0812b]">News</ContextMenuItem>
+                <ContextMenuItem className="focus:bg-[#a0812b]">Food</ContextMenuItem>
             </ContextMenuSubContent>
         </ContextMenuSub>
         <ContextMenuSeparator />
-        <ContextMenuItem onClick={deleteNote}>Delete</ContextMenuItem>
-        <ContextMenuItem>Copy Note</ContextMenuItem>
+        <ContextMenuItem className="focus:bg-[#a0812b]" onClick={deleteNote}>Delete</ContextMenuItem>
     </ContextMenuContent>
   )
 }

@@ -1,3 +1,4 @@
+import { stripHtml } from '@/utils/utils'
 import React from 'react'
 
 const Note = ({isSelected, onClick, dateModified, title, content}) => {
@@ -6,7 +7,7 @@ const Note = ({isSelected, onClick, dateModified, title, content}) => {
         <p>{title}</p>
         <div className='flex justify-between font-normal overflow-hidden text-nowrap gap-2'>
             <p>{dateModified}</p>
-            <p className={`${isSelected ? "text-[#d5c5a2]" : "text-[#9e9a9b]"}`}>{content}</p>
+            <p className={`${isSelected ? "text-[#d5c5a2]" : "text-[#9e9a9b]"}`}>{stripHtml(content)}</p>
         </div>
     </div>
   )

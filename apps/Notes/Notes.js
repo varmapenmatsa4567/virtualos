@@ -39,16 +39,23 @@ const Notes = ({ fileStructure, setFileStructure, ...props }) => {
         TableHeader,
         TableRow,
         Underline],
-        content: '<p>Hello World! 🌎️</p>',
+        content: '',
         editorProps: {
             attributes: {
                 class: "bg-transparent outline-none overflow-auto cursor-text"
+            }
+        },
+        onUpdate: ({ editor }) => {
+            // Save content whenever the editor is updated
+            if (selectedFolder && selectedNote) {
+                const newContent = editor.getHTML();
+                handleContentChange(newContent);
             }
         }
     })
 
     const [selectedFolder, setSelectedFolder] = useState(notes[0]?.id || null); // Set to the first folder's ID by default
-    const [selectedNote, setSelectedNote] = useState(null); // No note selected initially
+    const [selectedNote, setSelectedNote] = useState(notes[0]?.notes[0]?.id || null); // Set to the first note's]); // No note selected initially
     const [noteContent, setNoteContent] = useState("");
     const [currentNote, setCurrentNote] = useState(null);
 
@@ -62,23 +69,24 @@ const Notes = ({ fileStructure, setFileStructure, ...props }) => {
 
     // Effect to update the noteContent when a different note is selected
     useEffect(() => {
-        if (selectedFolder !== null && selectedNote !== null) {
+        if (selectedFolder !== null && selectedNote !== null && editor) {
             const folder = notes.find(folder => folder.id === selectedFolder);
             if (folder) {
                 const note = folder.notes.find(note => note.id === selectedNote);
                 setCurrentNote(note);
-                setNoteContent(note ? note.content : "");
+                
+                // Update editor content only if different from current content
+                if (note && editor.getHTML() !== note.content) {
+                    editor.commands.setContent(note.content || '');
+                }
             }
-        } else {
-            setNoteContent("");
+        } else if (editor) {
+            editor.commands.setContent('');
         }
-    }, [selectedFolder, selectedNote, notes]);
+    }, [selectedFolder, selectedNote, notes, editor]);
 
     // Function to handle textarea changes and save content
-    const handleContentChange = (e) => {
-        const newContent = e.target.value;
-        setNoteContent(newContent);
-
+    const handleContentChange = (newContent) => {
         // Update the notes state with the new content and date modified
         const updatedNotes = notes.map(folder => {
             if (folder.id === selectedFolder) {
@@ -222,7 +230,12 @@ const Notes = ({ fileStructure, setFileStructure, ...props }) => {
     // Reset selectedNote to null when changing folders
     const handleFolderChange = (folderId) => {
         setSelectedFolder(folderId);
-        setSelectedNote(null); // Deselect any note when changing folders
+        const folder = notes.find(folder => folder.id === folderId);
+        if (folder && folder.notes.length > 0) {
+            setSelectedNote(folder.notes[0].id);
+        } else {
+            setSelectedNote(null);
+        }
     };
 
     return (
@@ -293,14 +306,9 @@ const Notes = ({ fileStructure, setFileStructure, ...props }) => {
                         <p className="text-[#5b5759] text-2xl font-semibold text-center">No Notes</p>
                     )}
                 </div>
-                <div className="flex-1 h-full bg-[#1e1e1e] text-white px-4 p-2 overflow-auto cursor-text flex flex-col">
-                    <p className="text-center text-sm text-[#818181]">{formatDateTimeforNotes(currentNote?.dateModified)}</p>
-                    {/* <textarea
-                        value={noteContent}
-                        onChange={handleContentChange}
-                        className="w-full outline-none h-full bg-transparent text-white p-4"
-                    /> */}
-                    <EditorContent editor={editor} className="flex-1"/>
+                <div onClick={() => editor.commands.focus()} className="flex-1 h-full bg-[#1e1e1e] text-white px-4 p-2 overflow-auto cursor-text flex flex-col">
+                    <p className="text-center text-sm text-[#818181]">{selectedNote && formatDateTimeforNotes(currentNote?.dateModified)}</p>
+                    <EditorContent editor={editor} className="flex-1 caret-yellow-500"/>
                 </div>
             </div>
         </Window>

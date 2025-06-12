@@ -80,6 +80,18 @@ export const isYesterday = (someDate) => {
         someDate.getFullYear() == yesterday.getFullYear();
 }
 
+// utils.js
+export const stripHtml = (html) => {
+    if (!html) return '';
+    
+    // Create a temporary div element
+    const temp = document.createElement('div');
+    temp.innerHTML = html;
+    
+    // Return the text content
+    return temp.textContent || temp.innerText || '';
+};
+
 export const noteDate = (date) => {
     const dt = new Date(date);
     const month = dt.toLocaleString('en-US', { month: 'short' });
