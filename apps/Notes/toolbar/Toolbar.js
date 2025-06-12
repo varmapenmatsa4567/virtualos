@@ -6,9 +6,10 @@ import { IoIosLink } from 'react-icons/io';
 import { IoCheckmarkOutline, IoLockClosedOutline, IoShareOutline } from 'react-icons/io5';
 import { motion } from 'framer-motion';
 import { useOutsideClick } from '@/hooks/useOutsideClick';
+import { SquarePen } from 'lucide-react';
 
 
-const Toolbar = ({noteTitle, setNoteTitle, createNewNote, editor}) => {
+const Toolbar = ({createNewNote, editor}) => {
 
     
     const [isTextMenuOpen, setIsTextMenuOpen] = useState(false);
@@ -20,11 +21,7 @@ const Toolbar = ({noteTitle, setNoteTitle, createNewNote, editor}) => {
 
   return (
     <div className="flex items-center px-2 justify-between">
-        <NewNoteDialog
-            noteTitle={noteTitle}
-            setNoteTitle={setNoteTitle}
-            createNewNote={createNewNote}
-        />
+        <SquarePen onClick={createNewNote} className="cursor-pointer" size={16} color="#9b9a9b" />
         <div className="flex items-center gap-4 relative">
             <p onClick={() => setIsTextMenuOpen(!isTextMenuOpen)} className="text-[#9e9d9c]">Aa</p>
             <FaTasks className="text-[#9e9d9c]"/>

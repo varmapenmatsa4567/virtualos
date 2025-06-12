@@ -92,6 +92,8 @@ export const stripHtml = (html, nodeIndex = 1) => {
   
   // Return empty string if no nodes exist at requested index
   if (nodes.length <= nodeIndex) return '';
+
+  if(nodes[nodeIndex] == null) return '';
   
   // Get text content of the requested node
   return nodes[nodeIndex].textContent || nodes[nodeIndex].innerText || '';
@@ -109,12 +111,12 @@ export const getNonEmptyNodeIndexes = (html) => {
     for (let i = 0; i < nodes.length; i++) {
         const text = nodes[i].textContent?.trim();
         if (text) {
-        if (result.first === -1) {
-            result.first = i;
-        } else if (result.second === -1) {
-            result.second = i;
-            break; // We found both indexes
-        }
+            if (result.first === -1) {
+                result.first = i;
+            } else if (result.second === -1) {
+                result.second = i;
+                break; // We found both indexes
+            }
         }
     }
 

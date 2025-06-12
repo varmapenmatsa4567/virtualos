@@ -179,8 +179,7 @@ const Notes = ({ fileStructure, setFileStructure, ...props }) => {
 
         const newNote = {
             id: getId(),
-            title: noteTitle,
-            content: "",
+            content: "<h2></h2>",
             dateCreated: new Date(),
             dateModified: new Date(),
         };
@@ -245,10 +244,8 @@ const Notes = ({ fileStructure, setFileStructure, ...props }) => {
             isCustomized={true}
             customSize={{ width: "1000px", height: "600px" }}
             toolbar={
-                <div className="pl-[330px] justify-between">
-                    <Toolbar 
-                        noteTitle={noteTitle}
-                        setNoteTitle={setNoteTitle}
+                <div className="pl-[380px] justify-between">
+                    <Toolbar
                         createNewNote={createNewNote}
                         editor={editor}
                     />
@@ -284,12 +281,11 @@ const Notes = ({ fileStructure, setFileStructure, ...props }) => {
                         createNewFolder={createNewFolder}
                     />
                 </div>
-                <div className={`bg-[#261f22] w-[200px] flex flex-col gap-1 p-2 ${notes.find(folder => folder.id === selectedFolder)?.notes.length === 0 && "justify-center"}`}>
+                <div className={`bg-[#261f22] w-[250px] flex flex-col gap-1 p-2 ${notes.find(folder => folder.id === selectedFolder)?.notes.length === 0 && "justify-center"}`}>
                     {selectedFolder !== null && sortNotes(notes.find(folder => folder.id === selectedFolder))?.notes.map((note) => (
                         <ContextMenu key={note.id}>
                             <ContextMenuTrigger>
                                 <Note
-                                    title={note.title}
                                     dateModified={noteDate(note.dateModified)}
                                     isSelected={selectedNote === note.id}
                                     onClick={() => setSelectedNote(note.id)}
