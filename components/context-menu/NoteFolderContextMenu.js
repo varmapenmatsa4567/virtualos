@@ -1,10 +1,10 @@
 import React from 'react';
 import { ContextMenuContent, ContextMenuItem, ContextMenuSeparator, ContextMenuSub, ContextMenuSubContent, ContextMenuSubTrigger, ContextMenuCheckboxItem } from '@/components/ui/context-menu';
 
-const NoteFolderContextMenu = ({deleteFolder ,handleFolderSortChange, handleFolderOrderChange, sort, order}) => {
+const NoteFolderContextMenu = ({deleteFolder ,onEdit, handleFolderSortChange, handleFolderOrderChange, sort, order}) => {
   return (
     <ContextMenuContent className="bg-[#2f292e] text-white w-[180px]">
-        <ContextMenuItem className="focus:bg-[#a0812b]">Rename Folder</ContextMenuItem>
+        <ContextMenuItem onClick={onEdit} className="focus:bg-[#a0812b]">Rename Folder</ContextMenuItem>
         <ContextMenuItem className="focus:bg-[#a0812b]" onClick={deleteFolder}>Delete Folder</ContextMenuItem>
         <ContextMenuSeparator />
         <ContextMenuItem className="focus:bg-[#a0812b]">New Folder</ContextMenuItem>

@@ -26,6 +26,10 @@ const Notes = ({ fileStructure, setFileStructure, ...props }) => {
         return savedNotes ? JSON.parse(savedNotes) : initialNotes;
     });
 
+    const [selectedItem, setSelectedItem] = useState("folder");
+    const [editingFolder, setEditingFolder] = useState(null);
+    const [editingFolderName, setEditingFolderName] = useState(null);
+
     const editor = useEditor({
         extensions: [
          StarterKit.configure({
@@ -208,7 +212,6 @@ const Notes = ({ fileStructure, setFileStructure, ...props }) => {
 
         const newNote = {
             id: getId(),
-            title: note.title,
             content: note.content,
             dateCreated: new Date(),
             dateModified: new Date(),
@@ -230,6 +233,7 @@ const Notes = ({ fileStructure, setFileStructure, ...props }) => {
     // Reset selectedNote to null when changing folders
     const handleFolderChange = (folderId) => {
         setSelectedFolder(folderId);
+        setSelectedItem("folder");
         const folder = notes.find(folder => folder.id === folderId);
         if (folder && folder.notes.length > 0) {
             setSelectedNote(folder.notes[0].id);
@@ -237,6 +241,71 @@ const Notes = ({ fileStructure, setFileStructure, ...props }) => {
             setSelectedNote(null);
         }
     };
+
+    const handleNoteChange = (noteId) => {
+        setSelectedNote(noteId);
+        setSelectedItem("note");
+    };
+
+    const editNoteContent = () => {
+        setSelectedItem("content");
+        editor.commands.focus()
+    }
+
+    const startEditditingFolder = (folderId, folderName) => {
+        setEditingFolder(folderId);
+        setEditingFolderName(folderName);
+    }
+
+    const saveFolderName = (folderId) => {
+        const updatedNotes = notes.map(folder => {
+            if (folder.id === folderId) {
+                return {
+                    ...folder,
+                    folderName: editingFolderName,
+                };
+            }
+            return folder;
+        });
+
+        setNotes(updatedNotes);
+        setEditingFolder(null);
+        setEditingFolderName(null);
+    }
+
+    const moveNote = (sourceFolderId, destinationFolderId, noteId) => {
+        const note = notes.find(folder => folder.id === sourceFolderId).notes.find(note => note.id === noteId);
+        const updatedNotes = notes.map(folder => {
+            if (folder.id === sourceFolderId) {
+                return {
+                    ...folder,
+                    notes: folder.notes.filter(note => note.id !== noteId),
+                }
+            }
+            else if(folder.id === destinationFolderId){
+                return {
+                    ...folder,
+                    notes: [...folder.notes, note],
+                }
+            }
+            return folder;
+        });
+
+        setNotes(updatedNotes);
+    }
+
+    const togglePin = (noteId) => {
+        const folder = notes.find(folder => folder.id === selectedFolder);
+        if (!folder) return;
+
+        const updatedFolder = {
+            ...folder,
+            notes: folder.notes.map(note => note.id === noteId ? { ...note, isPinned: note.isPinned ? false : true } : note),
+        };
+
+        const updatedNotes = notes.map(f => f.id === selectedFolder ? updatedFolder : f);
+        setNotes(updatedNotes);
+    }
 
     return (
         <Window
@@ -253,22 +322,29 @@ const Notes = ({ fileStructure, setFileStructure, ...props }) => {
             }
         >
             <div className="h-full w-full flex">
-                <div className="bg-[#2a282c] w-[200px] h-full flex flex-col gap-1 p-2 justify-between">
+                <div className="bg-[#2a282c] w-[250px] h-full flex flex-col gap-1 p-2 justify-between">
                     <div className="flex flex-col gap-1">
                         {notes.map((folder) => (
                             <ContextMenu key={folder.id}>
                                 <ContextMenuTrigger>
                                     <Folder
                                         isSelected={selectedFolder === folder.id}
+                                        isBlur={selectedItem !== "folder"}
+                                        isEdit={editingFolder === folder.id}
+                                        editingFolderName={editingFolderName}
+                                        setEditingFolderName={setEditingFolderName}
                                         onClick={() => handleFolderChange(folder.id)}
                                         folderName={folder.folderName}
                                         count={folder.notes.length}
+                                        onEdit={() => startEditditingFolder(folder.id, folder.folderName)}
+                                        saveFolderName={() => saveFolderName(folder.id)}
                                     />
                                 </ContextMenuTrigger>
                                 <NoteFolderContextMenu 
                                     deleteFolder={() => deleteFolder(folder.id)}
                                     order={folder.order}
                                     sort={folder.sort}
+                                    onEdit={() => startEditditingFolder(folder.id, folder.folderName)}
                                     handleFolderSortChange={(sort) => handleFolderSortChange(sort, folder.id)}
                                     handleFolderOrderChange={(order) => handleFolderOrderChange(order, folder.id)}
                                 />
@@ -287,13 +363,19 @@ const Notes = ({ fileStructure, setFileStructure, ...props }) => {
                             <ContextMenuTrigger>
                                 <Note
                                     dateModified={noteDate(note.dateModified)}
+                                    isBlur={selectedItem !== "note"}
                                     isSelected={selectedNote === note.id}
-                                    onClick={() => setSelectedNote(note.id)}
+                                    onClick={() => handleNoteChange(note.id)}
                                     folderName={note.title}
                                     content={note.content}
                                 />
                             </ContextMenuTrigger>
                             <NoteContextMenu 
+                                notes={notes}
+                                isPinned={note.isPinned}
+                                togglePin={() => togglePin(note.id)}
+                                moveNote={(destinationFolderId) => moveNote(selectedFolder, destinationFolderId, note.id)}
+                                selectedFolder={selectedFolder}
                                 deleteNote={() => deleteNote(note.id)}
                                 duplicateNote={() => duplicateNote(note.id)}
                             />
@@ -303,7 +385,7 @@ const Notes = ({ fileStructure, setFileStructure, ...props }) => {
                         <p className="text-[#5b5759] text-2xl font-semibold text-center">No Notes</p>
                     )}
                 </div>
-                <div onClick={() => editor.commands.focus()} className="flex-1 h-full bg-[#1e1e1e] text-white px-4 p-2 overflow-auto cursor-text flex flex-col">
+                <div onClick={editNoteContent} className="flex-1 h-full bg-[#1e1e1e] text-white px-4 p-2 overflow-auto cursor-text flex flex-col">
                     <p className="text-center text-sm text-[#818181]">{selectedNote && formatDateTimeforNotes(currentNote?.dateModified)}</p>
                     <EditorContent editor={editor} className="flex-1 caret-yellow-500"/>
                 </div>

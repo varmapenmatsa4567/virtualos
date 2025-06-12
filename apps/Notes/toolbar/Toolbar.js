@@ -21,7 +21,7 @@ const Toolbar = ({createNewNote, editor}) => {
 
   return (
     <div className="flex items-center px-2 justify-between">
-        <SquarePen onClick={createNewNote} className="cursor-pointer" size={16} color="#9b9a9b" />
+        <SquarePen onClick={createNewNote} className="cursor-pointer" size={18} color="#9b9a9b" />
         <div className="flex items-center gap-4 relative">
             <p onClick={() => setIsTextMenuOpen(!isTextMenuOpen)} className="text-[#9e9d9c]">Aa</p>
             <FaTasks className="text-[#9e9d9c]"/>

@@ -20,8 +20,17 @@ export const sortNotes = (folder) => {
     });
     // console.log(sortedNotes);
 
+    // Place pinned notes at first
+    const pinnedNotes = sortedNotes.filter(note => note.isPinned);
+    const unpinnedNotes = sortedNotes.filter(note => !note.isPinned);
+    sortedNotes.splice(0, sortedNotes.length, ...pinnedNotes, ...unpinnedNotes);
+
     return {
         ...folder,
         notes: sortedNotes
     };
 };
+
+export const getAllFolderNames = (notes) => {
+    return notes.map(folder => folder.folderName);
+}
