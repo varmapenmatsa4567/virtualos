@@ -10,13 +10,13 @@ import { useOutsideClick } from '@/hooks/useOutsideClick';
 
 const Toolbar = ({noteTitle, setNoteTitle, createNewNote, editor}) => {
 
-    if(!editor) return null;
-
+    
     const [isTextMenuOpen, setIsTextMenuOpen] = useState(false);
-
+    
     const textMenuRef = useRef(null);
-
+    
     useOutsideClick(textMenuRef, () => setIsTextMenuOpen(false));
+    if(!editor) return null;
 
   return (
     <div className="flex items-center px-2 justify-between">

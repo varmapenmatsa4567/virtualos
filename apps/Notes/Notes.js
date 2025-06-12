@@ -3,7 +3,7 @@ import { initialNotes } from "@/utils/data";
 import { useState, useEffect } from "react";
 import Folder from "./Folder";
 import Note from "./Note";
-import { getId, noteDate } from "@/utils/utils";
+import { formatDateTimeforNotes, getId, noteDate } from "@/utils/utils";
 import { ContextMenu, ContextMenuTrigger } from "@/components/ui/context-menu";
 import NoteContextMenu from "@/components/context-menu/NoteContextMenu";
 import NoteFolderContextMenu from "@/components/context-menu/NoteFolderContextMenu";
@@ -50,6 +50,7 @@ const Notes = ({ fileStructure, setFileStructure, ...props }) => {
     const [selectedFolder, setSelectedFolder] = useState(notes[0]?.id || null); // Set to the first folder's ID by default
     const [selectedNote, setSelectedNote] = useState(null); // No note selected initially
     const [noteContent, setNoteContent] = useState("");
+    const [currentNote, setCurrentNote] = useState(null);
 
     const [folderName, setFolderName] = useState("New Folder");
     const [noteTitle, setNoteTitle] = useState("New Note");
@@ -65,6 +66,7 @@ const Notes = ({ fileStructure, setFileStructure, ...props }) => {
             const folder = notes.find(folder => folder.id === selectedFolder);
             if (folder) {
                 const note = folder.notes.find(note => note.id === selectedNote);
+                setCurrentNote(note);
                 setNoteContent(note ? note.content : "");
             }
         } else {
@@ -291,13 +293,14 @@ const Notes = ({ fileStructure, setFileStructure, ...props }) => {
                         <p className="text-[#5b5759] text-2xl font-semibold text-center">No Notes</p>
                     )}
                 </div>
-                <div className="flex-1 h-full bg-[#1e1e1e] text-white p-4 overflow-auto cursor-text">
+                <div className="flex-1 h-full bg-[#1e1e1e] text-white px-4 p-2 overflow-auto cursor-text flex flex-col">
+                    <p className="text-center text-sm text-[#818181]">{formatDateTimeforNotes(currentNote?.dateModified)}</p>
                     {/* <textarea
                         value={noteContent}
                         onChange={handleContentChange}
                         className="w-full outline-none h-full bg-transparent text-white p-4"
                     /> */}
-                    <EditorContent editor={editor}/>
+                    <EditorContent editor={editor} className="flex-1"/>
                 </div>
             </div>
         </Window>

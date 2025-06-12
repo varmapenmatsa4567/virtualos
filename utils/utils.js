@@ -37,6 +37,19 @@ export const formatDateTimeforFinder = (date) => {
     return `${month} ${day}, ${year} at ${hours}:${minutes} ${ampm}`;
 }
 
+export const formatDateTimeforNotes = (date) => {
+    // console.log(date);
+    const dt = new Date(date);
+    const month = dt.toLocaleString('en-US', { month: 'short' });
+    const day = dt.getDate().toString();
+    const year = dt.getFullYear();
+    const hours = dt.getHours() % 12 || 12; // Convert to 12-hour format
+    const minutes = dt.getMinutes().toString().padStart(2, '0'); // Pad minutes to 2 digits
+    const ampm = dt.getHours() >= 12 ? 'PM' : 'AM'; // Determine AM/PM
+
+    return `${day} ${month} ${year} at ${hours}:${minutes} ${ampm}`;
+}
+
 export const lockScreenDate = (date) => {
     const weekday = date.toLocaleString('en-US', { weekday: 'long' });
     const month = date.toLocaleString('en-US', { month: 'long' });
