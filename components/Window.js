@@ -8,6 +8,7 @@ import useGlobalStore from '@/stores/global-store';
 import useWindowsStore from '@/stores/windows-store';
 import { useEffect, useState } from 'react';
 import { stopPropagation } from '@/utils/utils';
+import { motion, AnimatePresence } from 'framer-motion';
 
 const Window = ({db, isSmall, appName, onClick, isCustomized, isTransparent, isFixed, customSize, isActive, isMinimized, isMaximized, onClose, toggleMinimize, toggleMaximize, toolbar, toolbarColor, toolbarHeight, children, isSepNot }) => {
   
@@ -33,9 +34,9 @@ const Window = ({db, isSmall, appName, onClick, isCustomized, isTransparent, isF
           height: isFixed ? customSize.height : 400,
         },
       };
-      setAppsState(newAppState); // Safe to call setState inside useEffect
+      setAppsState(newAppState);
     }
-  }, [appName, appsState, isFixed, customSize, setAppsState]); // Add dependencies
+  }, [appName, appsState, isFixed, customSize, setAppsState]);
 
   let defaults = {
     x: 300,
@@ -95,47 +96,74 @@ const Window = ({db, isSmall, appName, onClick, isCustomized, isTransparent, isF
         setTimeout(() => {
           setScreenshotUrl(null);
           setShowScreenshot(false);
-        }, 2000); // Delay to allow the screenshot to be taken
+        }, 2000);
       });
     }
   }
 
+  const variants = {
+    minimized: {
+      scale: 0,
+      y: 700,
+      x: 500,
+      transition: { 
+        duration: 0.3,
+      }
+    },
+    normal: {
+      scale: 1,
+      y: 0,
+      transition: { 
+        duration: 0.3,
+      }
+    }
+  };
+
   return (
-    <Rnd
-      default={defaults}
-      className={`${isActive && 'z-50'} ${isWindowScreenshot && "group relative"}`}
-      size={isMaximized ? { width: "100%", height: `${height}px` } : null}
-      position={isMaximized ? { x: 0, y: 0 } : null}
-      enableResizing={!isMaximized && !isFixed}
-      disableDragging={isMaximized}
-      minWidth={isCustomized ? customSize.width : 500}
-      minHeight={isCustomized ? customSize.height : 300}
-      onDragStop={handleDragStop}
-      onResizeStop={handleResizeStop}
-      bounds=".main"
-      dragHandleClassName="toolbar"
-      style={{
-        display: isMinimized ? "none" : "block",  
-      }}
-    >
-      <div id={appName} onClick={onClick} className={`${!isTransparent && "bg-[#242227]"} ${isSmall && "scale-[0.1]"} overflow-hidden flex flex-col shadow-2xl cursor-default h-full rounded-lg border-[0.5px] border-[#7f7e7f]`}>
-        <div onDoubleClick={titleBarAction == "maximize" ? toggleMaximize : titleBarAction == "minimize" ? toggleMinimize : null} className={`${toolbarColor != null ? toolbarColor : "bg-[#3c3639]"} rounded-t-lg w-full ${toolbarHeight != null ? toolbarHeight : "h-10"} flex items-center toolbar ${!isSepNot && "border-b border-black"}`}>
-          <WnManager
-            onClose={onClose}
-            toggleMinimize={toggleMinimize}
-            toggleFullScreen={toggleMaximize}
-            disabled={isMaximized}
-          />
-          <div className='flex-1'>
-            {toolbar}
-          </div>
-        </div>
-        <div onContextMenu={stopPropagation} className='h-[calc(100%-40px)] w-full'>
-          {children}
-        </div>
-      </div>
-      {isWindowScreenshot && <div onClick={takeScreenshot} className='hidden group-hover:block cursor-camera absolute top-0 left-0 w-full h-full bg-blue-300 rounded-md bg-opacity-35'></div>}
-    </Rnd>
+    <AnimatePresence>
+      {!isMinimized && (
+        <Rnd
+          default={defaults}
+          className={`${isActive && 'z-50'} ${isWindowScreenshot && "group relative"}`}
+          size={isMaximized ? { width: "100%", height: `${height}px` } : null}
+          position={isMaximized ? { x: 0, y: 0 } : null}
+          enableResizing={!isMaximized && !isFixed}
+          disableDragging={isMaximized}
+          minWidth={isCustomized ? customSize.width : 500}
+          minHeight={isCustomized ? customSize.height : 300}
+          onDragStop={handleDragStop}
+          onResizeStop={handleResizeStop}
+          bounds=".main"
+          dragHandleClassName="toolbar"
+        >
+          <motion.div 
+            id={appName} 
+            onClick={onClick} 
+            className={`${!isTransparent && "bg-[#242227]"} ${isSmall && "scale-[0.1]"} overflow-hidden flex flex-col shadow-2xl cursor-default h-full rounded-lg border-[0.5px] border-[#7f7e7f]`}
+            initial="normal"
+            animate={isMinimized ? "minimized" : "normal"}
+            variants={variants}
+            exit="minimized"
+          >
+            <div onDoubleClick={titleBarAction == "maximize" ? toggleMaximize : titleBarAction == "minimize" ? toggleMinimize : null} className={`${toolbarColor != null ? toolbarColor : "bg-[#3c3639]"} rounded-t-lg w-full ${toolbarHeight != null ? toolbarHeight : "h-10"} flex items-center toolbar ${!isSepNot && "border-b border-black"}`}>
+              <WnManager
+                onClose={onClose}
+                toggleMinimize={toggleMinimize}
+                toggleFullScreen={toggleMaximize}
+                disabled={isMaximized}
+              />
+              <div className='flex-1'>
+                {toolbar}
+              </div>
+            </div>
+            <div onContextMenu={stopPropagation} className='h-[calc(100%-40px)] w-full'>
+              {children}
+            </div>
+          </motion.div>
+          {isWindowScreenshot && <div onClick={takeScreenshot} className='hidden group-hover:block cursor-camera absolute top-0 left-0 w-full h-full bg-blue-300 rounded-md bg-opacity-35'></div>}
+        </Rnd>
+      )}
+    </AnimatePresence>
   );
 };
 
