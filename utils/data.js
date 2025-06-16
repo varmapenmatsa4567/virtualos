@@ -30,8 +30,8 @@ export const initialStructure = [
         sort: 'dateModified',
         order: 'asc',
         notes: [
-        { id: getId(), title: 'My first note', content: 'This is my first note', dateCreated: new Date(), dateModified: new Date() },
-        { id: getId(), title: 'My second note', content: 'This is my second note', dateCreated: new Date(), dateModified: new Date() }
+        { id: getId(), title: 'My first note', content: '', dateCreated: new Date(), dateModified: new Date() },
+        { id: getId(), title: 'My second note', content: '', dateCreated: new Date(), dateModified: new Date() }
         ]
     },
     {
@@ -40,7 +40,7 @@ export const initialStructure = [
         sort: 'dateModified',
         order: 'asc',
         notes: [
-        { id: getId(), title: 'Meeting notes', content: 'Meeting notes', dateCreated: new Date(), dateModified: new Date() }
+        { id: getId(), title: 'Meeting notes', content: '', dateCreated: new Date(), dateModified: new Date() }
         ]
     }
 ];

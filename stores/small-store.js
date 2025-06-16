@@ -1,3 +1,4 @@
+import { initialNotes } from '@/utils/data';
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
@@ -9,8 +10,11 @@ const useSmallStore = create(
         selectedClock: "World Clock",
         alarms: [],
         clocks: [],
+        notes: initialNotes,
 
         setClocks: (clocks) => set({ clocks }),
+        setNotes: (notes) => set({ notes }),
+        addNote: (note) => set((state) => ({ notes: [...state.notes, note] })),
         addClock: (clock) => set((state) => ({ clocks: [...state.clocks, clock] })),
         removeClock: (offset) => set((state) => ({
           clocks: state.clocks.filter(clock => clock.offset !== offset)

@@ -17,14 +17,12 @@ import Table from "@tiptap/extension-table";
 import TableCell from "@tiptap/extension-table-cell";
 import TableHeader from "@tiptap/extension-table-header";
 import TableRow from "@tiptap/extension-table-row";
+import useSmallStore from "@/stores/small-store";
 
 
 const Notes = ({ fileStructure, setFileStructure, ...props }) => {
     // Load notes from local storage or use initialNotes if local storage is empty
-    const [notes, setNotes] = useState(() => {
-        const savedNotes = localStorage.getItem('notes');
-        return savedNotes ? JSON.parse(savedNotes) : initialNotes;
-    });
+    const { notes, setNotes } = useSmallStore();
 
     const [selectedItem, setSelectedItem] = useState("folder");
     const [editingFolder, setEditingFolder] = useState(null);
