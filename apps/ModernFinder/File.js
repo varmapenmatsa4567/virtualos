@@ -2,7 +2,7 @@ import FileContextMenu from '@/components/context-menu/FileContextMenu';
 import { ContextMenu, ContextMenuTrigger } from '@/components/ui/context-menu';
 import React from 'react'
 
-const File = ({item, onSelect, isSelected, deleteItem, copyItem, cutItem, duplicateItem}) => {
+const File = ({item, openFile, onSelect, isSelected, deleteItem, copyItem, cutItem, duplicateItem}) => {
   const filename = item.name;
   const fileExtension = filename.split('.').pop();
   const fileNameWithoutExtension = filename.slice(0, filename.lastIndexOf('.'));
@@ -10,7 +10,7 @@ const File = ({item, onSelect, isSelected, deleteItem, copyItem, cutItem, duplic
   return (
     <ContextMenu>
       <ContextMenuTrigger onContextMenu={onSelect}>
-        <div onClick={onSelect} className='flex flex-col items-center gap-1'>
+        <div onDoubleClick={openFile} onClick={onSelect} className='flex flex-col items-center gap-1'>
             <img src={getImageSrc(item)} className={`w-16 h-16 object-contain p-1 ${isSelected ? "bg-[#3b373a] rounded-md" : null}`} />
             <p className={`text-white text-[12px] font-medium w-20 truncate text-center px-1 ${isSelected ? "bg-[#0059d0] rounded-sm" : null}`}>
               {fileNameWithoutExtension.length > 7 ? `${fileNameWithoutExtension.slice(0, 7)}...${fileExtension}` : filename}
@@ -30,7 +30,10 @@ const getImageSrc = (item) => {
     return item.content;
   } else if (item.type.endsWith('pdf')) {
     return './files/pdf-file.png';
-  } else {
+  } else if (item.type == ""){
+    return './vlcplayer.png';
+  } 
+  else {
     return 'file.png';
   }
 }

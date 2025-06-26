@@ -3,10 +3,10 @@ import { ContextMenu, ContextMenuTrigger } from '@/components/ui/context-menu';
 import { formatDateTimeforFinder } from '@/utils/utils';
 import React from 'react'
 
-const ListFile = ({item, index, isSelected, onSelect, deleteItem, copyItem, cutItem, duplicateItem}) => {
+const ListFile = ({item, openFile, index, isSelected, onSelect, deleteItem, copyItem, cutItem, duplicateItem}) => {
   const filename = item.name;
-  const fileExtension = filename.split('.').pop();
-  const fileNameWithoutExtension = filename.slice(0, filename.lastIndexOf('.'));
+//   const fileExtension = filename.split('.').pop();
+//   const fileNameWithoutExtension = filename.slice(0, filename.lastIndexOf('.'));
   console.log(item);
 
   const bgColor = index % 2 === 0 ? "bg-[#29292a]" : "bg-[#333334]";
@@ -14,7 +14,7 @@ const ListFile = ({item, index, isSelected, onSelect, deleteItem, copyItem, cutI
   return (
     <ContextMenu>
       <ContextMenuTrigger onContextMenu={onSelect}>
-        <div onClick={onSelect} className={`rounded-sm flex items-center px-2 p-0.5 ${isSelected ? "bg-[#0059d0]" : bgColor}`}>
+        <div onDoubleClick={openFile} onClick={onSelect} className={`rounded-sm flex items-center px-2 p-0.5 ${isSelected ? "bg-[#0059d0]" : bgColor}`}>
             <div className='flex items-center gap-1 w-5/12 truncate'>
                 <img src={getImageSrc(item)} className='w-4 h-4 object-contain' />
                 <p className={`text-white text-[12px] font-medium w-20 text-center`}>
@@ -45,7 +45,10 @@ const getImageSrc = (item) => {
     return item.content;
   } else if (item.type.endsWith('pdf')) {
     return './files/pdf-file.png';
-  } else {
+  } else if (item.type == ""){
+    return './vlcplayer.png';
+  } 
+  else {
     return 'file.png';
   }
 }
@@ -62,7 +65,10 @@ const getFileType = (item) => {
         return 'Excel Spreadsheet';
     } else if (item.type.endsWith('pptx')) {
         return 'PowerPoint Presentation';
-    } else {
+    } else if (item.type == "") {
+        return "Video"
+    }
+    else {
         return 'File';
     }
 }

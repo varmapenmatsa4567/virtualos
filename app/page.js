@@ -113,7 +113,7 @@ export default function Home() {
       extraProps: extraProps
     };
     setWindows([...windows, newWindow]);
-    if(appName !== "screenshot" && appName !== "imageviewer") setActiveWindow(newWindow.id);
+    setActiveWindow(newWindow.id);
 
     // Add the app to the openedApps list if it's not already there
     if (!openedApps.includes(appName) && appName !== "screenshot" && appName !== "imageviewer") {

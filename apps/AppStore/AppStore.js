@@ -10,7 +10,9 @@ const AppStore = ({openWindow, ...props}) => {
 
   const onClick = (appName) => {
     if(apps.includes(appName)) {
-      openWindow(appName);
+      setTimeout(() => {
+        openWindow(appName);
+      }, 500);
       return;
     }
     addApp(appName)
