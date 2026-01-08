@@ -18,13 +18,19 @@ import File from "./File";
 import ListFile from "./ListFile";
 import useDockStore from "@/stores/dock-store";
 
-const Finder = ({extraProps, ...props}) => {
+const Finder = ({extraProps, openWindow, ...props}) => {
 
   const {favourites, setFavourites, finderItems, setFinderItems} = useFinderStore();
   const { folders, addFolder } = useDockStore();
   const [historyIndex, setHistoryIndex] = useState(0);
   const [currentFinderItem, setCurrentFinderItem] = useState(null);
-  const [history, setHistory] = useState([finderItems.filter(item => item.parentId === null)[0].id]);
+  const [history, setHistory] = useState(() => {
+    const macos = finderItems.find(item => item.id === 'macos');
+    if (macos) return [macos.id];
+    // Fallback to the first root item if macos is not found
+    const root = finderItems.find(item => item.parentId === null);
+    return root ? [root.id] : [];
+  });
   const [selectedItem, setSelectedItem] = useState(null);
   const [clipboard, setClipboard] = useState(null);
   const [isCut, setIsCut] = useState(false);
@@ -92,6 +98,12 @@ const Finder = ({extraProps, ...props}) => {
     const item = finderItems.find(item => item.id === id);
     setClipboard(item);
     setIsCut(true);
+  }
+
+  const openFile = (item) => {
+    openWindow("imageviewer", {
+      imageUrl: item.content,
+    })
   }
 
   const goBack = () => {
@@ -315,6 +327,7 @@ const Finder = ({extraProps, ...props}) => {
                           isSelected={selectedItem === item.id}
                           item={item}
                           key={index}
+                          openFile={() => openFile(item)}
                           deleteItem={() => moveToTrash(item.id)}
                           copyItem={() => copyItem(item.id)}
                           cutItem={() => cutItem(item.id)}
