@@ -1,25 +1,24 @@
 "use client";
+import React, { useState, useEffect, useRef, Suspense } from "react";
 import AppManager from "@/components/AppManager";
 import TopBar from "@/components/TopBar";
-import { useState, useEffect, useRef } from "react";
 import { initialStructure } from "@/utils/data";
-import Launchpad from "@/apps/Launchpad/Launchpad";
 import { ModernDock } from "@/components/ModernDock";
-import Iphone from "@/mobile/Iphone";
 import useSettingsStore from "@/stores/settings-store";
-import LockScreen from "@/apps/LockScreen";
-import RestartScreen from "@/apps/RestartScreen";
 import useGlobalStore from "@/stores/global-store";
-import html2canvas from "html2canvas";
 import useWindowsStore from "@/stores/windows-store";
-import Splotlight from "@/apps/Spotlight/Splotlight";
 import { useOutsideClick } from "@/hooks/useOutsideClick";
 import useFinderStore from "@/stores/finder-store";
-import Folder from "@/apps/ModernFinder/Folder";
 import { ContextMenu, ContextMenuTrigger } from "@/components/ui/context-menu";
-import DesktopContextMenu from "@/components/context-menu/DesktopContextMenu";
-import NotificationContainer from "@/system/notifications/NotificationContainer";
 
+const Launchpad = React.lazy(() => import("@/apps/Launchpad/Launchpad"));
+const Iphone = React.lazy(() => import("@/mobile/Iphone"));
+const LockScreen = React.lazy(() => import("@/apps/LockScreen"));
+const RestartScreen = React.lazy(() => import("@/apps/RestartScreen"));
+const Splotlight = React.lazy(() => import("@/apps/Spotlight/Splotlight"));
+const Folder = React.lazy(() => import("@/apps/ModernFinder/Folder"));
+const DesktopContextMenu = React.lazy(() => import("@/components/context-menu/DesktopContextMenu"));
+const NotificationContainer = React.lazy(() => import("@/system/notifications/NotificationContainer"));
 
 export default function Home() {
 
@@ -126,14 +125,15 @@ export default function Home() {
     openWindow("imageviewer", { imageUrl });
   }
 
-  const takeScreenshot = () => {
+  const takeScreenshot = async () => {
     const screenshotElement = document.getElementById("screen");
     setWindows(windows.filter((window) => window.appName !== "screenshot"));
     closeScreenshot();
     if (screenshotElement) {
+      const html2canvas = (await import('html2canvas')).default;
       html2canvas(screenshotElement).then((canvas) => {
         const link = canvas.toDataURL('image/png');
-        setScreenshotUrl(link); 
+        setScreenshotUrl(link);
         setShowScreenshot(true);
         const audio = new Audio("/audio/ScreenCapture.mp3");
         audio.play();
@@ -243,18 +243,28 @@ export default function Home() {
 
   if(isMobile) {
     return (
-      <Iphone />
+      <Suspense fallback={null}>
+        <Iphone />
+      </Suspense>
     )
   }
 
   if(restart){
-    return <RestartScreen/>
+    return (
+      <Suspense fallback={null}>
+        <RestartScreen/>
+      </Suspense>
+    )
   }
 
   if(!hydrated) return null;
 
   if(isLocked) {
-    return <LockScreen/>
+    return (
+      <Suspense fallback={null}>
+        <LockScreen/>
+      </Suspense>
+    )
   }
   return (
     <div className={`relative ${isFullScreenshot && "group"}`}>
@@ -267,12 +277,13 @@ export default function Home() {
                 {desktopItems && desktopItems.map((item, index) => {
                   if(item.isDir) {
                     return (
-                      <Folder
-                        openFolder={() => openWindow("finder", { requiredItemId: item.id })}
-                        folderName={item.name} 
-                        key={index}
-                        item={item}
-                      />
+                      <Suspense fallback={null} key={index}>
+                        <Folder
+                          openFolder={() => openWindow("finder", { requiredItemId: item.id })}
+                          folderName={item.name}
+                          item={item}
+                        />
+                      </Suspense>
                     )
                   }
                 })}
@@ -298,14 +309,26 @@ export default function Home() {
                 />
               ))}
           </ContextMenuTrigger>
-          <DesktopContextMenu/>
+          <Suspense fallback={null}>
+            <DesktopContextMenu/>
+          </Suspense>
         </ContextMenu>
         </div>
         <ModernDock isVisible={isLaunchpadOpen} toggleLaunchpad={toggleLaunchpad} setWindows={setWindows} openWindow={openWindow} windows={windows}  />
         {/* <SiriChat /> */}
-        <NotificationContainer/>
-        {isLaunchpadOpen && <Launchpad openWindow={openWindow} toggleLaunchpad={toggleLaunchpad}/>}
-        {spotlightVisible && <Splotlight ref={spotlightRef} openWindow={openWindow}/>}
+        <Suspense fallback={null}>
+          <NotificationContainer/>
+        </Suspense>
+        {isLaunchpadOpen && (
+          <Suspense fallback={null}>
+            <Launchpad openWindow={openWindow} toggleLaunchpad={toggleLaunchpad}/>
+          </Suspense>
+        )}
+        {spotlightVisible && (
+          <Suspense fallback={null}>
+            <Splotlight ref={spotlightRef} openWindow={openWindow}/>
+          </Suspense>
+        )}
         {/* {isAppSwitcherVisible && (
           <AppSwitcher openedApps={openedApps} selectedAppIndex={selectedAppIndex} />
         )} */}

@@ -3,7 +3,6 @@ import React from 'react';
 import { Rnd } from 'react-rnd';
 import WnManager from './WnManager';
 import useSettingsStore from '@/stores/settings-store';
-import html2canvas from 'html2canvas';
 import useGlobalStore from '@/stores/global-store';
 import useWindowsStore from '@/stores/windows-store';
 import { useEffect, useState } from 'react';
@@ -11,7 +10,7 @@ import { stopPropagation } from '@/utils/utils';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const Window = ({db, isSmall, appName, onClick, isCustomized, isTransparent, isFixed, customSize, isActive, isMinimized, isMaximized, onClose, toggleMinimize, toggleMaximize, toolbar, toolbarColor, toolbarHeight, children, isSepNot }) => {
-  
+
   const height = window.innerHeight - 28;
 
   const { windows, setWindows, appsState, setAppsState } = useWindowsStore();
@@ -65,11 +64,12 @@ const Window = ({db, isSmall, appName, onClick, isCustomized, isTransparent, isF
     setAppsState({ ...appsState, [appName]: app });
   };
 
-  const takeScreenshot = () => {
+  const takeScreenshot = async () => {
     const screenshotElement = document.getElementById(appName);
     setWindows(windows.filter((window) => window.appName !== "screenshot"));
     closeScreenshot();
     if (screenshotElement) {
+      const html2canvas = (await import('html2canvas')).default;
       html2canvas(screenshotElement).then((canvas) => {
         const link = canvas.toDataURL('image/png');
         const audio = new Audio("/audio/ScreenCapture.mp3");
@@ -106,14 +106,14 @@ const Window = ({db, isSmall, appName, onClick, isCustomized, isTransparent, isF
       scale: 0,
       y: 700,
       x: 500,
-      transition: { 
+      transition: {
         duration: 0.3,
       }
     },
     normal: {
       scale: 1,
       y: 0,
-      transition: { 
+      transition: {
         duration: 0.3,
       }
     }
@@ -136,9 +136,9 @@ const Window = ({db, isSmall, appName, onClick, isCustomized, isTransparent, isF
           bounds=".main"
           dragHandleClassName="toolbar"
         >
-          <motion.div 
-            id={appName} 
-            onClick={onClick} 
+          <motion.div
+            id={appName}
+            onClick={onClick}
             className={`${!isTransparent && "bg-[#242227]"} ${isSmall && "scale-[0.1]"} overflow-hidden flex flex-col shadow-2xl cursor-default h-full rounded-lg border-[0.5px] border-[#7f7e7f]`}
             initial="normal"
             animate={isMinimized ? "minimized" : "normal"}
