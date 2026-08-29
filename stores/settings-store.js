@@ -12,7 +12,7 @@ const useSettingsStore = create(
       darkMode: false, // Dark mode state
       isLocked: false, // Lock state
       restart: false, // Restart state
-      autoDock: true,
+      autoDock: false,
       openedAppsDots: true, // Show open apps state
       showOpenedApps: true, // Show opened apps state
       titleBarAction: "maximize", // Default title bar action
