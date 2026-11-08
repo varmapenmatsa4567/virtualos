@@ -31,7 +31,7 @@ const SettingsContainer = ({item, onClick}) => {
             <div onClick={onClick} className='flex p-2 rounded-md items-center gap-2'>
                 <img 
                     className='w-8'
-                    src={`settings.png`}
+                    src={`settings.webp`}
                 />
                 <p className='text-white text-sm'>{item.text.replace(/\b\w/g, (char) => char.toUpperCase())}</p>
             </div>

@@ -39,7 +39,7 @@ const Notification = ({ notification }) => {
     exit={{ opacity: 0, x: 600 }}
     transition={{ duration: 0.5 }}
     className='bg-notification relative border-[0.5px] flex border-[#7f7e7f] rounded-xl p-2 items-center gap-1'>
-        <img src={`./${notification.icon}.png`} className='w-12 h-12' />
+        <img src={`./${notification.icon}.webp`} className='w-12 h-12' />
         <div className='flex flex-col text-white'>
             <p className='text-[13px] font-semibold'>{notification.title}</p>
             <p className='text-[13px]'>{notification.message}</p>

@@ -61,11 +61,11 @@ const Shortcuts = ({fileStructure, setFileStructure, ...props}) => {
   }
 
     const images = {
-        "controls": "settings.png",
-        "notes": "notes.png",
-        "device": "settings.png",
-        "web": "safari.png",
-        "clock": "clock.png"
+        "controls": "settings.webp",
+        "notes": "notes.webp",
+        "device": "settings.webp",
+        "web": "safari.webp",
+        "clock": "clock.webp"
     }
 
     const openShortcut = (index) => {

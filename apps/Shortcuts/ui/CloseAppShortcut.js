@@ -19,7 +19,7 @@ const CloseAppShortcut = ({index, item, shortcutItems, setShortcutItems, removeI
   return (
     <div draggable className="flex items-center group justify-between text-sm py-2 font-medium bg-[#2f2f30] p-2 w-2/3 rounded-xl border-2 border-[#464646]">
         <div className="flex items-center gap-2">
-            <img src={"settings.png"} className="w-6 h-6"/>
+            <img src={"settings.webp"} className="w-6 h-6"/>
             <p>Close</p>
             <select value={item.props.action} onChange={changeAction} className="rounded-md bg-[#2f343f] px-1 w-fit appearance-none text-[#007bff] text-center bg-transparent text-xs outline-none">
                 <option value="app">App</option>

@@ -13,7 +13,7 @@ const RelatedSearch = ({searchText, closeSpotlight}) => {
         <div onClick={openSearch} className='flex p-2 rounded-md items-center gap-2'>
             <img 
                 className='w-6'
-                src={`safari.png`}
+                src={`safari.webp`}
             />
             <p className='text-white text-[13px]'>Search in the Web</p>
         </div>

@@ -16,7 +16,7 @@ const DockAppIcon = ({onClick, appName, isAppOpen}) => {
         <DockLabel>{appLabel.replace(/\b\w/g, (char) => char.toUpperCase())}</DockLabel>
         <DockIcon>
             <div className='flex flex-col items-center'>
-            <img src={`${appName}.png`} alt={appName} />
+            <img src={`${appName}.webp`} alt={appName} />
             {isAppOpen && <div className='w-1 h-1 bg-white rounded-full'></div>}
             </div>
         </DockIcon>

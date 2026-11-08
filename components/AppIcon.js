@@ -18,7 +18,7 @@ const AppIcon = ({ appName, openApp, onClick, isOpen, isAppSwitcher, isMobile, t
       <img
         draggable={false}
         onContextMenu={(e) => e.preventDefault()}
-        src={`${appName.toLowerCase()}.png`}
+        src={`${appName.toLowerCase()}.webp`}
         className={`${isAppSwitcher ? 'w-[85px]' : isMobile ? 'w-28' : 'w-14'} ${unavailableApps.includes(appName) && "opacity-40"} pointer-events-none transition-transform duration-200 ${isMobile ? "" : "hover:scale-125"}`}
       />
       {titleRequired && <p className={`text-white select-none ${isAppSwitcher ? "text-[13px]" : "text-xs"}`}>{appLabel.replace(/\b\w/g, (char) => char.toUpperCase())}</p>}

@@ -5,7 +5,7 @@ const App = ({appName, icon, subtitle, isInstalled, onClick}) => {
     <div className='flex flex-col gap-4'>
         <div className='flex items-center justify-between'>
             <div className='flex items-center gap-2'>
-                <img src={`${icon}.png`} className='w-16'/>
+                <img src={`${icon}.webp`} className='w-16'/>
                 <div className='flex flex-col'>
                     <p className='text-white'>{appName.replace(/\b\w/g, (char) => char.toUpperCase())}</p>
                     <p className='text-[#a29e9e] text-xs'>{subtitle}</p>

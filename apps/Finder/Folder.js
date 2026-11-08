@@ -7,7 +7,7 @@ const Folder = ({folderName, onClick, onFolderDelete, onFolderDuplicate, onCopyI
     <ContextMenu>
         <ContextMenuTrigger>
           <div onClick={onSelect} onDoubleClick={onClick} className={`${isSelected ? "bg-[#3b373a] rounded-md" : null} flex flex-col items-center`}>
-              <img src='folder.png' className='w-16 h-16'/>
+              <img src='folder.webp' className='w-16 h-16'/>
               <p className='text-white text-[12px] font-medium text-clip w-20 text-center'>{folderName}</p>
           </div>
         </ContextMenuTrigger>

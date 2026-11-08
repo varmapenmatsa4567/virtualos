@@ -31,7 +31,7 @@ const getImageSrc = (item) => {
   } else if (item.type.endsWith('pdf')) {
     return './files/pdf-file.png';
   } else if (item.type == ""){
-    return './vlcplayer.png';
+    return './vlcplayer.webp';
   } 
   else {
     return 'file.png';
